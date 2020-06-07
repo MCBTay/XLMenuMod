@@ -48,7 +48,7 @@ namespace XLMenuMod.Patches.Level
                             CustomLevelManager.SetCurrentFolder(selectedFolder);
                         }
 
-                        // do this so that OnItemSelectedCan continue on, and hopefully prevent the double selects
+                        // do this so that OnItemSelected can continue on, and hopefully prevent the double selects
                         level = LevelManager.Instance.currentLevel;
                         return true;
                     }
