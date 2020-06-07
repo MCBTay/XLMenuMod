@@ -1,0 +1,12 @@
+{
+  "Id": "mcbtay.XLMenuMod",
+  "DisplayName": "mcbtay's XL Menu Mod",
+  "Author": "mcbtay",
+  "Version": "1.0",
+  "ManagerVersion": "0.15.0",
+  "Requirements": [],
+  "AssemblyName": "mcbtay.XLMenuMod.dll",
+  "EntryMethod": "XLMenuMod.Main.Load",
+  "HomePage": "",
+  "Repository": ""
+}
