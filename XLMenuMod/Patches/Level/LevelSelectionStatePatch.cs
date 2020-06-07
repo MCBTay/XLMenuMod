@@ -6,15 +6,6 @@ namespace XLMenuMod.Patches.Level
 {
     static class LevelSelectionStatePatch
     {
-        //[HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnEnter))]
-        //static class OnEnterPatch
-        //{
-        //    static void Postfix()
-        //    {
-        //        CustomLevelManager.LoadNestedLevels();
-        //    }
-        //}
-
         [HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnUpdate))]
         static class OnUpdatePatch
         {

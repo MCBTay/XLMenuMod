@@ -24,7 +24,7 @@ namespace XLMenuMod
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
 
             modEntry.OnToggle = OnToggle;
-            modEntry.OnGUI = OnSettingsGUI;
+            modEntry.OnGUI = Settings.OnSettingsGUI;
             modEntry.OnSaveGUI = OnSaveGUI;
 
             return true;
@@ -59,13 +59,6 @@ namespace XLMenuMod
             }
 
             return true;
-        }
-
-        private static void OnSettingsGUI(UnityModManager.ModEntry modEntry)
-        {
-            GUILayout.BeginVertical();
-            Settings.DisableBToMoveUpDirectory = GUILayout.Toggle(Settings.DisableBToMoveUpDirectory, new GUIContent("Disable B/O Button to Move Up Directory"));
-            GUILayout.EndVertical();
         }
 
         private static void OnSaveGUI(UnityModManager.ModEntry modEntry)

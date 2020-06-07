@@ -8,6 +8,31 @@ namespace XLMenuMod.Patches.Gear
 {
     public class GearListViewControllerPatch
     {
+        [HarmonyPatch(typeof(GearListViewController), nameof(GearListViewController.ItemPrefab), MethodType.Getter)]
+        static class ItemPrefabPatch
+        {
+            static void Postfix(ref ListViewItem<ICharacterCustomizationItem> __result)
+            {
+                if (__result is GearListViewItem)
+                {
+                    var gearListViewItem = __result as GearListViewItem;
+
+                    switch (Main.Settings.FontSize)
+                    {
+                        case FontSizePreset.Small:
+                            gearListViewItem.Label.fontSize = 30;
+                            break;
+                        case FontSizePreset.Smaller:
+                            gearListViewItem.Label.fontSize = 24;
+                            break;
+                        case FontSizePreset.Normal:
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(GearListViewController), nameof(GearListViewController.Items), MethodType.Getter)]
         static class ItemsPatch
         {
@@ -47,8 +72,6 @@ namespace XLMenuMod.Patches.Gear
                             // Set it to the first (real) item in the list, not the ../
                             __instance.HighlightIndex(1);
                         }
-
-                        return false;
                     }
                     else
                     {

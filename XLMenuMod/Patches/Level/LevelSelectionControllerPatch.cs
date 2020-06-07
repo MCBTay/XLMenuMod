@@ -6,7 +6,7 @@ using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Patches.Level
 {
-    public class LevelSelectionControllerPatch : LevelSelectionController
+    public class LevelSelectionControllerPatch
     {
         [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ToggleShowCustom))]
         public static class ToggleShowCustomPatch
@@ -66,8 +66,33 @@ namespace XLMenuMod.Patches.Level
             }
         }
 
+        [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ItemPrefab), MethodType.Getter)]
+        public static class ItemPrefabPatch
+        {
+            static void Postfix(ref ListViewItem<LevelInfo> __result)
+            {
+                if (__result is LevelListItem)
+                {
+                    var levelListViewItem = __result as LevelListItem;
+
+                    switch (Main.Settings.FontSize)
+                    {
+                        case FontSizePreset.Small:
+                            levelListViewItem.LevelNameText.fontSize = 30;
+                            break;
+                        case FontSizePreset.Smaller:
+                            levelListViewItem.LevelNameText.fontSize = 24;
+                            break;
+                        case FontSizePreset.Normal:
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.Items), MethodType.Getter)]
-        static class ItemsPatch
+        public static class ItemsPatch
         {
             static void Postfix(LevelSelectionController __instance, ref List<LevelInfo> __result)
             {
