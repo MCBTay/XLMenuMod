@@ -39,10 +39,13 @@ namespace XLMenuMod.Patches.Gear
                         if (folder.GetName() == "..\\")
                         {
                             CustomGearManager.MoveUpDirectory();
+                            // Somehow figure out the parent's index and set it to highlight
                         }
                         else
                         {
                             CustomGearManager.SetCurrentFolder(folder);
+                            // Set it to the first (real) item in the list, not the ../
+                            __instance.HighlightIndex(1);
                         }
 
                         return false;
