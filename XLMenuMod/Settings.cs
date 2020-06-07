@@ -6,7 +6,7 @@ namespace XLMenuMod
     [Serializable]
     public class Settings : UnityModManager.ModSettings
     {
-        public bool EnableBToMoveUpDirectory { get; set; }
+        public bool DisableBToMoveUpDirectory { get; set; }
 
         public Settings() : base()
         {

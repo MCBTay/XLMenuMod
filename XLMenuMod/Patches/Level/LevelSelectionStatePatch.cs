@@ -23,7 +23,7 @@ namespace XLMenuMod.Patches.Level
                 if (CustomLevelManager.CurrentFolder == null) return true;
                 if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
 
-                if (Main.Settings.EnableBToMoveUpDirectory)
+                if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
                     CustomLevelManager.MoveUpDirectory();

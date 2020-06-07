@@ -64,7 +64,7 @@ namespace XLMenuMod
         private static void OnSettingsGUI(UnityModManager.ModEntry modEntry)
         {
             GUILayout.BeginVertical();
-            Settings.EnableBToMoveUpDirectory = GUILayout.Toggle(Settings.EnableBToMoveUpDirectory, new GUIContent("Use B/O Button to Move Up Directory"));
+            Settings.DisableBToMoveUpDirectory = GUILayout.Toggle(Settings.DisableBToMoveUpDirectory, new GUIContent("Disable B/O Button to Move Up Directory"));
             GUILayout.EndVertical();
         }
 
