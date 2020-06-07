@@ -1,4 +1,6 @@
-﻿namespace XLMenuMod.Levels.Interfaces
+﻿using System;
+
+namespace XLMenuMod.Levels.Interfaces
 {
     public interface ICustomLevelInfo
     {

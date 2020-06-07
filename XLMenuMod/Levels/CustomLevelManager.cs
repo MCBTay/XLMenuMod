@@ -196,8 +196,6 @@ namespace XLMenuMod.Levels
                     levelSelector.LevelCategoryButton.label.text = CurrentFolder.GetName();
                 }
 
-                
-
                 levelSelector.UpdateList();
             }
         }
