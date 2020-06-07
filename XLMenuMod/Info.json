@@ -7,6 +7,6 @@
   "Requirements": [],
   "AssemblyName": "mcbtay.XLMenuMod.dll",
   "EntryMethod": "XLMenuMod.Main.Load",
-  "HomePage": "",
-  "Repository": ""
+  "HomePage": "https://github.com/MCBTay/XLMenuMod",
+  "Repository": "https://github.com/MCBTay/XLMenuMod"
 }
