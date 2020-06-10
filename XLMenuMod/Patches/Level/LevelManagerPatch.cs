@@ -1,24 +1,13 @@
 ﻿using Harmony12;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
 {
     public class LevelManagerPatch
     {
-        [HarmonyPatch(typeof(LevelManager), "GetCustomLevelFiles")]
-        public static class GetCustomLevelFilesPatch
-        {
-            static void Postfix(ref List<string> __result)
-            {
-                __result.AddRange(CustomLevelManager.LoadNestedLevelPaths());
-            }
-        }
-
         /// <summary>
         /// Some levels have custom script assemblies that go with them.  Find if an assembly exists that matches the maps file name, and load it if soo.
         /// </summary>

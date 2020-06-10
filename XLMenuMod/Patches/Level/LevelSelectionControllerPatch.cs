@@ -1,6 +1,7 @@
 ﻿using Harmony12;
 using System.Collections.Generic;
 using System.Linq;
+using UnityModManagerNet;
 using XLMenuMod.Levels;
 using XLMenuMod.Levels.Interfaces;
 
@@ -22,6 +23,8 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionController __instance, ref LevelInfo level)
             {
+                UnityModManager.Logger.Log("LevelSelectionController.OnItemSelectedPrefix enter");
+
                 if (level is ICustomLevelInfo)
                 {
                     var selectedLevel = level as ICustomLevelInfo;
@@ -36,31 +39,30 @@ namespace XLMenuMod.Patches.Level
                         {
                             if (selectedFolder.Parent == null)
                             {
-                                CustomLevelManager.SetCurrentFolder(null);
+                                CustomLevelManager.CurrentFolder = null;
                             }
                             else
                             {
-                                CustomLevelManager.SetCurrentFolder(selectedFolder.Parent as CustomFolderInfo);
+                                CustomLevelManager.CurrentFolder = selectedFolder.Parent as CustomFolderInfo;
                             }
                         }
                         else
                         {
-                            CustomLevelManager.SetCurrentFolder(selectedFolder);
+                            CustomLevelManager.CurrentFolder = selectedFolder;
                         }
 
-                        // do this so that OnItemSelected can continue on, and hopefully prevent the double selects
-                        level = LevelManager.Instance.currentLevel;
-                        return true;
+                        CustomLevelManager.SetLevelList();
+                        return false;
                     }
                     else
                     {
-                        CustomLevelManager.SetCurrentFolder(null);
+                        CustomLevelManager.CurrentFolder = null;
                         return true;
                     }
                 }
                 else
                 {
-                    CustomLevelManager.SetCurrentFolder(null);
+                    CustomLevelManager.CurrentFolder = null;
                     return true;
                 }
             }

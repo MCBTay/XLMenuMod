@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine.EventSystems;
+using UnityEngine;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
 {
-    public class CustomLevelManager : LevelManager
+    public class CustomLevelManager : MonoBehaviour
     {
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
@@ -49,15 +49,18 @@ namespace XLMenuMod.Levels
 
         public static void LoadNestedLevels()
         {
-            Instance.UpdateCustomMaps();
-
             NestedCustomLevels.Clear();
 
-            foreach (var level in Instance.CustomLevels)
+            foreach (var level in LevelManager.Instance.CustomLevels)
             {
                 if (string.IsNullOrEmpty(level.path) || !level.path.StartsWith(SaveManager.Instance.CustomLevelsDir)) continue;
 
-                var levelSubPath = level.path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
+                AddLevel(level);
+            }
+
+            foreach (var path in LoadNestedLevelPaths())
+            { 
+                var levelSubPath = path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
 
                 if (string.IsNullOrEmpty(levelSubPath)) continue;
 
@@ -67,7 +70,7 @@ namespace XLMenuMod.Levels
                 if (folders.Count == 1)
                 {
                     // This level is at the root
-                    AddLevel(level);
+                    AddLevel(LevelManager.Instance.LevelInfoForPath(path));
                     continue;
                 }
 
@@ -79,11 +82,11 @@ namespace XLMenuMod.Levels
 
                     if (folder == folders.Last())
                     {
-                        AddLevel(level, ref parent);
+                        AddLevel(LevelManager.Instance.LevelInfoForPath(path), ref parent);
                     }
                     else
                     {
-                        AddFolder(folder, ref parent);
+                        AddFolder(folder, path, ref parent);
                     }
                 }
             }
@@ -95,20 +98,6 @@ namespace XLMenuMod.Levels
             {
                 OriginalCustomLevels.Clear();
                 OriginalCustomLevels.AddRange(NestedCustomLevels);
-            }
-
-            var levelSelector = FindObjectOfType<LevelSelectionController>();
-            if (levelSelector != null)
-            {
-                levelSelector.Items.Clear();
-                foreach (var customLevel in NestedCustomLevels)
-                {
-                    if (customLevel is CustomFolderInfo)
-                        levelSelector.Items.Add(customLevel as CustomFolderInfo);
-                    else if (customLevel is CustomLevelInfo)
-                        levelSelector.Items.Add(customLevel as CustomLevelInfo);
-                }
-                levelSelector.UpdateList();
             }
         }
 
@@ -131,9 +120,9 @@ namespace XLMenuMod.Levels
             }
         }
 
-        public static void AddFolder(string folder, ref CustomFolderInfo parent)
+        public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
         {
-            var newFolder = new CustomFolderInfo { name = $"\\{folder}", Parent = parent, LevelInfo = new LevelInfo { name = $"\\{folder}" } };
+            var newFolder = new CustomFolderInfo { name = $"\\{folder}", Parent = parent, LevelInfo = new LevelInfo { name = $"\\{folder}", path = path } };
             newFolder.Children.Add(new CustomFolderInfo { name = "..\\", Parent = newFolder.Parent, LevelInfo = new LevelInfo { name = $"..\\" } });
 
             if (parent != null)
@@ -164,17 +153,9 @@ namespace XLMenuMod.Levels
             }
         }
 
-        public static void SetCurrentFolder(CustomFolderInfo folder)
-        {
-            CurrentFolder = folder;
-
-            SetLevelList();
-        }
-
         public static void MoveUpDirectory()
         {
             CurrentFolder = CurrentFolder.Parent as CustomFolderInfo;
-
             SetLevelList();
         }
 

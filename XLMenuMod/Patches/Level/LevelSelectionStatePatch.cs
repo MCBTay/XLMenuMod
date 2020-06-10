@@ -25,5 +25,23 @@ namespace XLMenuMod.Patches.Level
                 return true;
             }
         }
+
+        [HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnEnter))]
+        static class OnEnterPatch
+        {
+            static void Postfix()
+            {
+                CustomLevelManager.LoadNestedLevels();
+            }
+        }
+
+        [HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnExit))]
+        static class OnExitPatch
+        {
+            static void Postfix()
+            {
+                CustomLevelManager.CurrentFolder = null;
+            }
+        }
     }
 }
