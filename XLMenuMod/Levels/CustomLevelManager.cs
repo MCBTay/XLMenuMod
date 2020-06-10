@@ -51,11 +51,29 @@ namespace XLMenuMod.Levels
         {
             NestedCustomLevels.Clear();
 
+            var levelsToRemove = new List<LevelInfo>();
             foreach (var level in LevelManager.Instance.CustomLevels)
             {
                 if (string.IsNullOrEmpty(level.path) || !level.path.StartsWith(SaveManager.Instance.CustomLevelsDir)) continue;
 
-                AddLevel(level);
+                // Check to ensure the file is still on disk.  
+                if (File.Exists(level.path))
+                {
+                    AddLevel(level);
+                }
+                else
+                {
+                    // If it's not still on disk, there's a chance user moved it into a folder while the game was running.
+                    levelsToRemove.Add(level);
+                } 
+            }
+
+            if (levelsToRemove.Any())
+            {
+                foreach (var level in levelsToRemove)
+                {
+                    LevelManager.Instance.CustomLevels.Remove(level);
+                }
             }
 
             foreach (var path in LoadNestedLevelPaths())

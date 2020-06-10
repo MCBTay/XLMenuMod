@@ -47,8 +47,6 @@ namespace XLMenuMod
                 CustomGearManagerGameObject = new GameObject();
                 CustomGearManagerGameObject.AddComponent<CustomGearManager>();
                 Object.DontDestroyOnLoad(CustomGearManagerGameObject);
-
-                CustomLevelManager.LoadNestedLevels();
             }
             else
             {
