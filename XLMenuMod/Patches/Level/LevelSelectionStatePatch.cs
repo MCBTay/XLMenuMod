@@ -21,6 +21,7 @@ namespace XLMenuMod.Patches.Level
 
                     CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.Parent as CustomFolderInfo;
                     Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
+                    CustomLevelManager.UpdateLabel();
 
                     return false;
                 }

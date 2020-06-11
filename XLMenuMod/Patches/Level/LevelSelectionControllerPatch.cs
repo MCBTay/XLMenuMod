@@ -43,19 +43,11 @@ namespace XLMenuMod.Patches.Level
                             CustomLevelManager.CurrentFolder = selectedFolder;
                         }
 
-                        if (CustomLevelManager.CurrentFolder == null)
-                        {
-                            __instance.LevelCategoryButton.label.text = __instance.showCustom ? "Custom Maps" : "Official Maps";
-                        }
-                        else
-                        {
-                            __instance.LevelCategoryButton.label.text = CustomLevelManager.CurrentFolder.GetName();
-                        }
+                        CustomLevelManager.UpdateLabel();
 
 
                         EventSystem.current.SetSelectedGameObject(null);
                         __instance.UpdateList(); 
-                        Event.current.Use();
 
                         return false;
                     }
