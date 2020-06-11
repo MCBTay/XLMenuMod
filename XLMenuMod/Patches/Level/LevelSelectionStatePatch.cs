@@ -1,5 +1,6 @@
 ﻿using GameManagement;
 using Harmony12;
+using UnityEngine;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -9,7 +10,7 @@ namespace XLMenuMod.Patches.Level
         [HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnUpdate))]
         static class OnUpdatePatch
         {
-            static bool Prefix()
+            static bool Prefix(LevelSelectionState __instance)
             {
                 if (CustomLevelManager.CurrentFolder == null) return true;
                 if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
@@ -17,7 +18,10 @@ namespace XLMenuMod.Patches.Level
                 if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
-                    CustomLevelManager.MoveUpDirectory();
+
+                    CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.Parent as CustomFolderInfo;
+                    Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
+
                     return false;
                 }
 
