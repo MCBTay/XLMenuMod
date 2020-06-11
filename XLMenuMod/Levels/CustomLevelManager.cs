@@ -169,5 +169,20 @@ namespace XLMenuMod.Levels
                 }
             }
         }
+
+        public static void UpdateLabel()
+        {
+            var levelSelector = FindObjectOfType<LevelSelectionController>();
+            if (levelSelector == null) return;
+
+            if (CurrentFolder == null)
+            {
+                levelSelector.LevelCategoryButton.label.text = levelSelector.showCustom ? "Custom Maps" : "Official Maps";
+            }
+            else
+            {
+                levelSelector.LevelCategoryButton.label.text = CurrentFolder.GetName();
+            }
+        }
     }
 }
