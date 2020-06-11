@@ -1,7 +1,8 @@
 ﻿using Harmony12;
 using System.Collections.Generic;
 using System.Linq;
-using UnityModManagerNet;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using XLMenuMod.Levels;
 using XLMenuMod.Levels.Interfaces;
 
@@ -23,8 +24,6 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionController __instance, ref LevelInfo level)
             {
-                UnityModManager.Logger.Log("LevelSelectionController.OnItemSelectedPrefix enter");
-
                 if (level is ICustomLevelInfo)
                 {
                     var selectedLevel = level as ICustomLevelInfo;
@@ -37,21 +36,27 @@ namespace XLMenuMod.Patches.Level
 
                         if (selectedFolder.GetName() == "..\\")
                         {
-                            if (selectedFolder.Parent == null)
-                            {
-                                CustomLevelManager.CurrentFolder = null;
-                            }
-                            else
-                            {
-                                CustomLevelManager.CurrentFolder = selectedFolder.Parent as CustomFolderInfo;
-                            }
+                            CustomLevelManager.CurrentFolder = selectedFolder.Parent as CustomFolderInfo;
                         }
                         else
                         {
                             CustomLevelManager.CurrentFolder = selectedFolder;
                         }
 
-                        CustomLevelManager.SetLevelList();
+                        if (CustomLevelManager.CurrentFolder == null)
+                        {
+                            __instance.LevelCategoryButton.label.text = __instance.showCustom ? "Custom Maps" : "Official Maps";
+                        }
+                        else
+                        {
+                            __instance.LevelCategoryButton.label.text = CustomLevelManager.CurrentFolder.GetName();
+                        }
+
+
+                        EventSystem.current.SetSelectedGameObject(null);
+                        __instance.UpdateList(); 
+                        Event.current.Use();
+
                         return false;
                     }
                     else
@@ -102,30 +107,31 @@ namespace XLMenuMod.Patches.Level
                 {
                     if (CustomLevelManager.CurrentFolder != null && CustomLevelManager.CurrentFolder.Children != null && CustomLevelManager.CurrentFolder.Children.Any())
                     {
-                        __result.Clear();
-
-                        foreach (var customLevel in CustomLevelManager.CurrentFolder.Children.OrderBy(x => x.GetName()))
-                        {
-                            if (customLevel is CustomFolderInfo)
-                                __result.Add(customLevel as CustomFolderInfo);
-                            else if (customLevel is CustomLevelInfo)
-                                __result.Add(customLevel as CustomLevelInfo);
-                        }
+                        __result = GetLevels(CustomLevelManager.CurrentFolder.Children);
                     }
                     else
                     {
-                        __result.Clear();
-
-                        foreach (var customLevel in CustomLevelManager.NestedCustomLevels.OrderBy(x => x.GetName()))
-                        {
-                            if (customLevel is CustomFolderInfo)
-                                __result.Add(customLevel as CustomFolderInfo);
-                            else if (customLevel is CustomLevelInfo)
-                                __result.Add(customLevel as CustomLevelInfo);
-                        }
+                        __result = GetLevels(CustomLevelManager.NestedCustomLevels);
                     }
                 }
             }
+
+            static List<LevelInfo> GetLevels(List<ICustomLevelInfo> customLevels)
+            {
+                var levels = new List<LevelInfo>();
+
+                foreach (var customLevel in customLevels.OrderBy(x => x.GetName()))
+                {
+                    if (customLevel is CustomFolderInfo)
+                        levels.Add(customLevel as CustomFolderInfo);
+                    else if (customLevel is CustomLevelInfo)
+                        levels.Add(customLevel as CustomLevelInfo);
+                }
+
+                return levels;
+            }
         }
+
+
     }
 }

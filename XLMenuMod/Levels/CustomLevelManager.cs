@@ -109,8 +109,7 @@ namespace XLMenuMod.Levels
                 }
             }
 
-            var orderedLevels = NestedCustomLevels.OrderBy(x => x.GetName());
-            NestedCustomLevels = orderedLevels.ToList();
+            NestedCustomLevels = NestedCustomLevels.OrderBy(x => x.GetName()).ToList();
 
             if (CurrentFolder == null && NestedCustomLevels.Any())
             {
@@ -168,34 +167,6 @@ namespace XLMenuMod.Levels
                 {
                     parent = child;
                 }
-            }
-        }
-
-        public static void MoveUpDirectory()
-        {
-            CurrentFolder = CurrentFolder.Parent as CustomFolderInfo;
-            SetLevelList();
-        }
-
-        public static void SetLevelList()
-        {
-            var levelSelector = FindObjectOfType<LevelSelectionController>();
-            if (levelSelector != null)
-            {
-                levelSelector.Items.Clear();
-
-                if (CurrentFolder == null)
-                {
-                    levelSelector.Items.AddRange(NestedCustomLevels.Select(x => x.GetLevelInfo()).ToList());
-                    levelSelector.LevelCategoryButton.label.text = levelSelector.showCustom ? "Custom Maps" : "Official Maps";
-                }
-                else
-                {
-                    levelSelector.Items.AddRange(CurrentFolder.Children.Select(x => x.GetLevelInfo()).ToList());
-                    levelSelector.LevelCategoryButton.label.text = CurrentFolder.GetName();
-                }
-
-                levelSelector.UpdateList();
             }
         }
     }
