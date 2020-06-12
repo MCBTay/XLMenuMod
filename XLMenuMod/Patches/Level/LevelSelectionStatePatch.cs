@@ -1,6 +1,7 @@
 ﻿using GameManagement;
 using Harmony12;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -20,6 +21,8 @@ namespace XLMenuMod.Patches.Level
                     UISounds.Instance?.PlayOneShotSelectMajor();
 
                     CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.Parent as CustomFolderInfo;
+
+                    EventSystem.current.SetSelectedGameObject(null);
                     Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
                     CustomLevelManager.UpdateLabel();
 

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -11,6 +14,7 @@ namespace XLMenuMod.Levels
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
         public static List<ICustomLevelInfo> OriginalCustomLevels { get; set; }
+        public static float LastSelectedTime { get; set; }
 
         static CustomLevelManager()
         {
@@ -139,8 +143,8 @@ namespace XLMenuMod.Levels
 
         public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
         {
-            var newFolder = new CustomFolderInfo { name = $"\\{folder}", Parent = parent, LevelInfo = new LevelInfo { name = $"\\{folder}", path = path } };
-            newFolder.Children.Add(new CustomFolderInfo { name = "..\\", Parent = newFolder.Parent, LevelInfo = new LevelInfo { name = $"..\\" } });
+            var newFolder = new CustomFolderInfo { name = $"\\{folder}", Parent = parent };
+            newFolder.Children.Add(new CustomFolderInfo { name = "..\\", Parent = newFolder.Parent });
 
             if (parent != null)
             {

@@ -1,8 +1,10 @@
 ﻿using Harmony12;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Levels;
 using XLMenuMod.Levels.Interfaces;
 
@@ -24,6 +26,9 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionController __instance, ref LevelInfo level)
             {
+                if (CustomLevelManager.LastSelectedTime != 0 && Time.realtimeSinceStartup - CustomLevelManager.LastSelectedTime < 0.25f) return false;
+                CustomLevelManager.LastSelectedTime = Time.realtimeSinceStartup;
+
                 if (level is ICustomLevelInfo)
                 {
                     var selectedLevel = level as ICustomLevelInfo;
@@ -43,11 +48,9 @@ namespace XLMenuMod.Patches.Level
                             CustomLevelManager.CurrentFolder = selectedFolder;
                         }
 
-                        CustomLevelManager.UpdateLabel();
-
-
                         EventSystem.current.SetSelectedGameObject(null);
-                        __instance.UpdateList(); 
+                        __instance.UpdateList();
+                        CustomLevelManager.UpdateLabel();
 
                         return false;
                     }
@@ -123,7 +126,5 @@ namespace XLMenuMod.Patches.Level
                 return levels;
             }
         }
-
-
     }
 }
