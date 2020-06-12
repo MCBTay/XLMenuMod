@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -13,14 +10,12 @@ namespace XLMenuMod.Levels
     {
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
-        public static List<ICustomLevelInfo> OriginalCustomLevels { get; set; }
         public static float LastSelectedTime { get; set; }
 
         static CustomLevelManager()
         {
             CurrentFolder = null;
             NestedCustomLevels = new List<ICustomLevelInfo>();
-            OriginalCustomLevels = new List<ICustomLevelInfo>();
         }
 
         public static List<string> LoadNestedLevelPaths(string directoryToSearch = null)
@@ -114,12 +109,6 @@ namespace XLMenuMod.Levels
             }
 
             NestedCustomLevels = NestedCustomLevels.OrderBy(x => x.GetName()).ToList();
-
-            if (CurrentFolder == null && NestedCustomLevels.Any())
-            {
-                OriginalCustomLevels.Clear();
-                OriginalCustomLevels.AddRange(NestedCustomLevels);
-            }
         }
 
         public static void AddLevel(LevelInfo level)

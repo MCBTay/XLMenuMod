@@ -1,6 +1,8 @@
 ﻿using Harmony12;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using XLMenuMod.Gear;
 using XLMenuMod.Gear.Interfaces;
 
@@ -36,15 +38,29 @@ namespace XLMenuMod.Patches.Gear
         [HarmonyPatch(typeof(GearListViewController), nameof(GearListViewController.Items), MethodType.Getter)]
         static class ItemsPatch
         {
-            static void Postfix(GearListViewController __instance, ref List<ICharacterCustomizationItem> __result)
+            static void Postfix(ref List<ICharacterCustomizationItem> __result)
             {
-                if (CustomGearManager.CurrentFolder != null &&
-                    CustomGearManager.CurrentFolder.Children != null && 
-                    CustomGearManager.CurrentFolder.Children.Any())
+                if (CustomGearManager.CurrentFolder != null &&CustomGearManager.CurrentFolder.Children != null && CustomGearManager.CurrentFolder.Children.Any())
                 {
-                    __result.Clear();
-                    __result.AddRange(CustomGearManager.CurrentFolder.Children.OrderBy(x => x.GetName()));
+                    __result = GetGear(CustomGearManager.CurrentFolder.Children);
                 }
+            }
+
+            static List<ICharacterCustomizationItem> GetGear(List<ICustomGearInfo> customGear)
+            {
+                var gear = new List<ICharacterCustomizationItem>();
+
+                foreach (var gearItem in customGear.OrderBy(x => x.GetName()))
+                {
+                    if (gearItem is CustomFolderInfo)
+                        gear.Add(gearItem as CustomFolderInfo);
+                    else if (gearItem is CustomBoardGearInfo)
+                        gear.Add(gearItem as CustomBoardGearInfo);
+                    else if (gearItem is CustomCharacterGearInfo)
+                        gear.Add(gearItem as CustomCharacterGearInfo);
+                }
+
+                return gear;
             }
         }
 
@@ -53,6 +69,9 @@ namespace XLMenuMod.Patches.Gear
         {
             static bool Prefix(GearListViewController __instance, ref ICharacterCustomizationItem item)
             {
+                if (CustomGearManager.LastSelectedTime != 0 && Time.realtimeSinceStartup - CustomGearManager.LastSelectedTime < 0.25f) return false;
+                CustomGearManager.LastSelectedTime = Time.realtimeSinceStartup;
+
                 if (item is ICustomGearInfo)
                 {
                     var selectedItem = item as ICustomGearInfo;
@@ -63,22 +82,23 @@ namespace XLMenuMod.Patches.Gear
                         var folder = selectedItem as CustomFolderInfo;
                         if (folder.GetName() == "..\\")
                         {
-                            CustomGearManager.MoveUpDirectory();
-                            // Somehow figure out the parent's index and set it to highlight
+                            CustomGearManager.CurrentFolder = CustomGearManager.CurrentFolder.Parent as CustomFolderInfo;
                         }
                         else
                         {
-                            CustomGearManager.SetCurrentFolder(folder);
-                            // Set it to the first (real) item in the list, not the ../
-                            __instance.HighlightIndex(1);
+                            CustomGearManager.CurrentFolder = folder;
                         }
+
+                        EventSystem.current.SetSelectedGameObject(null);
+                        __instance.UpdateList();
+                        CustomGearManager.UpdateLabel();
                     }
                     else
                     {
-                        if (selectedItem.GearInfo is BoardGearInfo) 
-                            item = selectedItem.GearInfo as BoardGearInfo;
-                        else if (selectedItem.GearInfo is CharacterGearInfo) 
-                            item = selectedItem.GearInfo as CharacterGearInfo;
+                        if (selectedItem is CustomBoardGearInfo) 
+                            item = selectedItem as CustomBoardGearInfo;
+                        else if (selectedItem is CustomCharacterGearInfo) 
+                            item = selectedItem as CustomCharacterGearInfo;
                     }
                 }
 

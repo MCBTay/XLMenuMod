@@ -17,7 +17,10 @@ namespace XLMenuMod.Patches.Gear
                     if (customGear == null) return true;
                     if (customGear is CustomFolderInfo) return false;
 
-                    item = customGear.GearInfo;
+                    if (customGear is CustomBoardGearInfo)
+                        item = customGear as CustomBoardGearInfo;
+                    if (customGear is CustomCharacterGearInfo)
+                        item = customGear as CustomCharacterGearInfo;
                 }
 
                 return true;
@@ -34,8 +37,11 @@ namespace XLMenuMod.Patches.Gear
                     var customGear = gear as ICustomGearInfo;
                     if (customGear == null) return true;
                     if (customGear is CustomFolderInfo) return false;
-                    
-                    gear = customGear.GearInfo as GearInfo;
+
+                    if (customGear is CustomBoardGearInfo)
+                        gear = customGear as CustomBoardGearInfo;
+                    if (customGear is CustomCharacterGearInfo)
+                        gear = customGear as CustomCharacterGearInfo; ;
                 }
 
                 return true;

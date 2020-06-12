@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using XLMenuMod.Gear.Interfaces;
@@ -9,14 +10,58 @@ namespace XLMenuMod.Gear
     {
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomGearInfo> NestedCustomGear { get; set; }
-        public static List<ICharacterCustomizationItem> OriginalCustomGear { get; set; }
         public static int CurrentGearFilterIndex { get; set; }
+        public static float LastSelectedTime { get; set; }
 
         static CustomGearManager()
         {
             CurrentFolder = null;
             NestedCustomGear = new List<ICustomGearInfo>();
-            OriginalCustomGear = new List<ICharacterCustomizationItem>();
+        }
+
+        public static void LoadNestedGear(List<ICharacterCustomizationItem> visibleGear)
+        {
+            NestedCustomGear.Clear();
+
+            foreach (var gear in visibleGear)
+            {
+                var singleMaterialGear = gear as GearInfoSingleMaterial;
+
+                // For now all I saw was one texture change per gear type, so assuming first.
+                var textureChange = singleMaterialGear?.textureChanges?.FirstOrDefault();
+                if (textureChange == null) continue;
+
+                if (string.IsNullOrEmpty(textureChange.texturePath) || !textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir)) continue;
+
+                var textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomGearDir + '\\', string.Empty);
+
+                if (string.IsNullOrEmpty(textureSubPath)) continue;
+
+                var folders = textureSubPath.Split('\\').ToList();
+                if (folders == null || !folders.Any()) continue;
+
+                if (folders.Count == 1 || Path.GetExtension(folders.First()).ToLower() == ".png")
+                {
+                    // This gear item is at the root.
+                    AddGear(singleMaterialGear);
+                    continue;
+                }
+
+                CustomFolderInfo parent = null;
+                foreach (var folder in folders)
+                {
+                    if (Path.GetExtension(folder).ToLower() == ".png")
+                    {
+                        AddGear(singleMaterialGear, ref parent);
+                    }
+                    else
+                    {
+                        AddFolder(folder, ref parent);
+                    }
+                }
+            }
+
+            NestedCustomGear = NestedCustomGear.OrderBy(x => x.GetName()).ToList();
         }
 
         public static void AddGear(GearInfoSingleMaterial gear)
@@ -28,16 +73,14 @@ namespace XLMenuMod.Gear
                 var boardGear = gear as BoardGearInfo;
                 customGear = new CustomBoardGearInfo(boardGear.name, boardGear.type, boardGear.isCustom, boardGear.textureChanges, boardGear.tags)
                 {
-                    GearInfo = boardGear,
                     Parent = null
                 };
             }
             else if (gear is CharacterGearInfo)
             {
                 var characterGear = gear as CharacterGearInfo;
-                customGear = new CustomBoardGearInfo(characterGear.name, characterGear.type, characterGear.isCustom, characterGear.textureChanges, characterGear.tags)
+                customGear = new CustomCharacterGearInfo(characterGear.name, characterGear.type, characterGear.isCustom, characterGear.textureChanges, characterGear.tags)
                 {
-                    GearInfo = characterGear,
                     Parent = null
                 };
             }
@@ -57,16 +100,14 @@ namespace XLMenuMod.Gear
                 var boardGear = gear as BoardGearInfo;
                 customGear = new CustomBoardGearInfo(boardGear.name, boardGear.type, boardGear.isCustom, boardGear.textureChanges, boardGear.tags)
                 {
-                    GearInfo = boardGear,
                     Parent = parent
                 };
             }
             else if (gear is CharacterGearInfo)
             {
                 var characterGear = gear as CharacterGearInfo;
-                customGear = new CustomBoardGearInfo(characterGear.name, characterGear.type, characterGear.isCustom, characterGear.textureChanges, characterGear.tags)
+                customGear = new CustomCharacterGearInfo(characterGear.name, characterGear.type, characterGear.isCustom, characterGear.textureChanges, characterGear.tags)
                 {
-                    GearInfo = characterGear,
                     Parent = parent
                 };
             }
@@ -150,6 +191,21 @@ namespace XLMenuMod.Gear
                 }
 
                 gearSelector.listView.UpdateList();
+            }
+        }
+
+        public static void UpdateLabel()
+        {
+            var gearSelector = FindObjectOfType<GearSelectionController>();
+            if (gearSelector == null) return;
+
+            if (CurrentFolder == null)
+            {
+                gearSelector.gearTypeFiltering.gearCategoryButton.label.text = "Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel();
+            }
+            else
+            {
+                gearSelector.gearTypeFiltering.gearCategoryButton.label.text = CurrentFolder.GetName();
             }
         }
     }

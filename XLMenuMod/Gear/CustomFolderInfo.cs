@@ -10,7 +10,6 @@ namespace XLMenuMod.Gear
         public List<ICustomGearInfo> Children { get; set; }
         public bool IsFavorite { get; set; }
         public string Name { get; set; }
-        public ICharacterCustomizationItem GearInfo { get; set; }
 
         public CustomFolderInfo() 
         {
@@ -18,7 +17,6 @@ namespace XLMenuMod.Gear
             Children = new List<ICustomGearInfo>();
             IsFavorite = false;
             Name = string.Empty;
-            GearInfo = null;
         }
 
         public string GetName() { return Name; }
