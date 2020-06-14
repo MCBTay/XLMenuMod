@@ -1,4 +1,5 @@
 ﻿using Harmony12;
+using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityModManagerNet;
@@ -12,6 +13,7 @@ namespace XLMenuMod
         public static bool Enabled { get; private set; }
 
         private static HarmonyInstance Harmony { get; set; }
+        public static string ModPath { get; private set; }
 
         public static GameObject CustomLevelManagerGameObject;
         public static GameObject CustomGearManagerGameObject;
@@ -25,6 +27,8 @@ namespace XLMenuMod
             modEntry.OnToggle = OnToggle;
             modEntry.OnGUI = Settings.OnSettingsGUI;
             modEntry.OnSaveGUI = OnSaveGUI;
+
+            ModPath = modEntry.Path;
 
             return true;
         }
@@ -46,6 +50,14 @@ namespace XLMenuMod
                 CustomGearManagerGameObject = new GameObject();
                 CustomGearManagerGameObject.AddComponent<CustomGearManager>();
                 Object.DontDestroyOnLoad(CustomGearManagerGameObject);
+
+                // Replace CustomLevelsCache.json with saved version if it exists. 
+                // This is to prevent unnecessary hashes.
+                if (File.Exists(Path.Combine(ModPath, "CachedCustomLevels.json")))
+                {
+                    File.Copy(Path.Combine(ModPath, "CachedCustomLevels.json"), SaveManager.Instance.CachedLevelsPath, true);
+                }
+                CustomLevelManager.LoadNestedLevels();
             }
             else
             {

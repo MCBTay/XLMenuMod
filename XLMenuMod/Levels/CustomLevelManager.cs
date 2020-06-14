@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Harmony12;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -109,6 +110,8 @@ namespace XLMenuMod.Levels
             }
 
             NestedCustomLevels = NestedCustomLevels.OrderBy(x => x.GetName()).ToList();
+
+            Traverse.Create(LevelManager.Instance).Method("InitializeCustomLevels").GetValue();
         }
 
         public static void AddLevel(LevelInfo level)
