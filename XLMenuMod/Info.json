@@ -8,5 +8,5 @@
   "AssemblyName": "XLMenuMod.dll",
   "EntryMethod": "XLMenuMod.Main.Load",
   "HomePage": "https://github.com/MCBTay/XLMenuMod",
-  "Repository": "https://github.com/MCBTay/XLMenuMod"
+  "Repository": "https://raw.githubusercontent.com/MCBTay/XLMenuMod/master/repository.json"
 }
