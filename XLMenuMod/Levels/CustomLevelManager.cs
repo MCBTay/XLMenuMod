@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -12,6 +14,8 @@ namespace XLMenuMod.Levels
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
         public static float LastSelectedTime { get; set; }
+        public static CategoryButton SortCategoryButton { get; set; }
+        public static int CurrentLevelSort { get; set; }
 
         static CustomLevelManager()
         {
@@ -52,7 +56,11 @@ namespace XLMenuMod.Levels
             NestedCustomLevels.Clear();
 
             var levelsToRemove = new List<LevelInfo>();
-            foreach (var level in LevelManager.Instance.CustomLevels)
+
+            // When this bit was originally written, LevelManager.Instance.CustomLevels didn't know about any levels that were nested... now that I'm explicitly
+            // getting nested maps to hash, it does know about them.  for now, filter it to custom levels only in the root as that's how this logic was intended.
+            // TODO: Rewrite this into one loop? instead of 2?
+            foreach (var level in LevelManager.Instance.CustomLevels.Where(x => Path.GetDirectoryName(x.path) == SaveManager.Instance.CustomLevelsDir))
             {
                 if (string.IsNullOrEmpty(level.path) || !level.path.StartsWith(SaveManager.Instance.CustomLevelsDir)) continue;
 
@@ -135,8 +143,8 @@ namespace XLMenuMod.Levels
 
         public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
         {
-            var newFolder = new CustomFolderInfo { name = $"\\{folder}", Parent = parent };
-            newFolder.Children.Add(new CustomFolderInfo { name = "..\\", Parent = newFolder.Parent });
+            var newFolder = new CustomFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+            newFolder.Children.Add(new CustomFolderInfo("..\\", parent == null ? string.Empty : Path.GetDirectoryName(parent.path), newFolder.Parent));
 
             if (parent != null)
             {
@@ -179,6 +187,52 @@ namespace XLMenuMod.Levels
             {
                 levelSelector.LevelCategoryButton.label.text = CurrentFolder.GetName();
             }
+        }
+
+        public static List<ICustomLevelInfo> SortList(List<ICustomLevelInfo> levels)
+        {
+            List<ICustomLevelInfo> sorted = null;
+
+            switch (CurrentLevelSort)
+            {
+                case (int)LevelSortMethods.Least_Played:
+                    sorted = levels.OrderBy(x => x.PlayCount).ToList();
+                    break;
+                case (int)LevelSortMethods.Most_Played:
+                    sorted = levels.OrderByDescending(x => x.PlayCount).ToList();
+                    break;
+                case (int)LevelSortMethods.Newest:
+                    break;
+                case (int)LevelSortMethods.Oldest:
+                    break;
+                case (int)LevelSortMethods.Filesize_ASC:
+                    sorted = levels.OrderBy(x => x.Size).ToList();
+                    break;
+                case (int)LevelSortMethods.Filesize_DESC:
+                    sorted = levels.OrderByDescending(x => x.Size).ToList();
+                    break;
+                case (int)LevelSortMethods.Name_ASC:
+                    sorted = levels.OrderBy(x => x.GetName()).ToList();
+                    break;
+                case (int)LevelSortMethods.Name_DESC:
+                default:
+                    sorted = levels.OrderByDescending(x => x.GetName()).ToList();
+                    break;
+            }
+
+            return sorted;
+        }
+
+        public enum LevelSortMethods
+        {
+            Name_ASC,
+            Name_DESC,
+            Filesize_ASC,
+            Filesize_DESC,
+            Newest,
+            Oldest,
+            Most_Played,
+            Least_Played,
         }
     }
 }
