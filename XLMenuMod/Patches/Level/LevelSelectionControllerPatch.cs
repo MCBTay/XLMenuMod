@@ -1,10 +1,10 @@
 ﻿using Harmony12;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Levels;
 using XLMenuMod.Levels.Interfaces;
 
@@ -57,6 +57,18 @@ namespace XLMenuMod.Patches.Level
                     else
                     {
                         CustomLevelManager.CurrentFolder = null;
+
+                        var customlevel = level as CustomLevelInfo;
+                        if (customlevel != null)
+                        {
+                            var found = LevelManager.Instance.CustomLevels.FirstOrDefault(x => x.hash == customlevel.hash);
+                            if (found != null && found is CustomLevelInfo)
+                            {
+                                (found as CustomLevelInfo).PlayCount++;
+                            }
+                            SaveManager.Instance.SaveCustomLevelListCache(JsonConvert.SerializeObject(LevelManager.Instance.CustomLevels, Formatting.Indented));
+                        }
+
                         return true;
                     }
                 }
@@ -115,7 +127,7 @@ namespace XLMenuMod.Patches.Level
             {
                 var levels = new List<LevelInfo>();
 
-                foreach (var customLevel in customLevels.OrderBy(x => x.GetName()))
+                foreach (var customLevel in CustomLevelManager.SortList(customLevels))
                 {
                     if (customLevel is CustomFolderInfo)
                         levels.Add(customLevel as CustomFolderInfo);
@@ -124,6 +136,83 @@ namespace XLMenuMod.Patches.Level
                 }
 
                 return levels;
+            }
+        }
+
+        [HarmonyPatch(typeof(LevelSelectionController), "Awake")]
+        public static class AwakePatch
+        {
+            static void Postfix(LevelSelectionController __instance)
+            {
+                CustomLevelManager.SortCategoryButton = UnityEngine.Object.Instantiate(__instance.LevelCategoryButton);
+                CustomLevelManager.SortCategoryButton.transform.SetParent(__instance.LevelCategoryButton.transform, false);
+                CustomLevelManager.SortCategoryButton.transform.localScale = new Vector3(1, 1, 1);
+
+                CustomLevelManager.SortCategoryButton.OnNextCategory += new Action(OnNextSort);
+                CustomLevelManager.SortCategoryButton.OnPreviousCategory += new Action(OnPreviousSort);
+
+                CustomLevelManager.SortCategoryButton.gameObject.SetActive(__instance.showCustom);
+
+                //Delete the divider line
+                GameObject.Destroy(CustomLevelManager.SortCategoryButton.gameObject.GetComponentInChildren<UnityEngine.UI.Image>());
+
+                Traverse.Create(CustomLevelManager.SortCategoryButton).Method("SetText", ((CustomLevelManager.LevelSortMethods)CustomLevelManager.CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
+                CustomLevelManager.SortCategoryButton.label.fontSize = 20;
+
+                CustomLevelManager.SortCategoryButton.transform.Translate(new Vector3(0, 20, 0));
+            }
+
+            private static void OnPreviousSort()
+            {
+                //TODO: Handle double selects
+
+                CustomLevelManager.CurrentLevelSort--;
+
+                if (CustomLevelManager.CurrentLevelSort < 0)
+                    CustomLevelManager.CurrentLevelSort = Enum.GetValues(typeof(CustomLevelManager.LevelSortMethods)).Length - 1;
+
+                CustomLevelManager.SortCategoryButton.label.text = ((CustomLevelManager.LevelSortMethods)CustomLevelManager.CurrentLevelSort).ToString().Replace('_', ' ');
+
+                if (CustomLevelManager.CurrentFolder != null && CustomLevelManager.CurrentFolder.Children != null && CustomLevelManager.CurrentFolder.Children.Any())
+                {
+                    CustomLevelManager.CurrentFolder.Children = CustomLevelManager.SortList(CustomLevelManager.CurrentFolder.Children);
+                }
+                else
+                {
+                    CustomLevelManager.NestedCustomLevels = CustomLevelManager.SortList(CustomLevelManager.NestedCustomLevels);
+                }
+
+                var levelSelector = UnityEngine.Object.FindObjectOfType<LevelSelectionController>();
+
+                if (levelSelector != null)
+                    levelSelector.UpdateList();
+            }
+
+            private static void OnNextSort()
+            {
+                //TODO: Handle double selects
+
+                CustomLevelManager.CurrentLevelSort++;
+
+                if (CustomLevelManager.CurrentLevelSort > Enum.GetValues(typeof(CustomLevelManager.LevelSortMethods)).Length - 1)
+                    CustomLevelManager.CurrentLevelSort = 0;
+
+                CustomLevelManager.SortCategoryButton.label.text = ((CustomLevelManager.LevelSortMethods)CustomLevelManager.CurrentLevelSort).ToString().Replace('_', ' ');
+
+
+                if (CustomLevelManager.CurrentFolder != null && CustomLevelManager.CurrentFolder.Children != null && CustomLevelManager.CurrentFolder.Children.Any())
+                {
+                    CustomLevelManager.CurrentFolder.Children = CustomLevelManager.SortList(CustomLevelManager.CurrentFolder.Children);
+                }
+                else
+                {
+                    CustomLevelManager.NestedCustomLevels = CustomLevelManager.SortList(CustomLevelManager.NestedCustomLevels);
+                }
+
+                var levelSelector = UnityEngine.Object.FindObjectOfType<LevelSelectionController>();
+
+                if (levelSelector != null)
+                    levelSelector.UpdateList();
             }
         }
     }
