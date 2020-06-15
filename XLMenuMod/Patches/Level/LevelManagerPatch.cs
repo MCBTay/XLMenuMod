@@ -1,11 +1,9 @@
 ﻿using Harmony12;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -18,27 +16,6 @@ namespace XLMenuMod.Patches.Level
             static void Postfix(ref List<string> __result)
             {
                 __result.AddRange(CustomLevelManager.LoadNestedLevelPaths());
-            }
-        }
-
-        [HarmonyPatch(typeof(LevelManager), nameof(LevelManager.LoadCachedLevels))]
-        public static class LoadCachedLevelsPatch
-        {
-            static bool Prefix(DateTime ___lastHashingTime)
-            {
-                if (LevelManager.Instance.IsHashing)
-                    return false;
-                string str = SaveManager.Instance.LoadCustomLevelListCache();
-                if (str == null)
-                    return false;
-                ___lastHashingTime = File.GetLastWriteTime(SaveManager.Instance.CachedLevelsPath);
-
-                LevelManager.Instance.CustomLevels.Clear();
-                LevelManager.Instance.CustomLevels.AddRange(JsonConvert.DeserializeObject<List<CustomLevelInfo>>(str));
-                
-                Debug.Log($"Loaded CustomLevel Cache with {LevelManager.Instance.CustomLevels.Count} Levels last updated on from {___lastHashingTime.ToShortDateString()} at {___lastHashingTime.ToShortTimeString()}");
-                
-                return false;
             }
         }
 
