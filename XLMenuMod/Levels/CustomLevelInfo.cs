@@ -1,4 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.IO;
+using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -7,7 +10,16 @@ namespace XLMenuMod.Levels
     {
         [JsonIgnore]
         public ICustomLevelInfo Parent { get; set; }
-        
+
+        [JsonIgnore]
+        public int PlayCount { get; set; }
+
+        [JsonIgnore]
+        public long Size { get; set; }
+
+        [JsonIgnore]
+        public DateTime ModifiedDate { get; set; }
+
 
         [JsonIgnore]
         public bool IsFavorite { get; set; }
@@ -20,6 +32,8 @@ namespace XLMenuMod.Levels
             hash = level.hash;
             path = level.path;
             isAssetBundle = level.isAssetBundle;
+
+            Size = new FileInfo(path).Length;
 
             Parent = null;
             IsFavorite = false;
