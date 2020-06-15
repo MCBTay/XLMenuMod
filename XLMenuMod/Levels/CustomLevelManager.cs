@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -55,38 +53,11 @@ namespace XLMenuMod.Levels
         {
             NestedCustomLevels.Clear();
 
-            var levelsToRemove = new List<LevelInfo>();
-
-            // When this bit was originally written, LevelManager.Instance.CustomLevels didn't know about any levels that were nested... now that I'm explicitly
-            // getting nested maps to hash, it does know about them.  for now, filter it to custom levels only in the root as that's how this logic was intended.
-            // TODO: Rewrite this into one loop? instead of 2?
-            foreach (var level in LevelManager.Instance.CustomLevels.Where(x => Path.GetDirectoryName(x.path) == SaveManager.Instance.CustomLevelsDir))
+            foreach (var level in LevelManager.Instance.CustomLevels)
             {
                 if (string.IsNullOrEmpty(level.path) || !level.path.StartsWith(SaveManager.Instance.CustomLevelsDir)) continue;
 
-                // Check to ensure the file is still on disk.  
-                if (File.Exists(level.path))
-                {
-                    AddLevel(level);
-                }
-                else
-                {
-                    // If it's not still on disk, there's a chance user moved it into a folder while the game was running.
-                    levelsToRemove.Add(level);
-                } 
-            }
-
-            if (levelsToRemove.Any())
-            {
-                foreach (var level in levelsToRemove)
-                {
-                    LevelManager.Instance.CustomLevels.Remove(level);
-                }
-            }
-
-            foreach (var path in LoadNestedLevelPaths())
-            { 
-                var levelSubPath = path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
+                var levelSubPath = level.path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
 
                 if (string.IsNullOrEmpty(levelSubPath)) continue;
 
@@ -96,7 +67,7 @@ namespace XLMenuMod.Levels
                 if (folders.Count == 1)
                 {
                     // This level is at the root
-                    AddLevel(LevelManager.Instance.LevelInfoForPath(path));
+                    AddLevel(level);
                     continue;
                 }
 
@@ -108,28 +79,45 @@ namespace XLMenuMod.Levels
 
                     if (folder == folders.Last())
                     {
-                        AddLevel(LevelManager.Instance.LevelInfoForPath(path), ref parent);
+                        AddLevel(level, ref parent);
                     }
                     else
                     {
-                        AddFolder(folder, path, ref parent);
+                        AddFolder(folder, level.path, ref parent);
                     }
                 }
             }
-
-            NestedCustomLevels = NestedCustomLevels.OrderBy(x => x.GetName()).ToList();
 
             Traverse.Create(LevelManager.Instance).Method("InitializeCustomLevels").GetValue();
         }
 
         public static void AddLevel(LevelInfo level)
         {
-            NestedCustomLevels.Add(new CustomLevelInfo(level));
+            if (level is CustomLevelInfo)
+            {
+                var customLevel = level as CustomLevelInfo;
+                NestedCustomLevels.Add(customLevel);
+            }
+            else
+            {
+                NestedCustomLevels.Add(new CustomLevelInfo(level));
+            }
         }
 
         public static void AddLevel(LevelInfo level, ref CustomFolderInfo parent)
         {
-            var customLevel = new CustomLevelInfo(level, parent);
+            CustomLevelInfo customLevel = null;
+
+            if (level is CustomLevelInfo)
+            {
+                customLevel = level as CustomLevelInfo;
+            }
+            else
+            {
+                customLevel = new CustomLevelInfo(level, parent);
+            }
+
+            if (customLevel == null) return;
 
             if (parent != null && !parent.Children.Any(x => x == customLevel))
             {
@@ -196,14 +184,16 @@ namespace XLMenuMod.Levels
             switch (CurrentLevelSort)
             {
                 case (int)LevelSortMethods.Least_Played:
-                    sorted = levels.OrderBy(x => x.PlayCount).ToList();
+                    sorted = levels.OrderBy(x => x.GetPlayCount()).ToList();
                     break;
                 case (int)LevelSortMethods.Most_Played:
-                    sorted = levels.OrderByDescending(x => x.PlayCount).ToList();
+                    sorted = levels.OrderByDescending(x => x.GetPlayCount()).ToList();
                     break;
                 case (int)LevelSortMethods.Newest:
+                    sorted = levels.OrderByDescending(x => x.GetModifiedDate(false)).ToList();
                     break;
                 case (int)LevelSortMethods.Oldest:
+                    sorted = levels.OrderBy(x => x.GetModifiedDate(true)).ToList();
                     break;
                 case (int)LevelSortMethods.Filesize_ASC:
                     sorted = levels.OrderBy(x => x.Size).ToList();
