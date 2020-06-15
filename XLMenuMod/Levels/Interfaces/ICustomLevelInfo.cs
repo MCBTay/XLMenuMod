@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace XLMenuMod.Levels.Interfaces
 {
@@ -13,5 +14,6 @@ namespace XLMenuMod.Levels.Interfaces
         string GetName();
         DateTime GetModifiedDate();
         DateTime GetModifiedDate(bool ascending);
+        int GetPlayCount(List<ICustomLevelInfo> source = null);
     }
 }

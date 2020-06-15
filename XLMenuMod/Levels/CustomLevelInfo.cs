@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -27,6 +27,8 @@ namespace XLMenuMod.Levels
 
         public DateTime GetModifiedDate() { return ModifiedDate; }
         public DateTime GetModifiedDate(bool ascending) { return ModifiedDate; }
+
+        public int GetPlayCount(List<ICustomLevelInfo> source = null) { return PlayCount; }
 
         public CustomLevelInfo()
         {

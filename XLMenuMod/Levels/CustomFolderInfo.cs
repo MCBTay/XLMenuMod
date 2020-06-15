@@ -61,6 +61,32 @@ namespace XLMenuMod.Levels
             return modifiedDate;
         }
 
+        public int GetPlayCount(List<ICustomLevelInfo> source = null)
+        {
+            int playCount = 0;
+
+            if (source == null) source = Children;
+
+            if (source != null && source.Any())
+            {
+                foreach (var level in source)
+                {
+                    if (level is CustomFolderInfo)
+                    {
+                        var customFolder = level as CustomFolderInfo;
+                        playCount += GetPlayCount(customFolder.Children);
+                    }
+                    else if (level is CustomLevelInfo)
+                    {
+                        var customLevel = level as CustomLevelInfo;
+                        playCount += customLevel.PlayCount;
+                    }
+                }
+            }
+
+            return playCount;
+        }
+
         public CustomFolderInfo(string name, string path, ICustomLevelInfo parent)
         {
             this.name = name;
