@@ -15,9 +15,10 @@ namespace XLMenuMod.Patches.Level
         [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ToggleShowCustom))]
         public static class ToggleShowCustomPatch
         {
-            static void Postfix()
+            static void Postfix(LevelSelectionController __instance)
             {
                 CustomLevelManager.CurrentFolder = null;
+                CustomLevelManager.SortCategoryButton.gameObject.SetActive(__instance.showCustom);
             }
         }
 
