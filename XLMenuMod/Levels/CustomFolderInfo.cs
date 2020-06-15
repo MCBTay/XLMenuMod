@@ -34,6 +34,32 @@ namespace XLMenuMod.Levels
         public string GetName() { return name; }
         public long GetSize() { return Size; }
 
+        public DateTime GetModifiedDate() { return GetModifiedDate(true); }
+        public DateTime GetModifiedDate(bool ascending) 
+        {
+            DateTime modifiedDate = DateTime.MinValue;
+
+            if (GetName() == "..\\" || string.IsNullOrEmpty(path))
+                return modifiedDate;
+
+            var directoryInfo = new DirectoryInfo(path);
+            if (ascending)
+            {
+                modifiedDate = (from file in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories)
+                                where file.Extension.ToLower() != ".dll"
+                                orderby file.LastWriteTime
+                                select file.LastWriteTime).FirstOrDefault();
+            }
+            else
+            {
+                modifiedDate = (from file in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories)
+                                where file.Extension.ToLower() != ".dll"
+                                orderby file.LastWriteTime descending
+                                select file.LastWriteTime).FirstOrDefault();
+            }
+
+            return modifiedDate;
+        }
 
         public CustomFolderInfo(string name, string path, ICustomLevelInfo parent)
         {

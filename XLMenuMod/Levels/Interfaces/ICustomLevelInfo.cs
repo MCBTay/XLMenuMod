@@ -11,5 +11,7 @@ namespace XLMenuMod.Levels.Interfaces
         DateTime ModifiedDate { get; set; }
 
         string GetName();
+        DateTime GetModifiedDate();
+        DateTime GetModifiedDate(bool ascending);
     }
 }

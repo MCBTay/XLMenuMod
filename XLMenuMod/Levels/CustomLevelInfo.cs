@@ -11,7 +11,6 @@ namespace XLMenuMod.Levels
         [JsonIgnore]
         public ICustomLevelInfo Parent { get; set; }
 
-        [JsonIgnore]
         public int PlayCount { get; set; }
 
         [JsonIgnore]
@@ -26,6 +25,15 @@ namespace XLMenuMod.Levels
 
         public string GetName() { return name; }
 
+        public DateTime GetModifiedDate() { return ModifiedDate; }
+        public DateTime GetModifiedDate(bool ascending) { return ModifiedDate; }
+
+        public CustomLevelInfo()
+        {
+            Parent = null;
+            IsFavorite = false;
+        }
+
         public CustomLevelInfo(LevelInfo level) 
         {
             name = level.name;
@@ -33,10 +41,9 @@ namespace XLMenuMod.Levels
             path = level.path;
             isAssetBundle = level.isAssetBundle;
 
-            Size = new FileInfo(path).Length;
-
-            Parent = null;
-            IsFavorite = false;
+            var fileInfo = new FileInfo(path);
+            Size = fileInfo.Length;
+            ModifiedDate = fileInfo.LastWriteTime;
         }
 
         public CustomLevelInfo(LevelInfo level, CustomFolderInfo parent) : this(level)
