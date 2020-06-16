@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -236,8 +237,10 @@ namespace XLMenuMod.Levels
 
             SortCategoryButton.gameObject.SetActive(__instance.showCustom);
 
+            SortCategoryButton.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
+
             //Delete the divider line
-            Destroy(SortCategoryButton.gameObject.GetComponentInChildren<UnityEngine.UI.Image>());
+            Destroy(SortCategoryButton.gameObject.GetComponentInChildren<Image>());
 
             Traverse.Create(SortCategoryButton).Method("SetText", ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
             SortCategoryButton.label.fontSize = 20;
