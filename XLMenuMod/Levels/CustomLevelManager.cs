@@ -226,16 +226,16 @@ namespace XLMenuMod.Levels
             Least_Played,
         }
 
-        public static void CreateSortCategoryButton(LevelSelectionController __instance)
+        public static void CreateSortCategoryButton(CategoryButton baseButton)
         {
-            SortCategoryButton = Instantiate(__instance.LevelCategoryButton);
-            SortCategoryButton.transform.SetParent(__instance.LevelCategoryButton.transform, false);
+            SortCategoryButton = Instantiate(baseButton);
+            SortCategoryButton.transform.SetParent(baseButton.transform, false);
             SortCategoryButton.transform.localScale = new Vector3(1, 1, 1);
 
             SortCategoryButton.OnNextCategory += new Action(OnNextSort);
             SortCategoryButton.OnPreviousCategory += new Action(OnPreviousSort);
 
-            SortCategoryButton.gameObject.SetActive(__instance.showCustom);
+            SortCategoryButton.gameObject.SetActive(false);
 
             SortCategoryButton.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
 
