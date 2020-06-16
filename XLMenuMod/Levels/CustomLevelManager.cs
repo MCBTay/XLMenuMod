@@ -1,4 +1,5 @@
 ﻿using Harmony12;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -222,6 +223,77 @@ namespace XLMenuMod.Levels
             Oldest,
             Most_Played,
             Least_Played,
+        }
+
+        public static void CreateSortCategoryButton(LevelSelectionController __instance)
+        {
+            SortCategoryButton = Instantiate(__instance.LevelCategoryButton);
+            SortCategoryButton.transform.SetParent(__instance.LevelCategoryButton.transform, false);
+            SortCategoryButton.transform.localScale = new Vector3(1, 1, 1);
+
+            SortCategoryButton.OnNextCategory += new Action(OnNextSort);
+            SortCategoryButton.OnPreviousCategory += new Action(OnPreviousSort);
+
+            SortCategoryButton.gameObject.SetActive(__instance.showCustom);
+
+            //Delete the divider line
+            Destroy(SortCategoryButton.gameObject.GetComponentInChildren<UnityEngine.UI.Image>());
+
+            Traverse.Create(SortCategoryButton).Method("SetText", ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
+            SortCategoryButton.label.fontSize = 20;
+
+            SortCategoryButton.transform.Translate(new Vector3(0, 20, 0));
+        }
+
+        private static void OnPreviousSort()
+        {
+            //TODO: Handle double selects
+            CurrentLevelSort--;
+
+            if (CurrentLevelSort < 0)
+                CurrentLevelSort = Enum.GetValues(typeof(LevelSortMethods)).Length - 1;
+
+            SortCategoryButton.label.text = ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ');
+
+            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            {
+                CurrentFolder.Children = SortList(CurrentFolder.Children);
+            }
+            else
+            {
+                NestedCustomLevels = SortList(NestedCustomLevels);
+            }
+
+            var levelSelector = FindObjectOfType<LevelSelectionController>();
+
+            if (levelSelector != null)
+                levelSelector.UpdateList();
+        }
+
+        private static void OnNextSort()
+        {
+            //TODO: Handle double selects
+            CurrentLevelSort++;
+
+            if (CurrentLevelSort > Enum.GetValues(typeof(LevelSortMethods)).Length - 1)
+                CurrentLevelSort = 0;
+
+            SortCategoryButton.label.text = ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ');
+
+
+            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            {
+                CurrentFolder.Children = SortList(CurrentFolder.Children);
+            }
+            else
+            {
+                NestedCustomLevels = SortList(NestedCustomLevels);
+            }
+
+            var levelSelector = FindObjectOfType<LevelSelectionController>();
+
+            if (levelSelector != null)
+                levelSelector.UpdateList();
         }
     }
 }
