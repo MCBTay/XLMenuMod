@@ -184,47 +184,35 @@ namespace XLMenuMod.Levels
 
             switch (CurrentLevelSort)
             {
-                case (int)LevelSortMethods.Least_Played:
+                case (int)LevelSortMethod.Least_Played:
                     sorted = levels.OrderBy(x => x.GetPlayCount()).ToList();
                     break;
-                case (int)LevelSortMethods.Most_Played:
+                case (int)LevelSortMethod.Most_Played:
                     sorted = levels.OrderByDescending(x => x.GetPlayCount()).ToList();
                     break;
-                case (int)LevelSortMethods.Newest:
+                case (int)LevelSortMethod.Newest:
                     sorted = levels.OrderByDescending(x => x.GetModifiedDate(false)).ToList();
                     break;
-                case (int)LevelSortMethods.Oldest:
+                case (int)LevelSortMethod.Oldest:
                     sorted = levels.OrderBy(x => x.GetModifiedDate(true)).ToList();
                     break;
-                case (int)LevelSortMethods.Filesize_ASC:
+                case (int)LevelSortMethod.Filesize_ASC:
                     sorted = levels.OrderBy(x => x.Size).ToList();
                     break;
-                case (int)LevelSortMethods.Filesize_DESC:
+                case (int)LevelSortMethod.Filesize_DESC:
                     sorted = levels.OrderByDescending(x => x.Size).ToList();
                     break;
-                case (int)LevelSortMethods.Name_ASC:
+                case (int)LevelSortMethod.Name_ASC:
                     sorted = levels.OrderBy(x => x.GetName()).ToList();
                     break;
-                case (int)LevelSortMethods.Name_DESC:
+                case (int)LevelSortMethod.Name_DESC:
                 default:
                     sorted = levels.OrderByDescending(x => x.GetName()).ToList();
                     break;
             }
 
             return sorted;
-        }
-
-        public enum LevelSortMethods
-        {
-            Name_ASC,
-            Name_DESC,
-            Filesize_ASC,
-            Filesize_DESC,
-            Newest,
-            Oldest,
-            Most_Played,
-            Least_Played,
-        }
+        }   
 
         public static void CreateSortCategoryButton(CategoryButton baseButton)
         {
@@ -242,7 +230,7 @@ namespace XLMenuMod.Levels
             //Delete the divider line
             Destroy(SortCategoryButton.gameObject.GetComponentInChildren<Image>());
 
-            Traverse.Create(SortCategoryButton).Method("SetText", ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
+            Traverse.Create(SortCategoryButton).Method("SetText", ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
             SortCategoryButton.label.fontSize = 20;
 
             SortCategoryButton.transform.Translate(new Vector3(0, 20, 0));
@@ -254,9 +242,9 @@ namespace XLMenuMod.Levels
             CurrentLevelSort--;
 
             if (CurrentLevelSort < 0)
-                CurrentLevelSort = Enum.GetValues(typeof(LevelSortMethods)).Length - 1;
+                CurrentLevelSort = Enum.GetValues(typeof(LevelSortMethod)).Length - 1;
 
-            SortCategoryButton.label.text = ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ');
+            SortCategoryButton.label.text = ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ');
 
             if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
             {
@@ -278,10 +266,10 @@ namespace XLMenuMod.Levels
             //TODO: Handle double selects
             CurrentLevelSort++;
 
-            if (CurrentLevelSort > Enum.GetValues(typeof(LevelSortMethods)).Length - 1)
+            if (CurrentLevelSort > Enum.GetValues(typeof(LevelSortMethod)).Length - 1)
                 CurrentLevelSort = 0;
 
-            SortCategoryButton.label.text = ((LevelSortMethods)CurrentLevelSort).ToString().Replace('_', ' ');
+            SortCategoryButton.label.text = ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ');
 
 
             if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
