@@ -58,6 +58,7 @@ namespace XLMenuMod.Patches.Level
                     else
                     {
                         CustomLevelManager.CurrentFolder = null;
+                        CustomLevelManager.UpdateLabel();
 
                         var customlevel = level as CustomLevelInfo;
                         if (customlevel != null)
