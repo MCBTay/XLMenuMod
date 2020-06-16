@@ -33,6 +33,7 @@ namespace XLMenuMod.Levels
 
         public string GetName() { return name; }
         public long GetSize() { return Size; }
+        public string GetHash() { return hash; }
 
         public DateTime GetModifiedDate() { return GetModifiedDate(true); }
         public DateTime GetModifiedDate(bool ascending) 
@@ -42,24 +43,123 @@ namespace XLMenuMod.Levels
             if (GetName() == "..\\" || string.IsNullOrEmpty(path))
                 return modifiedDate;
 
-            var directoryInfo = new DirectoryInfo(path);
             if (ascending)
             {
-                modifiedDate = (from file in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories)
-                                where file.Extension.ToLower() != ".dll"
-                                orderby file.LastWriteTime
-                                select file.LastWriteTime).FirstOrDefault();
+                var child = GetOldestChild();
+                if (child != null)
+                {
+                    modifiedDate = child.ModifiedDate;
+                }
             }
             else
             {
-                modifiedDate = (from file in directoryInfo.GetFiles("*.*", SearchOption.AllDirectories)
-                                where file.Extension.ToLower() != ".dll"
-                                orderby file.LastWriteTime descending
-                                select file.LastWriteTime).FirstOrDefault();
+                var child = GetNewestChild();
+                if (child != null)
+                {
+                    modifiedDate = child.ModifiedDate;
+                }
             }
 
             return modifiedDate;
         }
+
+        public CustomLevelInfo GetNewestChild(List<ICustomLevelInfo> sourceList = null)
+        {
+            CustomLevelInfo newestChild = null;
+
+            if (sourceList == null) sourceList = Children;
+
+            if (sourceList == null || !sourceList.Any()) return newestChild;
+
+            foreach (var child in sourceList)
+            {
+                if (child is CustomLevelInfo)
+                {
+                    var customLevel = child as CustomLevelInfo;
+                
+                    if (newestChild == null)
+                    {
+                        newestChild = customLevel;
+                    }
+                    else
+                    {
+                        if (customLevel.ModifiedDate > newestChild.ModifiedDate)
+                        {
+                            newestChild = customLevel;
+                        }
+                    }
+                }
+                else if (child is CustomFolderInfo)
+                {
+                    var customFolder = child as CustomFolderInfo;
+
+                    if (newestChild == null)
+                    {
+                        newestChild = GetNewestChild(customFolder.Children);
+                    }
+                    else
+                    {
+                        var tempChild = GetNewestChild(customFolder.Children);
+                        if (tempChild != null && tempChild.ModifiedDate > newestChild.ModifiedDate)
+                        {
+                            newestChild = tempChild;
+                        }
+                    }
+                }
+            }
+
+            return newestChild;
+        }
+
+        public CustomLevelInfo GetOldestChild(List<ICustomLevelInfo> sourceList = null)
+        {
+            CustomLevelInfo oldestChild = null;
+
+            if (sourceList == null) sourceList = Children;
+
+            if (sourceList == null || !sourceList.Any()) return oldestChild;
+
+            foreach (var child in sourceList)
+            {
+                if (child is CustomLevelInfo)
+                {
+                    var customLevel = child as CustomLevelInfo;
+
+                    if (oldestChild == null)
+                    {
+                        oldestChild = customLevel;
+                    }
+                    else
+                    {
+                        if (customLevel.ModifiedDate < oldestChild.ModifiedDate)
+                        {
+                            oldestChild = customLevel;
+                        }
+                    }
+                }
+                else if (child is CustomFolderInfo)
+                {
+                    var customFolder = child as CustomFolderInfo;
+
+                    if (oldestChild == null)
+                    {
+                        oldestChild = GetNewestChild(customFolder.Children);
+                    }
+                    else
+                    {
+                        var tempChild = GetNewestChild(customFolder.Children);
+                        if (tempChild != null && tempChild.ModifiedDate < oldestChild.ModifiedDate)
+                        {
+                            oldestChild = tempChild;
+                        }
+                    }
+                }
+            }
+
+            return oldestChild;
+        }
+
+
 
         public int GetPlayCount(List<ICustomLevelInfo> source = null)
         {

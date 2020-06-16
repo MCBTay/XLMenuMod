@@ -24,6 +24,7 @@ namespace XLMenuMod.Levels
         public bool IsFavorite { get; set; }
 
         public string GetName() { return name; }
+        public string GetHash() { return hash; }
 
         public DateTime GetModifiedDate() { return ModifiedDate; }
         public DateTime GetModifiedDate(bool ascending) { return ModifiedDate; }

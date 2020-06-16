@@ -51,8 +51,6 @@ namespace XLMenuMod.Levels
 
         public static void LoadNestedLevels()
         {
-            NestedCustomLevels.Clear();
-
             foreach (var level in LevelManager.Instance.CustomLevels)
             {
                 if (string.IsNullOrEmpty(level.path) || !level.path.StartsWith(SaveManager.Instance.CustomLevelsDir)) continue;
@@ -96,36 +94,37 @@ namespace XLMenuMod.Levels
             if (level is CustomLevelInfo)
             {
                 var customLevel = level as CustomLevelInfo;
-                NestedCustomLevels.Add(customLevel);
-            }
-            else
-            {
-                NestedCustomLevels.Add(new CustomLevelInfo(level));
+                CreateOrUpdateLevel(NestedCustomLevels, level, customLevel, null);
             }
         }
 
         public static void AddLevel(LevelInfo level, ref CustomFolderInfo parent)
         {
-            CustomLevelInfo customLevel = null;
-
             if (level is CustomLevelInfo)
             {
-                customLevel = level as CustomLevelInfo;
+                var customLevel = level as CustomLevelInfo;
+
+                if (parent == null)
+                {
+                    CreateOrUpdateLevel(NestedCustomLevels, level, customLevel, parent);
+                }
+                else
+                {
+                    CreateOrUpdateLevel(parent.Children, level, customLevel, parent);
+                }
+            }
+        }
+
+        private static void CreateOrUpdateLevel(List<ICustomLevelInfo> sourceList, LevelInfo levelToAdd, CustomLevelInfo customLevelToAdd, CustomFolderInfo parent)
+        {
+            var existing = sourceList.FirstOrDefault(x => x.GetHash() == customLevelToAdd.GetHash() && x is CustomLevelInfo) as CustomLevelInfo;
+            if (existing == null)
+            {
+                sourceList.Add(new CustomLevelInfo(levelToAdd, parent) { PlayCount = customLevelToAdd.PlayCount });
             }
             else
             {
-                customLevel = new CustomLevelInfo(level, parent);
-            }
-
-            if (customLevel == null) return;
-
-            if (parent != null && !parent.Children.Any(x => x == customLevel))
-            {
-                parent.Children.Add(customLevel);
-            }
-            else if (!NestedCustomLevels.Any(x => x == customLevel))
-            {
-                NestedCustomLevels.Add(customLevel);
+                existing.PlayCount = customLevelToAdd.PlayCount;
             }
         }
 

@@ -12,6 +12,7 @@ namespace XLMenuMod.Levels.Interfaces
         DateTime ModifiedDate { get; set; }
 
         string GetName();
+        string GetHash();
         DateTime GetModifiedDate();
         DateTime GetModifiedDate(bool ascending);
         int GetPlayCount(List<ICustomLevelInfo> source = null);
