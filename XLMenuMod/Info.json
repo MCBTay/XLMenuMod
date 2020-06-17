@@ -3,7 +3,7 @@
   "DisplayName": "XL Menu Mod",
   "Author": "mcbtay",
   "Version": "1.2",
-  "ManagerVersion": "0.15.0",
+  "ManagerVersion": "0.22.5.0",
   "Requirements": [],
   "AssemblyName": "XLMenuMod.dll",
   "EntryMethod": "XLMenuMod.Main.Load",
