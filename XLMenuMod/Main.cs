@@ -1,4 +1,4 @@
-﻿using Harmony12;
+﻿using HarmonyLib;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace XLMenuMod
     {
         public static bool Enabled { get; private set; }
 
-        private static HarmonyInstance Harmony { get; set; }
+        private static Harmony Harmony { get; set; }
         public static string ModPath { get; private set; }
 
         public static GameObject CustomLevelManagerGameObject;
@@ -40,7 +40,7 @@ namespace XLMenuMod
 
             if (Enabled)
             { 
-                Harmony = HarmonyInstance.Create(modEntry.Info.Id);
+                Harmony = new Harmony(modEntry.Info.Id);
                 Harmony.PatchAll(Assembly.GetExecutingAssembly());
 
                 CustomLevelManagerGameObject = new GameObject();

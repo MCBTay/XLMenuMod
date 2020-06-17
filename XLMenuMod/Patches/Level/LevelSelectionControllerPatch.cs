@@ -1,6 +1,5 @@
-﻿using Harmony12;
+﻿using HarmonyLib;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -146,7 +145,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.CreateSortCategoryButton(__instance.LevelCategoryButton);
+                CustomLevelManager.CreateSortCategoryButton(__instance);
             }
         }
     }

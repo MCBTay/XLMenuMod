@@ -1,6 +1,5 @@
 ﻿using GameManagement;
-using Harmony12;
-using System.Linq;
+using HarmonyLib;
 using XLMenuMod.Gear;
 
 namespace XLMenuMod.Patches.Gear

@@ -1,4 +1,4 @@
-﻿using Harmony12;
+﻿using HarmonyLib;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Gear;

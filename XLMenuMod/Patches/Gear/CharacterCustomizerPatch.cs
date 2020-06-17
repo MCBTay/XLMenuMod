@@ -1,4 +1,4 @@
-﻿using Harmony12;
+﻿using HarmonyLib;
 using XLMenuMod.Gear;
 using XLMenuMod.Gear.Interfaces;
 

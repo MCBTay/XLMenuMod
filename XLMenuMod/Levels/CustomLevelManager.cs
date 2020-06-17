@@ -1,4 +1,5 @@
-﻿using Harmony12;
+﻿using HarmonyLib;
+using Rewired.UI.ControlMapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -214,10 +215,10 @@ namespace XLMenuMod.Levels
             return sorted;
         }   
 
-        public static void CreateSortCategoryButton(CategoryButton baseButton)
+        public static void CreateSortCategoryButton(LevelSelectionController __instance)
         {
-            SortCategoryButton = Instantiate(baseButton);
-            SortCategoryButton.transform.SetParent(baseButton.transform, false);
+            SortCategoryButton = Instantiate(__instance.LevelCategoryButton, __instance.LevelCategoryButton.transform.parent);
+            //SortCategoryButton.transform.SetParent(__instance.LevelCategoryButton.transform, false);
             SortCategoryButton.transform.localScale = new Vector3(1, 1, 1);
 
             SortCategoryButton.OnNextCategory += new Action(OnNextSort);
