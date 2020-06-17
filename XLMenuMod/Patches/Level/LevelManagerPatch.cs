@@ -12,15 +12,6 @@ namespace XLMenuMod.Patches.Level
 {
     public class LevelManagerPatch
     {
-        [HarmonyPatch(typeof(LevelManager), "GetCustomLevelFiles")]
-        public static class GetCustomLevelFilesPatch
-        {
-            static void Postfix(ref List<string> __result)
-            {
-                __result.AddRange(CustomLevelManager.LoadNestedLevelPaths());
-            }
-        }
-
         [HarmonyPatch(typeof(LevelManager), nameof(LevelManager.LoadCachedLevels))]
         public static class LoadCachedLevelsPatch
         {
@@ -36,7 +27,7 @@ namespace XLMenuMod.Patches.Level
                 LevelManager.Instance.CustomLevels.Clear();
                 LevelManager.Instance.CustomLevels.AddRange(JsonConvert.DeserializeObject<List<CustomLevelInfo>>(str));
 
-                Debug.Log($"Loaded CustomLevel Cache with {LevelManager.Instance.CustomLevels.Count} Levels last updated on from {___lastHashingTime.ToShortDateString()} at {___lastHashingTime.ToShortTimeString()}");
+                Debug.Log($"XLMenuMod: Loaded CustomLevel Cache with {LevelManager.Instance.CustomLevels.Count} Levels last updated on from {___lastHashingTime.ToShortDateString()} at {___lastHashingTime.ToShortTimeString()}");
 
                 return false;
             }
