@@ -65,6 +65,8 @@ namespace XLMenuMod
 
                 Object.Destroy(CustomLevelManagerGameObject.GetComponent<CustomLevelManager>());
                 Object.Destroy(CustomGearManagerGameObject.GetComponent<CustomGearManager>());
+
+                // TODO: At this point, we likely need to revert the custom levels to their original.
             }
 
             return true;
