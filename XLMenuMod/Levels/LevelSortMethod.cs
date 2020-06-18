@@ -10,5 +10,6 @@
         Oldest,
         Most_Played,
         Least_Played,
+        Recently_Played
     }
 }

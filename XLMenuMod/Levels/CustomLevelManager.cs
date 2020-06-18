@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Rewired.UI.ControlMapper;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,7 +54,7 @@ namespace XLMenuMod.Levels
         public static void LoadNestedLevels()
         {
             var levelsToRemove = new List<LevelInfo>();
-            
+
             // We want to look here in the event the levels are not already cached.  But if they ARE properly cached, they'll be all nested levels...
             // So for now filter this down to only ones at the root.
             foreach (var level in LevelManager.Instance.CustomLevels.Where(x => Path.GetDirectoryName(x.path) == SaveManager.Instance.CustomLevelsDir))
@@ -154,7 +153,7 @@ namespace XLMenuMod.Levels
 
             if (customLevelToAdd != null)
             {
-                existing = sourceList.FirstOrDefault(x => x.GetName() == customLevelToAdd.GetName() && x is CustomLevelInfo) as CustomLevelInfo;
+                existing = sourceList.FirstOrDefault(x => x.GetName() == customLevelToAdd.GetName()) as CustomLevelInfo;
             }
             else
             {
@@ -163,7 +162,11 @@ namespace XLMenuMod.Levels
             
             if (existing == null)
             {
-                sourceList.Add(new CustomLevelInfo(levelToAdd, parent) { PlayCount = customLevelToAdd == null ? 0 : customLevelToAdd.PlayCount });
+                sourceList.Add(new CustomLevelInfo(levelToAdd, parent)
+                {
+                    PlayCount = customLevelToAdd == null ? 0 : customLevelToAdd.PlayCount,
+                    LastPlayTime = customLevelToAdd == null ? DateTime.MinValue : customLevelToAdd.LastPlayTime
+                });
             }
             else
             {
@@ -171,20 +174,23 @@ namespace XLMenuMod.Levels
                 {
                     var existingCustom = existing as CustomLevelInfo;
                     existingCustom.PlayCount = customLevelToAdd == null ? 0 : customLevelToAdd.PlayCount;
+                    existingCustom.LastPlayTime = customLevelToAdd == null ? DateTime.MinValue : customLevelToAdd.LastPlayTime;
                 }
             }
         }
 
         public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
         {
-            var newFolder = new CustomFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
-            newFolder.Children.Add(new CustomFolderInfo("..\\", parent == null ? string.Empty : Path.GetDirectoryName(parent.path), newFolder.Parent));
+            var folderName = $"\\{folder}";
 
             if (parent != null)
             {
-                var child = parent.Children.FirstOrDefault(x => x.GetName() == newFolder.GetName() && x is CustomFolderInfo) as CustomFolderInfo;
+                var child = parent.Children.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
+                    var newFolder = new CustomFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+                    newFolder.Children.Add(new CustomFolderInfo("..\\", parent == null ? string.Empty : Path.GetDirectoryName(parent.path), newFolder.Parent));
+
                     parent.Children.Add(newFolder);
                     parent = newFolder;
                 }
@@ -195,9 +201,12 @@ namespace XLMenuMod.Levels
             }
             else
             {
-                var child = NestedCustomLevels.FirstOrDefault(x => x.GetName() == newFolder.GetName() && x is CustomFolderInfo) as CustomFolderInfo;
+                var child = NestedCustomLevels.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
+                    var newFolder = new CustomFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+                    newFolder.Children.Add(new CustomFolderInfo("..\\", parent == null ? string.Empty : Path.GetDirectoryName(parent.path), newFolder.Parent));
+
                     NestedCustomLevels.Add(newFolder);
                     parent = newFolder;
                 }
@@ -229,6 +238,8 @@ namespace XLMenuMod.Levels
 
             switch (CurrentLevelSort)
             {
+                case (int)LevelSortMethod.Recently_Played:
+                    break;
                 case (int)LevelSortMethod.Least_Played:
                     sorted = levels.OrderBy(x => x.GetPlayCount()).ToList();
                     break;
@@ -278,7 +289,7 @@ namespace XLMenuMod.Levels
             Traverse.Create(SortCategoryButton).Method("SetText", ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
             SortCategoryButton.label.fontSize = 20;
 
-            SortCategoryButton.transform.Translate(new Vector3(0, 20, 0));
+            //SortCategoryButton.transform.Translate(new Vector3(0, 20, 0));
         }
 
         private static void OnPreviousSort()

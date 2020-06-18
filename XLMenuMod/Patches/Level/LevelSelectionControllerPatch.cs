@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace XLMenuMod.Patches.Level
             static void Postfix(LevelSelectionController __instance)
             {
                 CustomLevelManager.CurrentFolder = null;
-                //CustomLevelManager.SortCategoryButton.gameObject.SetActive(__instance.showCustom);
+                CustomLevelManager.SortCategoryButton.gameObject.SetActive(__instance.showCustom);
             }
         }
 
@@ -66,6 +67,7 @@ namespace XLMenuMod.Patches.Level
                             if (found != null && found is CustomLevelInfo)
                             {
                                 (found as CustomLevelInfo).PlayCount++;
+                                (found as CustomLevelInfo).LastPlayTime = DateTime.Now;
                             }
                             SaveManager.Instance.SaveCustomLevelListCache(JsonConvert.SerializeObject(LevelManager.Instance.CustomLevels, Formatting.Indented));
                         }
@@ -145,7 +147,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             { 
-                //CustomLevelManager.CreateSortCategoryButton(__instance);
+                CustomLevelManager.CreateSortCategoryButton(__instance);
             }
         }
     }

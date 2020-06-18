@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -24,6 +23,9 @@ namespace XLMenuMod.Levels
 
         [JsonIgnore]
         public int PlayCount { get; set; }
+
+        [JsonIgnore]
+        public DateTime LastPlayTime { get; set; }
 
         [JsonIgnore]
         public DateTime ModifiedDate { get; set; }
@@ -159,7 +161,7 @@ namespace XLMenuMod.Levels
             return oldestChild;
         }
 
-
+        public DateTime GetLastPlayTime() { return LastPlayTime; }
 
         public int GetPlayCount(List<ICustomLevelInfo> source = null)
         {

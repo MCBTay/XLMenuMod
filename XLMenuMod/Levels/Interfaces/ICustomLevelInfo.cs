@@ -9,6 +9,7 @@ namespace XLMenuMod.Levels.Interfaces
         bool IsFavorite { get; set; }
         long Size { get; set; }
         int PlayCount { get; set; }
+        DateTime LastPlayTime { get; set; }
         DateTime ModifiedDate { get; set; }
 
         string GetName();
@@ -16,5 +17,6 @@ namespace XLMenuMod.Levels.Interfaces
         DateTime GetModifiedDate();
         DateTime GetModifiedDate(bool ascending);
         int GetPlayCount(List<ICustomLevelInfo> source = null);
+        DateTime GetLastPlayTime();
     }
 }

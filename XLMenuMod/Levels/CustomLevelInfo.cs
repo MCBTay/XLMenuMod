@@ -13,6 +13,8 @@ namespace XLMenuMod.Levels
 
         public int PlayCount { get; set; }
 
+        public DateTime LastPlayTime { get; set; }
+
         [JsonIgnore]
         public long Size { get; set; }
 
@@ -31,6 +33,8 @@ namespace XLMenuMod.Levels
 
         public int GetPlayCount(List<ICustomLevelInfo> source = null) { return PlayCount; }
 
+        public DateTime GetLastPlayTime() { return LastPlayTime; }
+
         public CustomLevelInfo()
         {
             Parent = null;
@@ -47,6 +51,8 @@ namespace XLMenuMod.Levels
             var fileInfo = new FileInfo(path);
             Size = fileInfo.Length;
             ModifiedDate = fileInfo.LastWriteTime;
+
+            LastPlayTime = DateTime.MinValue;
         }
 
         public CustomLevelInfo(LevelInfo level, CustomFolderInfo parent) : this(level)
