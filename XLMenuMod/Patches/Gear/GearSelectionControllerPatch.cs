@@ -33,7 +33,7 @@ namespace XLMenuMod.Patches.Gear
     {
         static void Postfix(GearSelectionController __instance)
         {
-            UserInterfaceHelper.CreateSortLabel(ref CustomGearManager.SortLabel, __instance.gearTypeFiltering.gearCategoryButton.label, __instance.gearTypeFiltering.gearCategoryButton.transform, ((GearSortMethod)CustomGearManager.CurrentGearSort).ToString());
+            CustomGearManager.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.gearTypeFiltering.gearCategoryButton.label, __instance.gearTypeFiltering.gearCategoryButton.transform, ((GearSortMethod)CustomGearManager.CurrentGearSort).ToString());
         }
     }
 }

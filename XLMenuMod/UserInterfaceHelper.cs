@@ -7,25 +7,27 @@ namespace XLMenuMod
 {
     public class UserInterfaceHelper : MonoBehaviour
     {
-        public static void CreateSortLabel(ref TMP_Text newLabel, TMP_Text sourceText, Transform parent, string sort)
+        public static TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort)
         {
-            if (newLabel != null) return;
+            TMP_Text label;
 
-            newLabel = Instantiate(sourceText, parent);
-            newLabel.transform.localScale = new Vector3(1, 1, 1);
+            label = Instantiate(sourceText, parent);
+            label.transform.localScale = new Vector3(1, 1, 1);
 
             var controllerIcons = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>().FirstOrDefault(x => x.name == "ControllerIcons");
             if (controllerIcons != null)
             {
-                newLabel.spriteAsset = controllerIcons;
+                label.spriteAsset = controllerIcons;
             }
 
-            newLabel.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
-            newLabel.gameObject.SetActive(false);
+            label.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
+            label.gameObject.SetActive(false);
 
-            SetSortLabelText(ref newLabel, sort.Replace('_', ' '));
+            SetSortLabelText(ref label, sort.Replace('_', ' '));
 
-            newLabel.transform.Translate(new Vector3(0, -30, 0));
+            label.transform.Translate(new Vector3(0, -30, 0));
+
+            return label;
         }
 
         public static void SetSortLabelText(ref TMP_Text label, string text)
