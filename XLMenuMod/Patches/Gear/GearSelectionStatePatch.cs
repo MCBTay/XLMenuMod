@@ -11,6 +11,14 @@ namespace XLMenuMod.Patches.Gear
         {
             static bool Prefix()
             {
+                if (PlayerController.Instance.inputController.player.GetButtonDown("Y"))
+                {
+                    UISounds.Instance?.PlayOneShotSelectionChange();
+
+                    CustomGearManager.OnNextSort();
+                    return false;
+                }
+
                 if (CustomGearManager.CurrentFolder == null) return true;
                 if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
 

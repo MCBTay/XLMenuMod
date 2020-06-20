@@ -15,7 +15,7 @@ namespace XLMenuMod.Patches.Level
             {
                 if (PlayerController.Instance.inputController.player.GetButtonDown("Y"))
                 {
-                    UISounds.Instance?.PlayOneShotSelectMajor();
+                    UISounds.Instance?.PlayOneShotSelectionChange();
 
                     CustomLevelManager.OnNextSort();
                     return false;
