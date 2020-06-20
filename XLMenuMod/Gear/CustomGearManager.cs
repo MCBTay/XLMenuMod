@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using XLMenuMod.Gear.Interfaces;
 
 namespace XLMenuMod.Gear
@@ -12,6 +16,8 @@ namespace XLMenuMod.Gear
         public static List<ICustomGearInfo> NestedCustomGear { get; set; }
         public static int CurrentGearFilterIndex { get; set; }
         public static float LastSelectedTime { get; set; }
+        public static TMP_Text SortLabel;
+        public static int CurrentGearSort { get; set; }
 
         static CustomGearManager()
         {
@@ -207,6 +213,81 @@ namespace XLMenuMod.Gear
             {
                 gearSelector.gearTypeFiltering.gearCategoryButton.label.text = CurrentFolder.GetName();
             }
+        }
+
+        public static List<ICustomGearInfo> SortList(List<ICustomGearInfo> gear)
+        {
+            List<ICustomGearInfo> sorted = null;
+
+            switch (CurrentGearSort)
+            {
+                case (int)GearSortMethod.Newest:
+                    sorted = gear.OrderByDescending(x => x.GetModifiedDate(false)).ToList();
+                    break;
+                case (int)GearSortMethod.Oldest:
+                    sorted = gear.OrderBy(x => x.GetModifiedDate(true)).ToList();
+                    break;
+                case (int)GearSortMethod.Name_ASC:
+                    sorted = gear.OrderBy(x => x.GetName()).ToList();
+                    break;
+                case (int)GearSortMethod.Name_DESC:
+                default:
+                    sorted = gear.OrderByDescending(x => x.GetName()).ToList();
+                    break;
+            }
+
+            return sorted;
+        }
+
+        // Not currently used, but already written and may be useful later.
+        public static void OnPreviousSort()
+        {
+            CurrentGearSort--;
+
+            if (CurrentGearSort < 0)
+                CurrentGearSort = Enum.GetValues(typeof(GearSortMethod)).Length - 1;
+
+            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
+
+            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            {
+                CurrentFolder.Children = SortList(CurrentFolder.Children);
+            }
+            else
+            {
+                NestedCustomGear = SortList(NestedCustomGear);
+            }
+
+            EventSystem.current.SetSelectedGameObject(null);
+
+            var gearSelector = FindObjectOfType<GearSelectionController>();
+            if (gearSelector != null)
+                Traverse.Create(gearSelector).Method("UpdateList").GetValue();
+        }
+
+        public static void OnNextSort()
+        {
+            CurrentGearSort++;
+
+            if (CurrentGearSort > Enum.GetValues(typeof(GearSortMethod)).Length - 1)
+                CurrentGearSort = 0;
+
+            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
+
+            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            {
+                CurrentFolder.Children = SortList(CurrentFolder.Children);
+            }
+            else
+            {
+                NestedCustomGear = SortList(NestedCustomGear);
+            }
+
+            EventSystem.current.SetSelectedGameObject(null);
+
+            var gearSelector = FindObjectOfType<GearSelectionController>();
+            if (gearSelector != null)
+                Traverse.Create(gearSelector).Method("UpdateList").GetValue();
         }
     }
 }

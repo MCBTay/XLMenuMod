@@ -27,4 +27,13 @@ namespace XLMenuMod.Patches.Gear
             }
         }
     }
+
+    [HarmonyPatch(typeof(GearSelectionController), "Awake")]
+    public static class AwakePatch
+    {
+        static void Postfix(GearSelectionController __instance)
+        {
+            UserInterfaceHelper.CreateSortLabel(ref CustomGearManager.SortLabel, __instance.gearTypeFiltering.gearCategoryButton.label, __instance.gearTypeFiltering.gearCategoryButton.transform, ((GearSortMethod)CustomGearManager.CurrentGearSort).ToString());
+        }
+    }
 }

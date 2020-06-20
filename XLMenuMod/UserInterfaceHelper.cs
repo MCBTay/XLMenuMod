@@ -23,8 +23,14 @@ namespace XLMenuMod
             newLabel.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
             newLabel.gameObject.SetActive(false);
 
-            newLabel.SetText($"<voffset=0.25em><sprite={(int)GetYSpriteIndex()}></voffset> <size=60%><b>Sort By:</b> " + sort.Replace('_', ' '));
+            SetSortLabelText(ref newLabel, sort.Replace('_', ' '));
+
             newLabel.transform.Translate(new Vector3(0, -30, 0));
+        }
+
+        public static void SetSortLabelText(ref TMP_Text label, string text)
+        {
+            label.SetText($"<voffset=0.25em><sprite={(int)GetYSpriteIndex()}></voffset> <size=60%><b>Sort By:</b> " + text.Replace('_', ' '));
         }
 
         public static ControllerIconSprite GetYSpriteIndex()

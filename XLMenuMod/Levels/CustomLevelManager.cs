@@ -279,7 +279,7 @@ namespace XLMenuMod.Levels
             if (CurrentLevelSort < 0)
                 CurrentLevelSort = Enum.GetValues(typeof(LevelSortMethod)).Length - 1;
 
-            SortLabel.SetText($"<voffset=0.25em><sprite=39></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
+            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentLevelSort).ToString());
 
             if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
             {
@@ -304,8 +304,7 @@ namespace XLMenuMod.Levels
             if (CurrentLevelSort > Enum.GetValues(typeof(LevelSortMethod)).Length - 1)
                 CurrentLevelSort = 0;
 
-            SortLabel.SetText($"<voffset=0.25em><sprite=39></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
-
+            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentLevelSort).ToString());
 
             if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
             {
