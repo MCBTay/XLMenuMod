@@ -1,10 +1,13 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -14,7 +17,7 @@ namespace XLMenuMod.Levels
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
         public static float LastSelectedTime { get; set; }
-        public static CategoryButton SortCategoryButton { get; set; }
+        public static TMP_Text SortLabel { get; set; }
         public static int CurrentLevelSort { get; set; }
 
         static CustomLevelManager()
@@ -80,7 +83,6 @@ namespace XLMenuMod.Levels
                     LevelManager.Instance.CustomLevels.Remove(level);
                 }
             }
-
 
             foreach (var path in LoadNestedLevelPaths())
             {
@@ -239,6 +241,8 @@ namespace XLMenuMod.Levels
             switch (CurrentLevelSort)
             {
                 case (int)LevelSortMethod.Recently_Played:
+                    // TODO: Fix this
+                    sorted = levels.OrderBy(x => x.GetName()).ToList();
                     break;
                 case (int)LevelSortMethod.Least_Played:
                     sorted = levels.OrderBy(x => x.GetPlayCount()).ToList();
@@ -270,37 +274,34 @@ namespace XLMenuMod.Levels
             return sorted;
         }   
 
-        public static void CreateSortCategoryButton(LevelSelectionController __instance)
+        public static void CreateSortLabel(LevelSelectionController __instance)
         {
-            SortCategoryButton = Instantiate(__instance.LevelCategoryButton, __instance.LevelCategoryButton.transform.parent);
-            //SortCategoryButton.transform.SetParent(__instance.LevelCategoryButton.transform, false);
-            SortCategoryButton.transform.localScale = new Vector3(1, 1, 1);
+            if (SortLabel != null) return;
 
-            SortCategoryButton.OnNextCategory += new Action(OnNextSort);
-            SortCategoryButton.OnPreviousCategory += new Action(OnPreviousSort);
+            SortLabel = Instantiate(__instance.LevelCategoryButton.label, __instance.LevelCategoryButton.transform);
+            SortLabel.transform.localScale = new Vector3(1, 1, 1);
 
-            SortCategoryButton.gameObject.SetActive(false);
+            var controllerIcons = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>().FirstOrDefault(x => x.name == "ControllerIcons");
+            if (controllerIcons != null)
+            {
+                SortLabel.spriteAsset = controllerIcons;
+            }
 
-            SortCategoryButton.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200);
-
-            //Delete the divider line
-            Destroy(SortCategoryButton.gameObject.GetComponentInChildren<Image>());
-
-            Traverse.Create(SortCategoryButton).Method("SetText", ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ')).GetValue();
-            SortCategoryButton.label.fontSize = 20;
-
-            //SortCategoryButton.transform.Translate(new Vector3(0, 20, 0));
+            SortLabel.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
+            SortLabel.gameObject.SetActive(false);
+            SortLabel.SetText($"<voffset=0.25em><sprite=39></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
+            SortLabel.transform.Translate(new Vector3(0, -30, 0));
         }
 
-        private static void OnPreviousSort()
+        // Not currently used, but already written and may be useful later.
+        public static void OnPreviousSort()
         {
-            //TODO: Handle double selects
             CurrentLevelSort--;
 
             if (CurrentLevelSort < 0)
                 CurrentLevelSort = Enum.GetValues(typeof(LevelSortMethod)).Length - 1;
 
-            SortCategoryButton.label.text = ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ');
+            SortLabel.SetText($"<voffset=0.25em><sprite=39></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
 
             if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
             {
@@ -313,19 +314,19 @@ namespace XLMenuMod.Levels
 
             var levelSelector = FindObjectOfType<LevelSelectionController>();
 
+            EventSystem.current.SetSelectedGameObject(null);
             if (levelSelector != null)
                 levelSelector.UpdateList();
         }
 
-        private static void OnNextSort()
+        public static void OnNextSort()
         {
-            //TODO: Handle double selects
             CurrentLevelSort++;
 
             if (CurrentLevelSort > Enum.GetValues(typeof(LevelSortMethod)).Length - 1)
                 CurrentLevelSort = 0;
 
-            SortCategoryButton.label.text = ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' ');
+            SortLabel.SetText($"<voffset=0.25em><sprite=39></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
 
 
             if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
@@ -339,6 +340,7 @@ namespace XLMenuMod.Levels
 
             var levelSelector = FindObjectOfType<LevelSelectionController>();
 
+            EventSystem.current.SetSelectedGameObject(null);
             if (levelSelector != null)
                 levelSelector.UpdateList();
         }

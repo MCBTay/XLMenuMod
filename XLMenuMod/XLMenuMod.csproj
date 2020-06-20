@@ -66,6 +66,9 @@
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>References\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextCoreModule">
+      <HintPath>References\UnityEngine.TextCoreModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>References\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -106,7 +109,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 

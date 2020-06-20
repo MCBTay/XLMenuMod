@@ -18,7 +18,7 @@ namespace XLMenuMod.Patches.Level
             static void Postfix(LevelSelectionController __instance)
             {
                 CustomLevelManager.CurrentFolder = null;
-                CustomLevelManager.SortCategoryButton.gameObject.SetActive(__instance.showCustom);
+                CustomLevelManager.SortLabel.gameObject.SetActive(__instance.showCustom);
             }
         }
 
@@ -147,7 +147,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             { 
-                CustomLevelManager.CreateSortCategoryButton(__instance);
+                CustomLevelManager.CreateSortLabel(__instance);
             }
         }
     }
