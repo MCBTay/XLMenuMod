@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XLMenuMod
+﻿namespace XLMenuMod
 {
     /// <summary>
-    /// An enumeration mapping to the TMP_SpriteAsset ControllerIcons found within the game.
+    /// Maps to the TMP_SpriteAsset ControllerIcons found within the game.
     /// </summary>
     enum ControllerIconSprite
     {
@@ -59,5 +53,26 @@ namespace XLMenuMod
         PS4_Triangle = 45,
         PS4_RightStick = 46,
         XB1_LeftStick = 47
+    }
+
+    public enum LevelSortMethod
+    {
+        Name_ASC,
+        Name_DESC,
+        Filesize_ASC,
+        Filesize_DESC,
+        Newest,
+        Oldest,
+        Most_Played,
+        Least_Played,
+        Recently_Played
+    }
+
+    public enum GearSortMethod
+    {
+        Name_ASC,
+        Name_DESC,
+        Newest,
+        Oldest
     }
 }

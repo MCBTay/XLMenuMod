@@ -80,7 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllerIconSprite.cs" />
+    <Compile Include="Enumerations.cs" />
     <Compile Include="Gear\CustomBoardGearInfo.cs" />
     <Compile Include="Gear\CustomCharacterGearInfo.cs" />
     <Compile Include="Gear\CustomFolderInfo.cs" />
@@ -89,7 +89,6 @@
     <Compile Include="Levels\CustomFolderInfo.cs" />
     <Compile Include="Levels\CustomLevelInfo.cs" />
     <Compile Include="Levels\Interfaces\ICustomLevelInfo.cs" />
-    <Compile Include="Levels\LevelSortMethod.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Levels\CustomLevelManager.cs" />
     <Compile Include="Patches\Gear\CharacterCustomizerPatch.cs" />
