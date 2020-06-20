@@ -3,7 +3,7 @@
     /// <summary>
     /// Maps to the TMP_SpriteAsset ControllerIcons found within the game.
     /// </summary>
-    enum ControllerIconSprite
+    public enum ControllerIconSprite
     {
         SWITCH_L = 0,
         XB1_LB = 1,

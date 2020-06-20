@@ -146,8 +146,8 @@ namespace XLMenuMod.Patches.Level
         public static class AwakePatch
         {
             static void Postfix(LevelSelectionController __instance)
-            { 
-                CustomLevelManager.CreateSortLabel(__instance);
+            {
+                UserInterfaceHelper.CreateSortLabel(ref CustomLevelManager.SortLabel, __instance.LevelCategoryButton.label, __instance.LevelCategoryButton.transform, ((LevelSortMethod)CustomLevelManager.CurrentLevelSort).ToString());
             }
         }
     }

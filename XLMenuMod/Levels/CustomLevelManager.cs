@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Rewired;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,7 @@ namespace XLMenuMod.Levels
         public static CustomFolderInfo CurrentFolder { get; set; }
         public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
         public static float LastSelectedTime { get; set; }
-        public static TMP_Text SortLabel { get; set; }
+        public static TMP_Text SortLabel;
         public static int CurrentLevelSort { get; set; }
 
         static CustomLevelManager()
@@ -270,51 +269,7 @@ namespace XLMenuMod.Levels
             }
 
             return sorted;
-        }   
-
-        public static void CreateSortLabel(LevelSelectionController __instance)
-        {
-            if (SortLabel != null) return;
-
-            SortLabel = Instantiate(__instance.LevelCategoryButton.label, __instance.LevelCategoryButton.transform);
-            SortLabel.transform.localScale = new Vector3(1, 1, 1);
-
-            var controllerIcons = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>().FirstOrDefault(x => x.name == "ControllerIcons");
-            if (controllerIcons != null)
-            {
-                SortLabel.spriteAsset = controllerIcons;
-            }
-
-            SortLabel.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
-            SortLabel.gameObject.SetActive(false);
-
-            SortLabel.SetText($"<voffset=0.25em><sprite={(int)GetSpriteIndex()}></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
-            SortLabel.transform.Translate(new Vector3(0, -30, 0));
-        }
-
-        
-
-        private static ControllerIconSprite GetSpriteIndex()
-        {
-            switch (Application.platform)
-            {
-                case RuntimePlatform.WindowsPlayer:
-                case RuntimePlatform.WindowsEditor:
-                    string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault<Joystick>()?.name ?? "unknown";
-                    if (str.Contains("Dual Shock") || str.Contains("DualShock"))
-                    {
-                        return ControllerIconSprite.PS4_Triangle_Button;
-                    }
-                    return ControllerIconSprite.XB1_Y;
-                case RuntimePlatform.PS4: 
-                    return ControllerIconSprite.PS4_Triangle_Button;
-                case RuntimePlatform.Switch: 
-                    return ControllerIconSprite.SWITCH_X;
-                case RuntimePlatform.XboxOne:
-                default:
-                    return ControllerIconSprite.XB1_Y;
-            }
-        }
+        }           
 
         // Not currently used, but already written and may be useful later.
         public static void OnPreviousSort()
