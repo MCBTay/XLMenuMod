@@ -13,6 +13,14 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionState __instance)
             {
+                if (PlayerController.Instance.inputController.player.GetButtonDown("Y"))
+                {
+                    UISounds.Instance?.PlayOneShotSelectMajor();
+
+                    CustomLevelManager.OnNextSort();
+                    return false;
+                }
+
                 if (CustomLevelManager.CurrentFolder == null) return true;
                 if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
 
