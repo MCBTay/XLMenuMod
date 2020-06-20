@@ -1,13 +1,12 @@
 ﻿using HarmonyLib;
+using Rewired;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Levels
@@ -289,8 +288,33 @@ namespace XLMenuMod.Levels
 
             SortLabel.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
             SortLabel.gameObject.SetActive(false);
-            SortLabel.SetText($"<voffset=0.25em><sprite=39></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
+
+            SortLabel.SetText($"<voffset=0.25em><sprite={(int)GetSpriteIndex()}></voffset> <size=60%><b>Sort By:</b> " + ((LevelSortMethod)CurrentLevelSort).ToString().Replace('_', ' '));
             SortLabel.transform.Translate(new Vector3(0, -30, 0));
+        }
+
+        
+
+        private static ControllerIconSprite GetSpriteIndex()
+        {
+            switch (Application.platform)
+            {
+                case RuntimePlatform.WindowsPlayer:
+                case RuntimePlatform.WindowsEditor:
+                    string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault<Joystick>()?.name ?? "unknown";
+                    if (str.Contains("Dual Shock") || str.Contains("DualShock"))
+                    {
+                        return ControllerIconSprite.PS4_Triangle_Button;
+                    }
+                    return ControllerIconSprite.XB1_Y;
+                case RuntimePlatform.PS4: 
+                    return ControllerIconSprite.PS4_Triangle_Button;
+                case RuntimePlatform.Switch: 
+                    return ControllerIconSprite.SWITCH_X;
+                case RuntimePlatform.XboxOne:
+                default:
+                    return ControllerIconSprite.XB1_Y;
+            }
         }
 
         // Not currently used, but already written and may be useful later.

@@ -80,6 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerIconSprite.cs" />
     <Compile Include="Gear\CustomBoardGearInfo.cs" />
     <Compile Include="Gear\CustomCharacterGearInfo.cs" />
     <Compile Include="Gear\CustomFolderInfo.cs" />
