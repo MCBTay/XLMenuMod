@@ -51,7 +51,6 @@ namespace XLMenuMod.Levels
             var fileInfo = new FileInfo(path);
             Size = fileInfo.Length;
             ModifiedDate = fileInfo.LastWriteTime;
-
             LastPlayTime = DateTime.MinValue;
         }
 

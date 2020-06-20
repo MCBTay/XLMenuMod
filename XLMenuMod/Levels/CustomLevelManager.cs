@@ -240,8 +240,7 @@ namespace XLMenuMod.Levels
             switch (CurrentLevelSort)
             {
                 case (int)LevelSortMethod.Recently_Played:
-                    // TODO: Fix this
-                    sorted = levels.OrderBy(x => x.GetName()).ToList();
+                    sorted = levels.OrderBy(x => x.GetLastPlayTime()).ToList();
                     break;
                 case (int)LevelSortMethod.Least_Played:
                     sorted = levels.OrderBy(x => x.GetPlayCount()).ToList();
