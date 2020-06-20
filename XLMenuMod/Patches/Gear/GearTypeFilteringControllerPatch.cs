@@ -13,9 +13,14 @@ namespace XLMenuMod.Patches.Gear
                 CustomGearManager.SetCurrentFolder(null);
             }
 
-            public static void Postfix(int ___currentFilterIndex)
+            public static void Postfix(int ___currentFilterIndex, bool ___showCustomGear)
             {
                 CustomGearManager.CurrentGearFilterIndex = ___currentFilterIndex;
+
+                if (CustomGearManager.SortLabel != null)
+                {
+                    CustomGearManager.SortLabel.gameObject.SetActive(___showCustomGear);
+                }
             }
         }
     }

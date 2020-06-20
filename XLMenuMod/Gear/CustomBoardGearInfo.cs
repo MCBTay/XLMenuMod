@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using XLMenuMod.Gear.Interfaces;
 
 namespace XLMenuMod.Gear
@@ -7,6 +7,7 @@ namespace XLMenuMod.Gear
     {
         public ICustomGearInfo Parent { get; set; }
         public bool IsFavorite { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
         public CustomBoardGearInfo(GearInfoSingleMaterial source) : base(source) { }
 
@@ -15,5 +16,8 @@ namespace XLMenuMod.Gear
             Parent = null;
             IsFavorite = false;
         }
+
+        public DateTime GetModifiedDate() { return ModifiedDate; }
+        public DateTime GetModifiedDate(bool ascending) { return ModifiedDate; }
     }
 }
