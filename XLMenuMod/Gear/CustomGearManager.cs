@@ -67,7 +67,7 @@ namespace XLMenuMod.Gear
                 }
             }
 
-            NestedCustomGear = NestedCustomGear.OrderBy(x => x.GetName()).ToList();
+            NestedCustomGear = SortList(NestedCustomGear);
         }
 
         public static void AddGear(GearInfoSingleMaterial gear)
