@@ -35,6 +35,13 @@ namespace XLMenuMod.Levels
 
         public DateTime GetLastPlayTime() { return LastPlayTime; }
 
+        // This is here for JSON serialization purposes
+        public CustomLevelInfo()
+        {
+            Parent = null;
+            IsFavorite = false;
+        }
+
         public CustomLevelInfo(LevelInfo level) 
         {
             name = level.name;
