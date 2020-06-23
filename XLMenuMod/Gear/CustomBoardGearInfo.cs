@@ -1,4 +1,7 @@
-﻿using System;
+﻿using RenderHeads.Media.AVProMovieCapture.Demos;
+using System;
+using System.IO;
+using System.Linq;
 using XLMenuMod.Gear.Interfaces;
 
 namespace XLMenuMod.Gear
@@ -15,6 +18,14 @@ namespace XLMenuMod.Gear
         {
             Parent = null;
             IsFavorite = false;
+
+            // For now all I saw was one texture change per gear type, so assuming first.
+            var textureChange = textureChanges?.FirstOrDefault();
+            if (textureChange != null)
+            {
+                var fileInfo = new FileInfo(textureChange.texturePath);
+                ModifiedDate = fileInfo.LastWriteTime;
+            }
         }
 
         public DateTime GetModifiedDate() { return ModifiedDate; }
