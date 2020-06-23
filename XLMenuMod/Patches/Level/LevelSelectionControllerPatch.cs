@@ -102,6 +102,7 @@ namespace XLMenuMod.Patches.Level
                             break;
                         case FontSizePreset.Normal:
                         default:
+                            levelListViewItem.LevelNameText.fontSize = 36;
                             break;
                     }
                 }
