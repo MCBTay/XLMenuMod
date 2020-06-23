@@ -249,20 +249,23 @@ namespace XLMenuMod.Gear
 
             UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
 
-            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
-            {
-                CurrentFolder.Children = SortList(CurrentFolder.Children);
-            }
-            else
-            {
-                NestedCustomGear = SortList(NestedCustomGear);
-            }
-
-            EventSystem.current.SetSelectedGameObject(null);
-
             var gearSelector = FindObjectOfType<GearSelectionController>();
             if (gearSelector != null)
+            {
+                gearSelector.visibleGear.Clear();
+                if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+                {
+                    CurrentFolder.Children = SortList(CurrentFolder.Children);
+                    gearSelector.visibleGear.AddRange(CurrentFolder.Children);
+                }
+                else
+                {
+                    NestedCustomGear = SortList(NestedCustomGear);
+                    gearSelector.visibleGear.AddRange(NestedCustomGear);
+                }
+
                 Traverse.Create(gearSelector).Method("UpdateList").GetValue();
+            }
         }
 
         public static void OnNextSort()
@@ -274,20 +277,24 @@ namespace XLMenuMod.Gear
 
             UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
 
-            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
-            {
-                CurrentFolder.Children = SortList(CurrentFolder.Children);
-            }
-            else
-            {
-                NestedCustomGear = SortList(NestedCustomGear);
-            }
-
-            EventSystem.current.SetSelectedGameObject(null);
-
             var gearSelector = FindObjectOfType<GearSelectionController>();
             if (gearSelector != null)
+            {
+                gearSelector.visibleGear.Clear();
+
+                if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+                {
+                    CurrentFolder.Children = SortList(CurrentFolder.Children);
+                    gearSelector.visibleGear.AddRange(CurrentFolder.Children);
+                }
+                else
+                {
+                    NestedCustomGear = SortList(NestedCustomGear);
+                    gearSelector.visibleGear.AddRange(NestedCustomGear);
+                }
+
                 Traverse.Create(gearSelector).Method("UpdateList").GetValue();
+            }
         }
     }
 }
