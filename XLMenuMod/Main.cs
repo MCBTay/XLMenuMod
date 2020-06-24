@@ -20,6 +20,8 @@ namespace XLMenuMod
 
         public static Settings Settings { get; private set; }
 
+        public static AssetBundle Assets { get; private set; }
+
         static bool Load(UnityModManager.ModEntry modEntry)
         {
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
@@ -51,6 +53,8 @@ namespace XLMenuMod
                 CustomGearManagerGameObject.AddComponent<CustomGearManager>();
                 Object.DontDestroyOnLoad(CustomGearManagerGameObject);
 
+                Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
+
                 // Replace CustomLevelsCache.json with saved version if it exists. 
                 // This is to prevent unnecessary hashes.
                 if (File.Exists(Path.Combine(ModPath, "CachedCustomLevels.json")))
@@ -70,6 +74,18 @@ namespace XLMenuMod
             }
 
             return true;
+        }
+
+        private static byte[] ExtractResource(string filename)
+        {
+            Assembly a = Assembly.GetExecutingAssembly();
+            using (var resFilestream = a.GetManifestResourceStream(filename))
+            {
+                if (resFilestream == null) return null;
+                byte[] ba = new byte[resFilestream.Length];
+                resFilestream.Read(ba, 0, ba.Length);
+                return ba;
+            }
         }
 
         private static void OnSaveGUI(UnityModManager.ModEntry modEntry)

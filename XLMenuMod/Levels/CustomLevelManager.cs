@@ -224,11 +224,21 @@ namespace XLMenuMod.Levels
 
             if (CurrentFolder == null)
             {
-                levelSelector.LevelCategoryButton.label.text = levelSelector.showCustom ? "Custom Maps" : "Official Maps";
+                levelSelector.LevelCategoryButton.label.SetText(levelSelector.showCustom ? "Custom Maps" : "Official Maps");
             }
             else
             {
-                levelSelector.LevelCategoryButton.label.text = CurrentFolder.GetName();
+                if (Main.Assets != null)
+                {
+                    var sprite = Main.Assets?.LoadAllAssets<TMP_SpriteAsset>().FirstOrDefault();
+
+                    if (sprite != null)
+                    {
+                        levelSelector.LevelCategoryButton.label.spriteAsset = sprite;
+                    }                    
+                }
+
+                levelSelector.LevelCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10>"));
             }
         }
 
