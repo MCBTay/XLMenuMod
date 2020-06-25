@@ -20,21 +20,22 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelListItem __instance, LevelInfo value)
             {
-
                 if (__instance.LevelNameText.text.StartsWith("\\"))
                 {
-                    if (Main.Assets == null) return;
-                    var sprites = Main.Assets.LoadAllAssets<TMP_SpriteAsset>().FirstOrDefault();
-
-                    if (sprites == null) return;
-                    __instance.LevelNameText.spriteAsset = sprites;
-
-                    foreach (var sprite in sprites.spriteGlyphTable)
+                    if (Main.BlueSprites != null)
                     {
-                        var x = sprite.sprite.textureRectOffset;                     
+                        __instance.LevelNameText.spriteAsset = Main.BlueSprites;
+                        __instance.LevelNameText.SetText(__instance.LevelNameText.text.Replace("\\", "<sprite=10 tint=1> "));
                     }
-
-                    __instance.LevelNameText.SetText(__instance.LevelNameText.text.Replace("\\", "<sprite=10 tint=1 color=#FF0000FF>"));
+                    
+                }
+                else if (__instance.LevelNameText.text.Equals("..\\"))
+                {
+                    if (Main.BlueSprites != null)
+                    {
+                        __instance.LevelNameText.spriteAsset = Main.BlueSprites;
+                        __instance.LevelNameText.SetText(__instance.LevelNameText.text.Replace("..\\", "<sprite=9 tint=1> Go Back"));
+                    }
                 }
             }
         }

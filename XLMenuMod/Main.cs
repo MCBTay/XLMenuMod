@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
 using XLMenuMod.Gear;
@@ -21,6 +23,8 @@ namespace XLMenuMod
         public static Settings Settings { get; private set; }
 
         public static AssetBundle Assets { get; private set; }
+        public static TMP_SpriteAsset BlackSprites { get; private set; }
+        public static TMP_SpriteAsset BlueSprites { get; private set; }
 
         static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -54,6 +58,13 @@ namespace XLMenuMod
                 Object.DontDestroyOnLoad(CustomGearManagerGameObject);
 
                 Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
+
+                var spriteAssets = Assets.LoadAllAssets<TMP_SpriteAsset>();
+                if (spriteAssets != null)
+                {
+                    BlackSprites = spriteAssets.First();
+                    BlueSprites = spriteAssets.ElementAt(1);
+                }
 
                 // Replace CustomLevelsCache.json with saved version if it exists. 
                 // This is to prevent unnecessary hashes.

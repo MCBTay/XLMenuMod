@@ -228,17 +228,11 @@ namespace XLMenuMod.Levels
             }
             else
             {
-                if (Main.Assets != null)
+                if (Main.BlackSprites != null)
                 {
-                    var sprite = Main.Assets?.LoadAllAssets<TMP_SpriteAsset>().FirstOrDefault();
-
-                    if (sprite != null)
-                    {
-                        levelSelector.LevelCategoryButton.label.spriteAsset = sprite;
-                    }                    
+                    levelSelector.LevelCategoryButton.label.spriteAsset = Main.BlackSprites;
+                    levelSelector.LevelCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
                 }
-
-                levelSelector.LevelCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10>"));
             }
         }
 
