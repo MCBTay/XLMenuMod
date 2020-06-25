@@ -193,7 +193,11 @@ namespace XLMenuMod.Gear
                 else
                 {
                     gearSelector.visibleGear.AddRange(CurrentFolder.Children);
-                    gearSelector.gearTypeFiltering.gearCategoryButton.label.text = CurrentFolder.GetName();
+                    if (Main.BlackSprites != null)
+                    {
+                        gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
+                        gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+                    }
                 }
 
                 gearSelector.listView.UpdateList();
@@ -211,7 +215,11 @@ namespace XLMenuMod.Gear
             }
             else
             {
-                gearSelector.gearTypeFiltering.gearCategoryButton.label.text = CurrentFolder.GetName();
+                if (Main.BlackSprites != null)
+                {
+                    gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
+                    gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+                }
             }
         }
 
