@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using XLMenuMod.Gear.Interfaces;
 
@@ -19,6 +20,22 @@ namespace XLMenuMod.Gear
             Children = new List<ICustomGearInfo>();
             IsFavorite = false;
             Name = string.Empty;
+
+            //if (GetName() != "..\\" && !string.IsNullOrEmpty(path))
+            //    Size = GetDirectorySize(path);
+        }
+
+        private long GetDirectorySize(string directory)
+        {
+            var files = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories).Where(x => Path.GetExtension(x).ToLower() != "*.dll");
+
+            long directorySize = 0;
+            foreach (var file in files)
+            {
+                directorySize += new FileInfo(file).Length;
+            }
+
+            return directorySize;
         }
 
         public string GetName() { return Name; }

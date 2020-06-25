@@ -133,14 +133,16 @@ namespace XLMenuMod.Gear
 
         public static void AddFolder(string folder, ref CustomFolderInfo parent)
         {
-            var newFolder = new CustomFolderInfo { Name = $"\\{folder}", Parent = parent };
-            newFolder.Children.Add(new CustomFolderInfo { Name = "..\\", Parent = newFolder.Parent });
+            var folderName = $"\\{folder}";
 
             if (parent != null)
             {
-                var child = parent.Children.FirstOrDefault(x => x.GetName() == newFolder.GetName() && x is CustomFolderInfo) as CustomFolderInfo;
+                var child = parent.Children.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
+                    var newFolder = new CustomFolderInfo { Name = folderName, Parent = parent };
+                    newFolder.Children.Add(new CustomFolderInfo { Name = "..\\", Parent = newFolder.Parent });
+
                     parent.Children.Add(newFolder);
                     parent = newFolder;
                 }
@@ -151,9 +153,12 @@ namespace XLMenuMod.Gear
             }
             else
             {
-                var child = NestedCustomGear.FirstOrDefault(x => x.GetName() == newFolder.GetName() && x is CustomFolderInfo) as CustomFolderInfo;
+                var child = NestedCustomGear.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
+                    var newFolder = new CustomFolderInfo { Name = folderName, Parent = parent };
+                    newFolder.Children.Add(new CustomFolderInfo { Name = "..\\", Parent = newFolder.Parent });
+
                     NestedCustomGear.Add(newFolder);
                     parent = newFolder;
                 }
