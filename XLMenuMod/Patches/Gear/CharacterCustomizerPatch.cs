@@ -11,16 +11,12 @@ namespace XLMenuMod.Patches.Gear
         {
             static bool Prefix(ref ICharacterCustomizationItem item)
             {
-                if (item is ICustomGearInfo)
+                if (item is ICustomGearInfo customGear)
                 {
-                    var customGear = item as ICustomGearInfo;
-                    if (customGear == null) return true;
-                    if (customGear is CustomFolderInfo) return false;
+                    if (customGear.Info is CustomFolderInfo) return false;
 
-                    if (customGear is CustomBoardGearInfo)
-                        item = customGear as CustomBoardGearInfo;
-                    if (customGear is CustomCharacterGearInfo)
-                        item = customGear as CustomCharacterGearInfo;
+                    if (customGear is CustomBoardGearInfo boardGear) item = boardGear;
+                    if (customGear is CustomCharacterGearInfo charGear) item = charGear;
                 }
 
                 return true;
@@ -32,16 +28,12 @@ namespace XLMenuMod.Patches.Gear
         {
             static bool Prefix(ref GearInfo gear)
             {
-                if (gear is ICustomGearInfo)
+                if (gear is ICustomGearInfo customGear)
                 {
-                    var customGear = gear as ICustomGearInfo;
-                    if (customGear == null) return true;
-                    if (customGear is CustomFolderInfo) return false;
+                    if (customGear.Info is CustomFolderInfo) return false;
 
-                    if (customGear is CustomBoardGearInfo)
-                        gear = customGear as CustomBoardGearInfo;
-                    if (customGear is CustomCharacterGearInfo)
-                        gear = customGear as CustomCharacterGearInfo; ;
+                    if (customGear is CustomBoardGearInfo boardGear) gear = boardGear;
+                    if (customGear is CustomCharacterGearInfo charGear) gear = charGear;
                 }
 
                 return true;

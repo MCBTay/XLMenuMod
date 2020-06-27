@@ -5,15 +5,15 @@ using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using XLMenuMod.Gear.Interfaces;
+using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
 {
     public class CustomGearManager : MonoBehaviour
     {
         public static CustomFolderInfo CurrentFolder { get; set; }
-        public static List<ICustomGearInfo> NestedCustomGear { get; set; }
+        public static List<ICustomInfo> NestedCustomGear { get; set; }
         public static int CurrentGearFilterIndex { get; set; }
         public static float LastSelectedTime { get; set; }
         public static TMP_Text SortLabel;
@@ -22,7 +22,7 @@ namespace XLMenuMod.Gear
         static CustomGearManager()
         {
             CurrentFolder = null;
-            NestedCustomGear = new List<ICustomGearInfo>();
+            NestedCustomGear = new List<ICustomInfo>();
         }
 
         public static void LoadNestedGear(List<ICharacterCustomizationItem> visibleGear)
@@ -44,7 +44,7 @@ namespace XLMenuMod.Gear
                 if (string.IsNullOrEmpty(textureSubPath)) continue;
 
                 var folders = textureSubPath.Split('\\').ToList();
-                if (folders == null || !folders.Any()) continue;
+                if (!folders.Any()) continue;
 
                 if (folders.Count == 1 || Path.GetExtension(folders.First()).ToLower() == ".png")
                 {
@@ -62,7 +62,7 @@ namespace XLMenuMod.Gear
                     }
                     else
                     {
-                        AddFolder(folder, ref parent);
+                        AddFolder(folder, Path.GetDirectoryName(textureChange.texturePath), ref parent);
                     }
                 }
             }
@@ -74,26 +74,18 @@ namespace XLMenuMod.Gear
         {
             ICustomGearInfo customGear = null;
 
-            if (gear is BoardGearInfo)
+            if (gear is BoardGearInfo boardGear)
             {
-                var boardGear = gear as BoardGearInfo;
-                customGear = new CustomBoardGearInfo(boardGear.name, boardGear.type, boardGear.isCustom, boardGear.textureChanges, boardGear.tags)
-                {
-                    Parent = null
-                };
+                customGear = new CustomBoardGearInfo(boardGear.name, boardGear.type, boardGear.isCustom, boardGear.textureChanges, boardGear.tags);
             }
-            else if (gear is CharacterGearInfo)
+            else if (gear is CharacterGearInfo charGear)
             {
-                var characterGear = gear as CharacterGearInfo;
-                customGear = new CustomCharacterGearInfo(characterGear.name, characterGear.type, characterGear.isCustom, characterGear.textureChanges, characterGear.tags)
-                {
-                    Parent = null
-                };
+                customGear = new CustomCharacterGearInfo(charGear.name, charGear.type, charGear.isCustom, charGear.textureChanges, charGear.tags);
             }
 
             if (customGear != null)
             {
-                NestedCustomGear.Add(customGear);
+                NestedCustomGear.Add(customGear.Info);
             }
         }
 
@@ -103,35 +95,29 @@ namespace XLMenuMod.Gear
 
             if (gear is BoardGearInfo)
             {
-                var boardGear = gear as BoardGearInfo;
-                customGear = new CustomBoardGearInfo(boardGear.name, boardGear.type, boardGear.isCustom, boardGear.textureChanges, boardGear.tags)
-                {
-                    Parent = parent
-                };
+                customGear = new CustomBoardGearInfo(gear.name, gear.type, gear.isCustom, gear.textureChanges, gear.tags);
+                customGear.Info.Parent = parent;
             }
             else if (gear is CharacterGearInfo)
             {
-                var characterGear = gear as CharacterGearInfo;
-                customGear = new CustomCharacterGearInfo(characterGear.name, characterGear.type, characterGear.isCustom, characterGear.textureChanges, characterGear.tags)
-                {
-                    Parent = parent
-                };
+                customGear = new CustomCharacterGearInfo(gear.name, gear.type, gear.isCustom, gear.textureChanges, gear.tags);
+                customGear.Info.Parent = parent;
             }
             
             if (customGear != null)
             {
-                if (parent != null && !parent.Children.Any(x => x == customGear))
+                if (parent != null && parent.Children.All(x => x != customGear.Info))
                 {
-                    parent.Children.Add(customGear);
+                    parent.Children.Add(customGear.Info);
                 }
                 else
                 {
-                    NestedCustomGear.Add(customGear);
+                    NestedCustomGear.Add(customGear.Info);
                 }
             }
         }
 
-        public static void AddFolder(string folder, ref CustomFolderInfo parent)
+        public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
         {
             var folderName = $"\\{folder}";
 
@@ -140,40 +126,32 @@ namespace XLMenuMod.Gear
                 var child = parent.Children.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
-                    var newFolder = new CustomFolderInfo { Name = folderName, Parent = parent };
-                    newFolder.Children.Add(new CustomFolderInfo { Name = "..\\", Parent = newFolder.Parent });
+                    var customFolder = new CustomGearFolderInfo(folderName, path, parent);
+                    child = customFolder.FolderInfo;
+                    parent.Children.Add(child);
+                }
 
-                    parent.Children.Add(newFolder);
-                    parent = newFolder;
-                }
-                else
-                {
-                    parent = child;
-                }
+                parent = child;
             }
             else
             {
                 var child = NestedCustomGear.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
-                    var newFolder = new CustomFolderInfo { Name = folderName, Parent = parent };
-                    newFolder.Children.Add(new CustomFolderInfo { Name = "..\\", Parent = newFolder.Parent });
+                    var customFolder = new CustomGearFolderInfo(folderName, path, parent);
+                    child = customFolder.FolderInfo;
+                    NestedCustomGear.Add(child);
+                }
 
-                    NestedCustomGear.Add(newFolder);
-                    parent = newFolder;
-                }
-                else
-                {
-                    parent = child;
-                }
+                parent = child;
             }
         }
 
-        public static void SetCurrentFolder(CustomFolderInfo folder)
+        public static void SetCurrentFolder(CustomFolderInfo folder, bool setGearList = true)
         {
             CurrentFolder = folder;
 
-            SetGearList();
+            if (setGearList) SetGearList();
         }
 
         public static void MoveUpDirectory()
@@ -192,12 +170,12 @@ namespace XLMenuMod.Gear
 
                 if (CurrentFolder == null)
                 {
-                    gearSelector.visibleGear.AddRange(NestedCustomGear);
-                    gearSelector.gearTypeFiltering.gearCategoryButton.label.text = "Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel();
+                    gearSelector.visibleGear.AddRange(NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo));
+                    gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
                 }
                 else
                 {
-                    gearSelector.visibleGear.AddRange(CurrentFolder.Children);
+                    gearSelector.visibleGear.AddRange(CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo));
                     if (Main.BlackSprites != null)
                     {
                         gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
@@ -216,7 +194,7 @@ namespace XLMenuMod.Gear
 
             if (CurrentFolder == null)
             {
-                gearSelector.gearTypeFiltering.gearCategoryButton.label.text = "Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel();
+                gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
             }
             else
             {
@@ -228,9 +206,9 @@ namespace XLMenuMod.Gear
             }
         }
 
-        public static List<ICustomGearInfo> SortList(List<ICustomGearInfo> gear)
+        public static List<ICustomInfo> SortList(List<ICustomInfo> gear)
         {
-            List<ICustomGearInfo> sorted = null;
+            List<ICustomInfo> sorted = null;
 
             switch (CurrentGearSort)
             {
@@ -269,12 +247,14 @@ namespace XLMenuMod.Gear
                 if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
                 {
                     CurrentFolder.Children = SortList(CurrentFolder.Children);
-                    gearSelector.visibleGear.AddRange(CurrentFolder.Children);
+                    var list = CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo);
+                    gearSelector.visibleGear.AddRange(list);
                 }
                 else
                 {
                     NestedCustomGear = SortList(NestedCustomGear);
-                    gearSelector.visibleGear.AddRange(NestedCustomGear);
+                    var list = NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo);
+                    gearSelector.visibleGear.AddRange(list);
                 }
 
                 Traverse.Create(gearSelector).Method("UpdateList").GetValue();
@@ -295,15 +275,17 @@ namespace XLMenuMod.Gear
             {
                 gearSelector.visibleGear.Clear();
 
-                if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+                if (CurrentFolder?.Children != null && CurrentFolder.Children.Any())
                 {
                     CurrentFolder.Children = SortList(CurrentFolder.Children);
-                    gearSelector.visibleGear.AddRange(CurrentFolder.Children);
+                    var list = CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo);
+                    gearSelector.visibleGear.AddRange(list);
                 }
                 else
                 {
                     NestedCustomGear = SortList(NestedCustomGear);
-                    gearSelector.visibleGear.AddRange(NestedCustomGear);
+                    var list = NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo);
+                    gearSelector.visibleGear.AddRange(list);
                 }
 
                 Traverse.Create(gearSelector).Method("UpdateList").GetValue();

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Gear;
 using XLMenuMod.Gear.Interfaces;
+using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
@@ -29,6 +30,7 @@ namespace XLMenuMod.Patches.Gear
                             break;
                         case FontSizePreset.Normal:
                         default:
+                            gearListViewItem.Label.fontSize = 36;
                             break;
                     }
                 }
@@ -46,18 +48,15 @@ namespace XLMenuMod.Patches.Gear
                 }
             }
 
-            static List<ICharacterCustomizationItem> GetGear(List<ICustomGearInfo> customGear)
+            static List<ICharacterCustomizationItem> GetGear(List<ICustomInfo> customGear)
             {
                 var gear = new List<ICharacterCustomizationItem>();
 
-                foreach (var gearItem in customGear.OrderBy(x => x.GetName()))
+                foreach (var gearItem in customGear.Select(x => x.GetParentObject()))
                 {
-                    if (gearItem is CustomFolderInfo)
-                        gear.Add(gearItem as XLMenuMod.Gear.CustomFolderInfo);
-                    else if (gearItem is CustomBoardGearInfo)
-                        gear.Add(gearItem as CustomBoardGearInfo);
-                    else if (gearItem is CustomCharacterGearInfo)
-                        gear.Add(gearItem as CustomCharacterGearInfo);
+                    if (gearItem is CustomGearFolderInfo folderInfo) gear.Add(folderInfo);
+                    else if (gearItem is CustomBoardGearInfo boardGear) gear.Add(boardGear);
+                    else if (gearItem is CustomCharacterGearInfo charGear) gear.Add(charGear);
                 }
 
                 return gear;
@@ -69,20 +68,16 @@ namespace XLMenuMod.Patches.Gear
         {
             static bool Prefix(GearListViewController __instance, ref ICharacterCustomizationItem item)
             {
-                if (CustomGearManager.LastSelectedTime != 0 && Time.realtimeSinceStartup - CustomGearManager.LastSelectedTime < 0.25f) return false;
+                if (CustomGearManager.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomGearManager.LastSelectedTime < 0.25f) return false;
                 CustomGearManager.LastSelectedTime = Time.realtimeSinceStartup;
 
-                if (item is ICustomGearInfo)
+                if (item is ICustomGearInfo selectedItem)
                 {
-                    var selectedItem = item as ICustomGearInfo;
-                    if (selectedItem == null) return true;
-
-                    if (selectedItem is CustomFolderInfo)
+                    if (selectedItem.Info is CustomFolderInfo folder)
                     {
-                        var folder = selectedItem as XLMenuMod.Gear.CustomFolderInfo;
                         if (folder.GetName() == "..\\")
                         {
-                            CustomGearManager.CurrentFolder = CustomGearManager.CurrentFolder.Parent as XLMenuMod.Gear.CustomFolderInfo;
+                            CustomGearManager.CurrentFolder = CustomGearManager.CurrentFolder.Parent as CustomFolderInfo;
                         }
                         else
                         {
@@ -95,10 +90,8 @@ namespace XLMenuMod.Patches.Gear
                     }
                     else
                     {
-                        if (selectedItem is CustomBoardGearInfo) 
-                            item = selectedItem as CustomBoardGearInfo;
-                        else if (selectedItem is CustomCharacterGearInfo) 
-                            item = selectedItem as CustomCharacterGearInfo;
+                        if (selectedItem is CustomBoardGearInfo boardGear) item = boardGear;
+                        else if (selectedItem is CustomCharacterGearInfo charGear) item = charGear;
                     }
                 }
 

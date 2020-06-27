@@ -1,11 +1,11 @@
 ﻿using HarmonyLib;
-using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Linq;
 using XLMenuMod.Gear;
+using XLMenuMod.Gear.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
-    public class GearSelectionControllerPatch : GearSelectionController
+    public class GearSelectionControllerPatch
     {
         [HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ShowGearWithFilter))]
         public static class ShowGearWithFilterPatch
@@ -21,7 +21,7 @@ namespace XLMenuMod.Patches.Gear
                 CustomGearManager.LoadNestedGear(__instance.visibleGear);
 
                 __instance.visibleGear.Clear();
-                __instance.visibleGear.AddRange(CustomGearManager.NestedCustomGear);
+                __instance.visibleGear.AddRange(CustomGearManager.NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo));
 
                 Traverse.Create(__instance).Method("UpdateList").GetValue();
             }

@@ -14,10 +14,7 @@ namespace XLMenuMod.Levels
             this.name = name;
             this.path = path;
 
-            FolderInfo = new CustomFolderInfo(name, path, parent)
-            {
-                ParentObject = this,
-            };
+            FolderInfo = new CustomFolderInfo(name, path, parent) { ParentObject = this };
 
             if (name != "..\\")
             {

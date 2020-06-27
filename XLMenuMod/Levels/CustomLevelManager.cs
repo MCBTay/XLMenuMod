@@ -225,6 +225,8 @@ namespace XLMenuMod.Levels
             }
         }
 
+
+        //TODO: Fix bug where when sorting within a folder, the "Go Back" folder gets sorted.  It should always be up top.
         public static List<ICustomInfo> SortList(List<ICustomInfo> levels)
         {
             List<ICustomInfo> sorted = null;
