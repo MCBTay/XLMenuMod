@@ -30,7 +30,7 @@ namespace XLMenuMod.Patches.Level
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
 
-                    CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.FolderInfo.Parent as CustomLevelFolderInfo;
+                    CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.FolderInfo.Parent?.GetParentObject() as CustomLevelFolderInfo;
 
                     EventSystem.current.SetSelectedGameObject(null);
                     UnityEngine.Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
