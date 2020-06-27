@@ -53,7 +53,7 @@ namespace XLMenuMod.Patches.Gear
                 foreach (var gearItem in customGear.OrderBy(x => x.GetName()))
                 {
                     if (gearItem is CustomFolderInfo)
-                        gear.Add(gearItem as CustomFolderInfo);
+                        gear.Add(gearItem as XLMenuMod.Gear.CustomFolderInfo);
                     else if (gearItem is CustomBoardGearInfo)
                         gear.Add(gearItem as CustomBoardGearInfo);
                     else if (gearItem is CustomCharacterGearInfo)
@@ -79,10 +79,10 @@ namespace XLMenuMod.Patches.Gear
 
                     if (selectedItem is CustomFolderInfo)
                     {
-                        var folder = selectedItem as CustomFolderInfo;
+                        var folder = selectedItem as XLMenuMod.Gear.CustomFolderInfo;
                         if (folder.GetName() == "..\\")
                         {
-                            CustomGearManager.CurrentFolder = CustomGearManager.CurrentFolder.Parent as CustomFolderInfo;
+                            CustomGearManager.CurrentFolder = CustomGearManager.CurrentFolder.Parent as XLMenuMod.Gear.CustomFolderInfo;
                         }
                         else
                         {

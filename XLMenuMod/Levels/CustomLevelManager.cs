@@ -6,14 +6,14 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using XLMenuMod.Levels.Interfaces;
+using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Levels
 {
     public class CustomLevelManager : MonoBehaviour
     {
-        public static CustomFolderInfo CurrentFolder { get; set; }
-        public static List<ICustomLevelInfo> NestedCustomLevels { get; set; }
+        public static CustomLevelFolderInfo CurrentFolder { get; set; }
+        public static List<ICustomInfo> NestedCustomLevels { get; set; }
         public static float LastSelectedTime { get; set; }
         public static TMP_Text SortLabel;
         public static int CurrentLevelSort { get; set; }
@@ -21,7 +21,7 @@ namespace XLMenuMod.Levels
         static CustomLevelManager()
         {
             CurrentFolder = null;
-            NestedCustomLevels = new List<ICustomLevelInfo>();
+            NestedCustomLevels = new List<ICustomInfo>();
         }
 
         public static List<string> LoadNestedLevelPaths(string directoryToSearch = null)
@@ -122,14 +122,13 @@ namespace XLMenuMod.Levels
 
         public static void AddLevel(LevelInfo level)
         {
-            if (level is CustomLevelInfo)
+            if (level is CustomLevelInfo customLevel)
             {
-                var customLevel = level as CustomLevelInfo;
-                CreateOrUpdateLevel(NestedCustomLevels, level, customLevel, null);
+                CreateOrUpdateLevel(NestedCustomLevels, customLevel, null);
             }
             else
             {
-                CreateOrUpdateLevel(NestedCustomLevels, level, null, null);
+                CreateOrUpdateLevel(NestedCustomLevels, level, null);
             }
         }
 
@@ -137,45 +136,39 @@ namespace XLMenuMod.Levels
         {
             var customLevel = level as CustomLevelInfo;
 
-            if (parent == null)
-            {
-                CreateOrUpdateLevel(NestedCustomLevels, level, customLevel, parent);
-            }
-            else
-            {
-                CreateOrUpdateLevel(parent.Children, level, customLevel, parent);
-            }
+            var list = parent == null ? NestedCustomLevels : parent.Children;
+
+            CreateOrUpdateLevel(list, customLevel ?? level, parent);
         }
 
-        private static void CreateOrUpdateLevel(List<ICustomLevelInfo> sourceList, LevelInfo levelToAdd, CustomLevelInfo customLevelToAdd, CustomFolderInfo parent)
+        private static void CreateOrUpdateLevel(List<ICustomInfo> sourceList, LevelInfo levelToAdd, CustomFolderInfo parent)
         {
-            LevelInfo existing = null;
+            ICustomInfo existing = sourceList.FirstOrDefault(x => x.GetName() == levelToAdd.name);
 
-            if (customLevelToAdd != null)
-            {
-                existing = sourceList.FirstOrDefault(x => x.GetName() == customLevelToAdd.GetName()) as CustomLevelInfo;
-            }
-            else
-            {
-                existing = sourceList.FirstOrDefault(x => x.GetName() == levelToAdd.name) as LevelInfo;
-            }
-            
             if (existing == null)
             {
-                sourceList.Add(new CustomLevelInfo(levelToAdd, parent)
-                {
-                    PlayCount = customLevelToAdd == null ? 0 : customLevelToAdd.PlayCount,
-                    LastPlayTime = customLevelToAdd == null ? DateTime.MinValue : customLevelToAdd.LastPlayTime
-                });
+                var newLevel = new CustomLevelInfo(levelToAdd, parent);
+
+                //TODO: Come back to this
+                //if (customLevelToAdd != null && customLevelToAdd.Info != null)
+                //{
+                //    newLevel.Info.UsageCount = customLevelToAdd.Info.UsageCount;
+                //    newLevel.Info.LastUsage = customLevelToAdd.Info.LastUsage;
+                //}
+
+                sourceList.Add(newLevel.Info);
             }
             else
             {
-                if (existing is CustomLevelInfo)
-                {
-                    var existingCustom = existing as CustomLevelInfo;
-                    existingCustom.PlayCount = customLevelToAdd == null ? 0 : customLevelToAdd.PlayCount;
-                    existingCustom.LastPlayTime = customLevelToAdd == null ? DateTime.MinValue : customLevelToAdd.LastPlayTime;
-                }
+                //var existingCustom = existing.GetParentObject() as CustomLevelInfo;
+
+                //TODO: Come back to this
+                //if (customLevelToAdd != null && customLevelToAdd.Info != null && 
+                //    existingCustom != null && existingCustom.Info != null)
+                //{
+                //    existingCustom.Info.UsageCount = customLevelToAdd.Info.UsageCount;
+                //    existingCustom.Info.LastUsage = customLevelToAdd.Info.LastUsage;
+                //}
             }
         }
 
@@ -188,11 +181,9 @@ namespace XLMenuMod.Levels
                 var child = parent.Children.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
-                    var newFolder = new CustomFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
-                    newFolder.Children.Add(new CustomFolderInfo("..\\", parent == null ? string.Empty : Path.GetDirectoryName(parent.path), newFolder.Parent));
-
-                    parent.Children.Add(newFolder);
-                    parent = newFolder;
+                    var newFolder = new CustomLevelFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+                    parent.Children.Add(newFolder.FolderInfo);
+                    parent = newFolder.FolderInfo;
                 }
                 else
                 {
@@ -204,11 +195,9 @@ namespace XLMenuMod.Levels
                 var child = NestedCustomLevels.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
                 if (child == null)
                 {
-                    var newFolder = new CustomFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
-                    newFolder.Children.Add(new CustomFolderInfo("..\\", parent == null ? string.Empty : Path.GetDirectoryName(parent.path), newFolder.Parent));
-
-                    NestedCustomLevels.Add(newFolder);
-                    parent = newFolder;
+                    var newFolder = new CustomLevelFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+                    NestedCustomLevels.Add(newFolder.FolderInfo);
+                    parent = newFolder.FolderInfo;
                 }
                 else
                 {
@@ -231,25 +220,25 @@ namespace XLMenuMod.Levels
                 if (Main.BlackSprites != null)
                 {
                     levelSelector.LevelCategoryButton.label.spriteAsset = Main.BlackSprites;
-                    levelSelector.LevelCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+                    levelSelector.LevelCategoryButton.label.SetText(CurrentFolder.FolderInfo.GetName().Replace("\\", "<sprite=10> "));
                 }
             }
         }
 
-        public static List<ICustomLevelInfo> SortList(List<ICustomLevelInfo> levels)
+        public static List<ICustomInfo> SortList(List<ICustomInfo> levels)
         {
-            List<ICustomLevelInfo> sorted = null;
+            List<ICustomInfo> sorted = null;
 
             switch (CurrentLevelSort)
             {
                 case (int)LevelSortMethod.Recently_Played:
-                    sorted = levels.OrderBy(x => x.GetLastPlayTime()).ToList();
+                    sorted = levels.OrderBy(x => x.GetLastUsage()).ToList();
                     break;
                 case (int)LevelSortMethod.Least_Played:
-                    sorted = levels.OrderBy(x => x.GetPlayCount()).ToList();
+                    sorted = levels.OrderBy(x => x.GetUsageCount()).ToList();
                     break;
                 case (int)LevelSortMethod.Most_Played:
-                    sorted = levels.OrderByDescending(x => x.GetPlayCount()).ToList();
+                    sorted = levels.OrderByDescending(x => x.GetUsageCount()).ToList();
                     break;
                 case (int)LevelSortMethod.Newest:
                     sorted = levels.OrderByDescending(x => x.GetModifiedDate(false)).ToList();
@@ -285,9 +274,10 @@ namespace XLMenuMod.Levels
 
             UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentLevelSort).ToString());
 
-            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            if (CurrentFolder != null && CurrentFolder.FolderInfo != null &&
+                CurrentFolder.FolderInfo.Children != null && CurrentFolder.FolderInfo.Children.Any())
             {
-                CurrentFolder.Children = SortList(CurrentFolder.Children);
+                CurrentFolder.FolderInfo.Children = SortList(CurrentFolder.FolderInfo.Children);
             }
             else
             {
@@ -310,9 +300,10 @@ namespace XLMenuMod.Levels
 
             UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentLevelSort).ToString());
 
-            if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            if (CurrentFolder != null && CurrentFolder.FolderInfo != null && 
+                CurrentFolder.FolderInfo.Children != null && CurrentFolder.FolderInfo.Children.Any())
             {
-                CurrentFolder.Children = SortList(CurrentFolder.Children);
+                CurrentFolder.FolderInfo.Children = SortList(CurrentFolder.FolderInfo.Children);
             }
             else
             {

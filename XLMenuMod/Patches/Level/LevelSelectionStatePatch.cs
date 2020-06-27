@@ -1,7 +1,9 @@
 ﻿using GameManagement;
 using HarmonyLib;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -28,10 +30,10 @@ namespace XLMenuMod.Patches.Level
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
 
-                    CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.Parent as CustomFolderInfo;
+                    CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.FolderInfo.Parent as CustomLevelFolderInfo;
 
                     EventSystem.current.SetSelectedGameObject(null);
-                    Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
+                    UnityEngine.Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
                     CustomLevelManager.UpdateLabel();
 
                     return false;

@@ -76,6 +76,8 @@ namespace XLMenuMod
             }
             else
             {
+                Assets?.Unload(true);
+
                 Harmony.UnpatchAll(Harmony.Id);
 
                 Object.Destroy(CustomLevelManagerGameObject.GetComponent<CustomLevelManager>());

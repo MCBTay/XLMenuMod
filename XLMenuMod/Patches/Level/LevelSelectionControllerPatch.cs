@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using XLMenuMod.Interfaces;
 using XLMenuMod.Levels;
-using XLMenuMod.Levels.Interfaces;
 
 namespace XLMenuMod.Patches.Level
 {
@@ -27,57 +27,42 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionController __instance, ref LevelInfo level)
             {
-                if (CustomLevelManager.LastSelectedTime != 0 && Time.realtimeSinceStartup - CustomLevelManager.LastSelectedTime < 0.25f) return false;
+                if (CustomLevelManager.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.LastSelectedTime < 0.25f) return false;
                 CustomLevelManager.LastSelectedTime = Time.realtimeSinceStartup;
 
-                if (level is ICustomLevelInfo)
+                if (level is CustomLevelFolderInfo selectedFolder)
                 {
-                    var selectedLevel = level as ICustomLevelInfo;
-                    if (selectedLevel == null) return true;
-
-                    if (selectedLevel is CustomFolderInfo)
+                    if (selectedFolder.FolderInfo.GetName() == "..\\")
                     {
-                        var selectedFolder = selectedLevel as CustomFolderInfo;
-                        if (selectedFolder == null) return true;
-
-                        if (selectedFolder.GetName() == "..\\")
-                        {
-                            CustomLevelManager.CurrentFolder = selectedFolder.Parent as CustomFolderInfo;
-                        }
-                        else
-                        {
-                            CustomLevelManager.CurrentFolder = selectedFolder;
-                        }
-
-                        EventSystem.current.SetSelectedGameObject(null);
-                        __instance.UpdateList();
-                        CustomLevelManager.UpdateLabel();
-
-                        return false;
+                        CustomLevelManager.CurrentFolder = selectedFolder.FolderInfo.Parent?.GetParentObject() as CustomLevelFolderInfo;
                     }
                     else
                     {
-                        CustomLevelManager.CurrentFolder = null;
-                        CustomLevelManager.UpdateLabel();
-
-                        var customlevel = level as CustomLevelInfo;
-                        if (customlevel != null)
-                        {
-                            var found = LevelManager.Instance.CustomLevels.FirstOrDefault(x => x.hash == customlevel.hash);
-                            if (found != null && found is CustomLevelInfo)
-                            {
-                                (found as CustomLevelInfo).PlayCount++;
-                                (found as CustomLevelInfo).LastPlayTime = DateTime.Now;
-                            }
-                            SaveManager.Instance.SaveCustomLevelListCache(JsonConvert.SerializeObject(LevelManager.Instance.CustomLevels, Formatting.Indented));
-                        }
-
-                        return true;
+                        CustomLevelManager.CurrentFolder = selectedFolder;
                     }
+
+                    EventSystem.current.SetSelectedGameObject(null);
+                    __instance.UpdateList();
+                    CustomLevelManager.UpdateLabel();
+
+                    return false;
                 }
                 else
                 {
                     CustomLevelManager.CurrentFolder = null;
+                    CustomLevelManager.UpdateLabel();
+
+                    if (level is CustomLevelInfo customLevel)
+                    {
+                        var found = LevelManager.Instance.CustomLevels.FirstOrDefault(x => x.hash == customLevel.hash);
+                        if (found != null && found is CustomLevelInfo)
+                        {
+                            (found as CustomLevelInfo).Info.UsageCount++;
+                            (found as CustomLevelInfo).Info.LastUsage = DateTime.Now;
+                        }
+                        SaveManager.Instance.SaveCustomLevelListCache(JsonConvert.SerializeObject(LevelManager.Instance.CustomLevels, Formatting.Indented));
+                    }
+
                     return true;
                 }
             }
@@ -116,9 +101,10 @@ namespace XLMenuMod.Patches.Level
             {
                 if (__instance.showCustom)
                 {
-                    if (CustomLevelManager.CurrentFolder != null && CustomLevelManager.CurrentFolder.Children != null && CustomLevelManager.CurrentFolder.Children.Any())
+                    if (CustomLevelManager.CurrentFolder != null && CustomLevelManager.CurrentFolder.FolderInfo != null && 
+                        CustomLevelManager.CurrentFolder.FolderInfo.Children != null && CustomLevelManager.CurrentFolder.FolderInfo.Children.Any())
                     {
-                        __result = GetLevels(CustomLevelManager.CurrentFolder.Children);
+                        __result = GetLevels(CustomLevelManager.CurrentFolder.FolderInfo.Children);
                     }
                     else
                     {
@@ -127,16 +113,16 @@ namespace XLMenuMod.Patches.Level
                 }
             }
 
-            static List<LevelInfo> GetLevels(List<ICustomLevelInfo> customLevels)
+            static List<LevelInfo> GetLevels(List<ICustomInfo> customLevels)
             {
                 var levels = new List<LevelInfo>();
 
                 foreach (var customLevel in CustomLevelManager.SortList(customLevels))
                 {
-                    if (customLevel is CustomFolderInfo)
-                        levels.Add(customLevel as CustomFolderInfo);
-                    else if (customLevel is CustomLevelInfo)
-                        levels.Add(customLevel as CustomLevelInfo);
+                    if (customLevel.IsFolder)
+                        levels.Add(customLevel.GetParentObject() as CustomLevelFolderInfo);
+                    else
+                        levels.Add(customLevel.GetParentObject() as CustomLevelInfo);
                 }
 
                 return levels;
