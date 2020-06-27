@@ -226,40 +226,39 @@ namespace XLMenuMod.Levels
         }
 
 
-        //TODO: Fix bug where when sorting within a folder, the "Go Back" folder gets sorted.  It should always be up top.
         public static List<ICustomInfo> SortList(List<ICustomInfo> levels)
         {
-            List<ICustomInfo> sorted = null;
+            List<ICustomInfo> sorted;
 
             switch (CurrentLevelSort)
             {
                 case (int)LevelSortMethod.Recently_Played:
-                    sorted = levels.OrderBy(x => x.GetLastUsage()).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(y => y.GetLastUsage()).ToList();
                     break;
                 case (int)LevelSortMethod.Least_Played:
-                    sorted = levels.OrderBy(x => x.GetUsageCount()).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetUsageCount()).ToList();
                     break;
                 case (int)LevelSortMethod.Most_Played:
-                    sorted = levels.OrderByDescending(x => x.GetUsageCount()).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetUsageCount()).ToList();
                     break;
                 case (int)LevelSortMethod.Newest:
-                    sorted = levels.OrderByDescending(x => x.GetModifiedDate(false)).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
                     break;
                 case (int)LevelSortMethod.Oldest:
-                    sorted = levels.OrderBy(x => x.GetModifiedDate(true)).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetModifiedDate(true)).ToList();
                     break;
                 case (int)LevelSortMethod.Filesize_ASC:
-                    sorted = levels.OrderBy(x => x.Size).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.Size).ToList();
                     break;
                 case (int)LevelSortMethod.Filesize_DESC:
-                    sorted = levels.OrderByDescending(x => x.Size).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.Size).ToList();
                     break;
                 case (int)LevelSortMethod.Name_ASC:
-                    sorted = levels.OrderBy(x => x.GetName()).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
                     break;
                 case (int)LevelSortMethod.Name_DESC:
                 default:
-                    sorted = levels.OrderByDescending(x => x.GetName()).ToList();
+                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
                     break;
             }
 

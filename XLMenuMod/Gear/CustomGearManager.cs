@@ -208,22 +208,22 @@ namespace XLMenuMod.Gear
 
         public static List<ICustomInfo> SortList(List<ICustomInfo> gear)
         {
-            List<ICustomInfo> sorted = null;
+            List<ICustomInfo> sorted;
 
             switch (CurrentGearSort)
             {
                 case (int)GearSortMethod.Newest:
-                    sorted = gear.OrderByDescending(x => x.GetModifiedDate(false)).ToList();
+                    sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
                     break;
                 case (int)GearSortMethod.Oldest:
-                    sorted = gear.OrderBy(x => x.GetModifiedDate(true)).ToList();
+                    sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetModifiedDate(true)).ToList();
                     break;
                 case (int)GearSortMethod.Name_ASC:
-                    sorted = gear.OrderBy(x => x.GetName()).ToList();
+                    sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
                     break;
                 case (int)GearSortMethod.Name_DESC:
                 default:
-                    sorted = gear.OrderByDescending(x => x.GetName()).ToList();
+                    sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
                     break;
             }
 
