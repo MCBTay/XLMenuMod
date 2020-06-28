@@ -21,7 +21,7 @@ namespace XLMenuMod.Patches
         {
             static void Postfix(List<string> __result)
             {
-                __result.AddRange(CustomLevelManager.LoadNestedLevelPaths());
+                __result.AddRange(CustomLevelManager.Instance.LoadNestedLevelPaths());
             }
         }
     }

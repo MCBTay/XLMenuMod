@@ -72,7 +72,7 @@ namespace XLMenuMod
                 {
                     File.Copy(Path.Combine(ModPath, "CachedCustomLevels.json"), SaveManager.Instance.CachedLevelsPath, true);
                 }
-                CustomLevelManager.LoadNestedLevels();
+                CustomLevelManager.Instance.LoadNestedItems();
             }
             else
             {

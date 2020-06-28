@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Levels
 {
@@ -27,7 +26,7 @@ namespace XLMenuMod.Levels
             };
         }
 
-        public CustomLevelInfo(LevelInfo level, ICustomInfo parent) : this(level)
+        public CustomLevelInfo(LevelInfo level, CustomFolderInfo parent) : this(level)
         {
             Info.Parent = parent;
         }

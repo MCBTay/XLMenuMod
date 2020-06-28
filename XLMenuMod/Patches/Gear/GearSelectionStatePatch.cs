@@ -15,21 +15,21 @@ namespace XLMenuMod.Patches.Gear
                 {
                     UISounds.Instance?.PlayOneShotSelectionChange();
 
-                    CustomGearManager.OnNextSort();
+                    CustomGearManager.Instance.OnNextSort<GearSortMethod>();
                     return false;
                 }
 
-                if (CustomGearManager.CurrentFolder == null) return true;
+                if (CustomGearManager.Instance.CurrentFolder == null) return true;
                 if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
 
                 if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
-                    CustomGearManager.MoveUpDirectory();
+                    CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
                     return false;
                 }
                     
-                CustomGearManager.CurrentFolder = null;
+                CustomGearManager.Instance.CurrentFolder = null;
                 return true;
             }
         }

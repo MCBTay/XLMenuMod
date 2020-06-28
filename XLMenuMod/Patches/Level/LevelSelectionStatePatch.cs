@@ -1,9 +1,6 @@
 ﻿using GameManagement;
 using HarmonyLib;
-using System;
-using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -19,27 +16,27 @@ namespace XLMenuMod.Patches.Level
                 {
                     UISounds.Instance?.PlayOneShotSelectionChange();
 
-                    CustomLevelManager.OnNextSort();
+                    CustomLevelManager.Instance.OnNextSort<LevelSortMethod>();
                     return false;
                 }
 
-                if (CustomLevelManager.CurrentFolder == null) return true;
+                if (CustomLevelManager.Instance.CurrentFolder == null) return true;
                 if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
 
                 if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
 
-                    CustomLevelManager.CurrentFolder = CustomLevelManager.CurrentFolder.FolderInfo.Parent?.GetParentObject() as CustomLevelFolderInfo;
+                    CustomLevelManager.Instance.CurrentFolder = CustomLevelManager.Instance.CurrentFolder.Parent;
 
                     EventSystem.current.SetSelectedGameObject(null);
                     UnityEngine.Object.FindObjectOfType<LevelSelectionController>()?.UpdateList();
-                    CustomLevelManager.UpdateLabel();
+                    CustomLevelManager.Instance.UpdateLabel();
 
                     return false;
                 }
 
-                CustomLevelManager.CurrentFolder = null;
+                CustomLevelManager.Instance.CurrentFolder = null;
                 return true;
             }
         }
@@ -49,7 +46,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix()
             {
-                CustomLevelManager.LoadNestedLevels();
+                CustomLevelManager.Instance.LoadNestedItems();
             }
         }
 
@@ -58,7 +55,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix()
             {
-                CustomLevelManager.CurrentFolder = null;
+                CustomLevelManager.Instance.CurrentFolder = null;
             }
         }
     }

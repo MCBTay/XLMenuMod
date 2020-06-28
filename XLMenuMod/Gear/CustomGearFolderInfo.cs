@@ -5,16 +5,20 @@ using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
 {
-    public class CustomGearFolderInfo : ICustomGearInfo
+    public class CustomGearFolderInfo : ICustomGearInfo, ICustomFolderInfo
     {
         [JsonIgnore]
         public ICustomInfo Info { get; set; }
 
-        public CustomFolderInfo FolderInfo => Info as CustomFolderInfo;
+        public CustomFolderInfo FolderInfo
+        {
+            get { return Info as CustomFolderInfo; }
+            set { Info = value; }
+        }
 
         public string GetName() { return Info?.GetName(); }
 
-        public CustomGearFolderInfo(string name, string path, ICustomInfo parent)
+        public CustomGearFolderInfo(string name, string path, CustomFolderInfo parent)
         {
             Info = new CustomFolderInfo(name, path, parent) { ParentObject = this };
 

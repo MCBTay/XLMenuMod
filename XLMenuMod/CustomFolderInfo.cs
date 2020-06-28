@@ -132,7 +132,7 @@ namespace XLMenuMod
             return oldestChild;
         }
 
-        public CustomFolderInfo(string name, string path, ICustomInfo parent) : base(name, path, parent, false)
+        public CustomFolderInfo(string name, string path, CustomFolderInfo parent) : base(name, path, parent, false)
         {
             Children = new List<ICustomInfo>();
 

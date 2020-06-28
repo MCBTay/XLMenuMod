@@ -14,11 +14,11 @@ namespace XLMenuMod.Patches.Gear
                 EventSystem.current.SetSelectedGameObject(null);
 
                 CustomGearManager.CurrentGearFilterIndex = ___currentFilterIndex;
-                CustomGearManager.SetCurrentFolder(null, ___showCustomGear);
+                CustomGearManager.Instance.CurrentFolder = null;
 
-                if (CustomGearManager.SortLabel != null)
+                if (CustomGearManager.Instance.SortLabel != null)
                 {
-                    CustomGearManager.SortLabel.gameObject.SetActive(___showCustomGear);
+                    CustomGearManager.Instance.SortLabel.gameObject.SetActive(___showCustomGear);
                 }
             }
         }

@@ -1,15 +1,15 @@
-﻿using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Linq;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Levels
 {
-    public class CustomLevelFolderInfo : LevelInfo
+    public class CustomLevelFolderInfo : LevelInfo, ICustomFolderInfo
     {
         [JsonIgnore]
         public CustomFolderInfo FolderInfo { get; set; }
 
-        public CustomLevelFolderInfo(string name, string path, ICustomInfo parent)
+        public CustomLevelFolderInfo(string name, string path, CustomFolderInfo parent)
         {
             this.name = name;
             this.path = path;

@@ -16,7 +16,7 @@ namespace XLMenuMod.Interfaces
 
         DateTime ModifiedDate { get; set; }
         DateTime LastUsage { get; set; }
-        ICustomInfo Parent { get; set; }
+        CustomFolderInfo Parent { get; set; }
         int UsageCount { get; set; }
 
         string GetName();

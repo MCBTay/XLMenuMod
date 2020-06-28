@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -89,12 +90,14 @@
   <ItemGroup>
     <Compile Include="CustomFolderInfo.cs" />
     <Compile Include="CustomInfo.cs" />
+    <Compile Include="CustomManager.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Gear\CustomBoardGearInfo.cs" />
     <Compile Include="Gear\CustomCharacterGearInfo.cs" />
     <Compile Include="Gear\CustomGearFolderInfo.cs" />
     <Compile Include="Gear\CustomGearManager.cs" />
     <Compile Include="Gear\Interfaces\ICustomGearInfo.cs" />
+    <Compile Include="Interfaces\ICustomFolderInfo.cs" />
     <Compile Include="Interfaces\ICustomInfo.cs" />
     <Compile Include="Levels\CustomLevelFolderInfo.cs" />
     <Compile Include="Levels\CustomLevelInfo.cs" />

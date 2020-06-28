@@ -17,8 +17,8 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.CurrentFolder = null;
-                CustomLevelManager.SortLabel.gameObject.SetActive(__instance.showCustom);
+                CustomLevelManager.Instance.CurrentFolder = null;
+                CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
             }
         }
 
@@ -27,30 +27,30 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionController __instance, ref LevelInfo level)
             {
-                if (CustomLevelManager.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.LastSelectedTime < 0.25f) return false;
-                CustomLevelManager.LastSelectedTime = Time.realtimeSinceStartup;
+                if (CustomLevelManager.Instance.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.Instance.LastSelectedTime < 0.25f) return false;
+                CustomLevelManager.Instance.LastSelectedTime = Time.realtimeSinceStartup;
 
                 if (level is CustomLevelFolderInfo selectedFolder)
                 {
                     if (selectedFolder.FolderInfo.GetName() == "..\\")
                     {
-                        CustomLevelManager.CurrentFolder = selectedFolder.FolderInfo.Parent?.GetParentObject() as CustomLevelFolderInfo;
+                        CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo.Parent;
                     }
                     else
                     {
-                        CustomLevelManager.CurrentFolder = selectedFolder;
+                        CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo;
                     }
 
                     EventSystem.current.SetSelectedGameObject(null);
                     __instance.UpdateList();
-                    CustomLevelManager.UpdateLabel();
+                    CustomLevelManager.Instance.UpdateLabel();
 
                     return false;
                 }
                 else
                 {
-                    CustomLevelManager.CurrentFolder = null;
-                    CustomLevelManager.UpdateLabel();
+                    CustomLevelManager.Instance.CurrentFolder = null;
+                    CustomLevelManager.Instance.UpdateLabel();
 
                     if (level is CustomLevelInfo customLevel)
                     {
@@ -101,14 +101,13 @@ namespace XLMenuMod.Patches.Level
             {
                 if (__instance.showCustom)
                 {
-                    if (CustomLevelManager.CurrentFolder != null && CustomLevelManager.CurrentFolder.FolderInfo != null && 
-                        CustomLevelManager.CurrentFolder.FolderInfo.Children != null && CustomLevelManager.CurrentFolder.FolderInfo.Children.Any())
+                    if (CustomLevelManager.Instance.CurrentFolder != null && CustomLevelManager.Instance.CurrentFolder.Children != null && CustomLevelManager.Instance.CurrentFolder.Children.Any())
                     {
-                        __result = GetLevels(CustomLevelManager.CurrentFolder.FolderInfo.Children);
+                        __result = GetLevels(CustomLevelManager.Instance.CurrentFolder.Children);
                     }
                     else
                     {
-                        __result = GetLevels(CustomLevelManager.NestedCustomLevels);
+                        __result = GetLevels(CustomLevelManager.Instance.NestedItems);
                     }
                 }
             }
@@ -117,7 +116,7 @@ namespace XLMenuMod.Patches.Level
             {
                 var levels = new List<LevelInfo>();
 
-                foreach (var customLevel in CustomLevelManager.SortList(customLevels))
+                foreach (var customLevel in CustomLevelManager.Instance.SortList(customLevels))
                 {
                     if (customLevel.IsFolder)
                         levels.Add(customLevel.GetParentObject() as CustomLevelFolderInfo);
@@ -134,7 +133,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.LevelCategoryButton.label, __instance.LevelCategoryButton.transform, ((LevelSortMethod)CustomLevelManager.CurrentLevelSort).ToString());
+                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.LevelCategoryButton.label, __instance.LevelCategoryButton.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
             }
         }
     }

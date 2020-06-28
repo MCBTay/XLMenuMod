@@ -1,30 +1,18 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TMPro;
-using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Levels
 {
-    public class CustomLevelManager : MonoBehaviour
+    public class CustomLevelManager : CustomManager
     {
-        public static CustomLevelFolderInfo CurrentFolder { get; set; }
-        public static List<ICustomInfo> NestedCustomLevels { get; set; }
-        public static float LastSelectedTime { get; set; }
-        public static TMP_Text SortLabel;
-        public static int CurrentLevelSort { get; set; }
+        private static CustomLevelManager _instance;
+        public static CustomLevelManager Instance => _instance ?? (_instance = new CustomLevelManager());
 
-        static CustomLevelManager()
-        {
-            CurrentFolder = null;
-            NestedCustomLevels = new List<ICustomInfo>();
-        }
-
-        public static List<string> LoadNestedLevelPaths(string directoryToSearch = null)
+        public List<string> LoadNestedLevelPaths(string directoryToSearch = null)
         {
             var nestedLevels = new List<string>();
 
@@ -52,9 +40,10 @@ namespace XLMenuMod.Levels
             return nestedLevels;
         }
 
-        public static void LoadNestedLevels()
+        public override void LoadNestedItems()
         {
             var levelsToRemove = new List<LevelInfo>();
+            CustomFolderInfo parent = null;
 
             // We want to look here in the event the levels are not already cached.  But if they ARE properly cached, they'll be all nested levels...
             // So for now filter this down to only ones at the root.
@@ -65,7 +54,7 @@ namespace XLMenuMod.Levels
                 // Check to ensure the file is still on disk.  
                 if (File.Exists(level.path))
                 {
-                    AddLevel(level);
+                    AddItem(level, ref parent);
                 }
                 else
                 {
@@ -93,14 +82,15 @@ namespace XLMenuMod.Levels
                 var folders = levelSubPath.Split('\\').ToList();
                 if (folders == null || !folders.Any()) continue;
 
+                parent = null;
                 if (folders.Count == 1)
                 {
                     // This level is at the root
-                    AddLevel(LevelManager.Instance.LevelInfoForPath(path));
+                    AddItem(LevelManager.Instance.LevelInfoForPath(path), ref parent);
                     continue;
                 }
 
-                CustomFolderInfo parent = null;
+                parent = null;
                 for (int i = 0; i < folders.Count; i++)
                 {
                     var folder = folders.ElementAt(i);
@@ -108,11 +98,11 @@ namespace XLMenuMod.Levels
 
                     if (folder == folders.Last())
                     {
-                        AddLevel(LevelManager.Instance.LevelInfoForPath(path), ref parent);
+                        AddItem(LevelManager.Instance.LevelInfoForPath(path), ref parent);
                     }
                     else
                     {
-                        AddFolder(folder, path, ref parent);
+                        AddFolder<CustomLevelFolderInfo>(folder, path, ref parent);
                     }
                 }
             }
@@ -120,117 +110,21 @@ namespace XLMenuMod.Levels
             Traverse.Create(LevelManager.Instance).Method("InitializeCustomLevels").GetValue();
         }
 
-        public static void AddLevel(LevelInfo level)
-        {
-            if (level is CustomLevelInfo customLevel)
-            {
-                CreateOrUpdateLevel(NestedCustomLevels, customLevel, null);
-            }
-            else
-            {
-                CreateOrUpdateLevel(NestedCustomLevels, level, null);
-            }
-        }
-
-        public static void AddLevel(LevelInfo level, ref CustomFolderInfo parent)
-        {
-            var customLevel = level as CustomLevelInfo;
-
-            var list = parent == null ? NestedCustomLevels : parent.Children;
-
-            CreateOrUpdateLevel(list, customLevel ?? level, parent);
-        }
-
-        private static void CreateOrUpdateLevel(List<ICustomInfo> sourceList, LevelInfo levelToAdd, CustomFolderInfo parent)
-        {
-            ICustomInfo existing = sourceList.FirstOrDefault(x => x.GetName() == levelToAdd.name);
-
-            if (existing == null)
-            {
-                var newLevel = new CustomLevelInfo(levelToAdd, parent);
-
-                //TODO: Come back to this
-                //if (customLevelToAdd != null && customLevelToAdd.Info != null)
-                //{
-                //    newLevel.Info.UsageCount = customLevelToAdd.Info.UsageCount;
-                //    newLevel.Info.LastUsage = customLevelToAdd.Info.LastUsage;
-                //}
-
-                sourceList.Add(newLevel.Info);
-            }
-            else
-            {
-                //var existingCustom = existing.GetParentObject() as CustomLevelInfo;
-
-                //TODO: Come back to this
-                //if (customLevelToAdd != null && customLevelToAdd.Info != null && 
-                //    existingCustom != null && existingCustom.Info != null)
-                //{
-                //    existingCustom.Info.UsageCount = customLevelToAdd.Info.UsageCount;
-                //    existingCustom.Info.LastUsage = customLevelToAdd.Info.LastUsage;
-                //}
-            }
-        }
-
-        public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
-        {
-            var folderName = $"\\{folder}";
-
-            if (parent != null)
-            {
-                var child = parent.Children.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
-                if (child == null)
-                {
-                    var newFolder = new CustomLevelFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
-                    parent.Children.Add(newFolder.FolderInfo);
-                    parent = newFolder.FolderInfo;
-                }
-                else
-                {
-                    parent = child;
-                }
-            }
-            else
-            {
-                var child = NestedCustomLevels.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
-                if (child == null)
-                {
-                    var newFolder = new CustomLevelFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
-                    NestedCustomLevels.Add(newFolder.FolderInfo);
-                    parent = newFolder.FolderInfo;
-                }
-                else
-                {
-                    parent = child;
-                }
-            }
-        }
-
-        public static void UpdateLabel()
+        public override void UpdateLabel()
         {
             var levelSelector = FindObjectOfType<LevelSelectionController>();
             if (levelSelector == null) return;
 
-            if (CurrentFolder == null)
-            {
-                levelSelector.LevelCategoryButton.label.SetText(levelSelector.showCustom ? "Custom Maps" : "Official Maps");
-            }
-            else
-            {
-                if (Main.BlackSprites != null)
-                {
-                    levelSelector.LevelCategoryButton.label.spriteAsset = Main.BlackSprites;
-                    levelSelector.LevelCategoryButton.label.SetText(CurrentFolder.FolderInfo.GetName().Replace("\\", "<sprite=10> "));
-                }
-            }
+            UserInterfaceHelper.SetCategoryButtonLabel(ref levelSelector.LevelCategoryButton.label, CurrentFolder.GetName(), levelSelector.showCustom ? "Custom Maps" : "Official Maps", CurrentFolder == null);
         }
 
-
-        public static List<ICustomInfo> SortList(List<ICustomInfo> levels)
+        public override List<ICustomInfo> SortList(List<ICustomInfo> levels)
         {
+            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentSort).ToString());
+
             List<ICustomInfo> sorted;
 
-            switch (CurrentLevelSort)
+            switch (CurrentSort)
             {
                 case (int)LevelSortMethod.Recently_Played:
                     sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(y => y.GetLastUsage()).ToList();
@@ -266,24 +160,9 @@ namespace XLMenuMod.Levels
         }           
 
         // Not currently used, but already written and may be useful later.
-        public static void OnPreviousSort()
+        public override void OnPreviousSort<T>()
         {
-            CurrentLevelSort--;
-
-            if (CurrentLevelSort < 0)
-                CurrentLevelSort = Enum.GetValues(typeof(LevelSortMethod)).Length - 1;
-
-            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentLevelSort).ToString());
-
-            if (CurrentFolder != null && CurrentFolder.FolderInfo != null &&
-                CurrentFolder.FolderInfo.Children != null && CurrentFolder.FolderInfo.Children.Any())
-            {
-                CurrentFolder.FolderInfo.Children = SortList(CurrentFolder.FolderInfo.Children);
-            }
-            else
-            {
-                NestedCustomLevels = SortList(NestedCustomLevels);
-            }
+            base.OnPreviousSort<LevelSortMethod>();
 
             var levelSelector = FindObjectOfType<LevelSelectionController>();
 
@@ -292,30 +171,13 @@ namespace XLMenuMod.Levels
                 levelSelector.UpdateList();
         }
 
-        public static void OnNextSort()
+        public override void OnNextSort<T>()
         {
-            CurrentLevelSort++;
+            base.OnNextSort<LevelSortMethod>();
 
-            if (CurrentLevelSort > Enum.GetValues(typeof(LevelSortMethod)).Length - 1)
-                CurrentLevelSort = 0;
-
-            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentLevelSort).ToString());
-
-            if (CurrentFolder != null && CurrentFolder.FolderInfo != null && 
-                CurrentFolder.FolderInfo.Children != null && CurrentFolder.FolderInfo.Children.Any())
-            {
-                CurrentFolder.FolderInfo.Children = SortList(CurrentFolder.FolderInfo.Children);
-            }
-            else
-            {
-                NestedCustomLevels = SortList(NestedCustomLevels);
-            }
-
-            var levelSelector = FindObjectOfType<LevelSelectionController>();
 
             EventSystem.current.SetSelectedGameObject(null);
-            if (levelSelector != null)
-                levelSelector.UpdateList();
+            FindObjectOfType<LevelSelectionController>()?.UpdateList();
         }
     }
 }

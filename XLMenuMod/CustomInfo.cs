@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod
 {
     public class CustomInfo : ICustomInfo
     {
-        public ICustomInfo Parent { get; set; }
+        public CustomFolderInfo Parent { get; set; }
         public long Size { get; set; }
         public DateTime ModifiedDate { get; set; }
 
@@ -58,7 +54,7 @@ namespace XLMenuMod
             LastUsage = DateTime.MinValue;
         }
 
-        public CustomInfo(string name, string path, ICustomInfo parent, bool getFileSize = true) : this(name, path, getFileSize)
+        public CustomInfo(string name, string path, CustomFolderInfo parent, bool getFileSize = true) : this(name, path, getFileSize)
         {
             Parent = parent;
         }

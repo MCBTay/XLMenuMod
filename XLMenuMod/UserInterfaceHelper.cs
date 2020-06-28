@@ -56,5 +56,18 @@ namespace XLMenuMod
                     return ControllerIconSprite.XB1_Y;
             }
         }
+
+        public static void SetCategoryButtonLabel(ref TMP_Text label, string text, string defaultText, bool useDefault = true)
+        {
+            if (useDefault)
+            {
+                label.SetText(defaultText);
+            }
+            else
+            {
+                label.spriteAsset = Main.BlackSprites;
+                label.SetText(text.Replace("\\", "<sprite=10> "));
+            }
+        }
     }
 }

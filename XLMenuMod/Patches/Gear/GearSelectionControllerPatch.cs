@@ -14,14 +14,14 @@ namespace XLMenuMod.Patches.Gear
             {
                 if (___visibleGearOrigin != VisibleGearOrigin.Custom)
                 {
-                    CustomGearManager.CurrentFolder = null;
+                    CustomGearManager.Instance.CurrentFolder = null;
                     return;
                 }
 
-                CustomGearManager.LoadNestedGear(__instance.visibleGear);
+                CustomGearManager.Instance.LoadNestedItems();
 
                 __instance.visibleGear.Clear();
-                __instance.visibleGear.AddRange(CustomGearManager.NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo));
+                __instance.visibleGear.AddRange(CustomGearManager.Instance.NestedItems.Select(x => x.GetParentObject() as ICustomGearInfo));
 
                 Traverse.Create(__instance).Method("UpdateList").GetValue();
             }
@@ -33,7 +33,7 @@ namespace XLMenuMod.Patches.Gear
     {
         static void Postfix(GearSelectionController __instance)
         {
-            CustomGearManager.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.gearTypeFiltering.gearCategoryButton.label, __instance.gearTypeFiltering.gearCategoryButton.transform, ((GearSortMethod)CustomGearManager.CurrentGearSort).ToString());
+            CustomGearManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.gearTypeFiltering.gearCategoryButton.label, __instance.gearTypeFiltering.gearCategoryButton.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString());
         }
     }
 }

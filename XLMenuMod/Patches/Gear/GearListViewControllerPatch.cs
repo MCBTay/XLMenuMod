@@ -42,9 +42,9 @@ namespace XLMenuMod.Patches.Gear
         {
             static void Postfix(ref List<ICharacterCustomizationItem> __result)
             {
-                if (CustomGearManager.CurrentFolder != null &&CustomGearManager.CurrentFolder.Children != null && CustomGearManager.CurrentFolder.Children.Any())
+                if (CustomGearManager.Instance.CurrentFolder != null &&CustomGearManager.Instance.CurrentFolder.Children != null && CustomGearManager.Instance.CurrentFolder.Children.Any())
                 {
-                    __result = GetGear(CustomGearManager.CurrentFolder.Children);
+                    __result = GetGear(CustomGearManager.Instance.CurrentFolder.Children);
                 }
             }
 
@@ -68,8 +68,8 @@ namespace XLMenuMod.Patches.Gear
         {
             static bool Prefix(GearListViewController __instance, ref ICharacterCustomizationItem item)
             {
-                if (CustomGearManager.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomGearManager.LastSelectedTime < 0.25f) return false;
-                CustomGearManager.LastSelectedTime = Time.realtimeSinceStartup;
+                if (CustomGearManager.Instance.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomGearManager.Instance.LastSelectedTime < 0.25f) return false;
+                CustomGearManager.Instance.LastSelectedTime = Time.realtimeSinceStartup;
 
                 if (item is ICustomGearInfo selectedItem)
                 {
@@ -77,16 +77,16 @@ namespace XLMenuMod.Patches.Gear
                     {
                         if (folder.GetName() == "..\\")
                         {
-                            CustomGearManager.CurrentFolder = CustomGearManager.CurrentFolder.Parent as CustomFolderInfo;
+                            CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
                         }
                         else
                         {
-                            CustomGearManager.CurrentFolder = folder;
+                            CustomGearManager.Instance.CurrentFolder = folder;
                         }
 
                         EventSystem.current.SetSelectedGameObject(null);
                         __instance.UpdateList();
-                        CustomGearManager.UpdateLabel();
+                        CustomGearManager.Instance.UpdateLabel();
                     }
                     else
                     {

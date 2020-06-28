@@ -1,35 +1,26 @@
 ﻿using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TMPro;
-using UnityEngine;
-using XLMenuMod.Gear.Interfaces;
+using UnityEngine.EventSystems;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
 {
-    public class CustomGearManager : MonoBehaviour
+    public class CustomGearManager : CustomManager
     {
-        public static CustomFolderInfo CurrentFolder { get; set; }
-        public static List<ICustomInfo> NestedCustomGear { get; set; }
+        private static CustomGearManager _instance;
+        public static CustomGearManager Instance => _instance ?? (_instance = new CustomGearManager());
+
         public static int CurrentGearFilterIndex { get; set; }
-        public static float LastSelectedTime { get; set; }
-        public static TMP_Text SortLabel;
-        public static int CurrentGearSort { get; set; }
 
-        static CustomGearManager()
+        
+
+        public override void LoadNestedItems()
         {
-            CurrentFolder = null;
-            NestedCustomGear = new List<ICustomInfo>();
-        }
+            NestedItems.Clear();
 
-        public static void LoadNestedGear(List<ICharacterCustomizationItem> visibleGear)
-        {
-            NestedCustomGear.Clear();
-
-            foreach (var gear in visibleGear)
+            foreach (var gear in GearSelectionController.Instance.visibleGear)
             {
                 var singleMaterialGear = gear as GearInfoSingleMaterial;
 
@@ -46,171 +37,86 @@ namespace XLMenuMod.Gear
                 var folders = textureSubPath.Split('\\').ToList();
                 if (!folders.Any()) continue;
 
+                CustomFolderInfo parent = null;
                 if (folders.Count == 1 || Path.GetExtension(folders.First()).ToLower() == ".png")
                 {
                     // This gear item is at the root.
-                    AddGear(singleMaterialGear);
+                    AddItem(singleMaterialGear, ref parent);
                     continue;
                 }
 
-                CustomFolderInfo parent = null;
+                parent = null;
                 foreach (var folder in folders)
                 {
                     if (Path.GetExtension(folder).ToLower() == ".png")
                     {
-                        AddGear(singleMaterialGear, ref parent);
+                        AddItem(singleMaterialGear, ref parent);
                     }
                     else
                     {
-                        AddFolder(folder, Path.GetDirectoryName(textureChange.texturePath), ref parent);
+                        AddFolder<CustomGearFolderInfo>(folder, Path.GetDirectoryName(textureChange.texturePath), ref parent);
                     }
                 }
             }
 
-            NestedCustomGear = SortList(NestedCustomGear);
+            NestedItems = SortList(NestedItems);
         }
 
-        public static void AddGear(GearInfoSingleMaterial gear)
-        {
-            ICustomGearInfo customGear = null;
+        //public void SetCurrentFolder(CustomFolderInfo folder, bool setGearList = true)
+        //{
+        //    CurrentFolder = folder;
 
-            if (gear is BoardGearInfo boardGear)
-            {
-                customGear = new CustomBoardGearInfo(boardGear.name, boardGear.type, boardGear.isCustom, boardGear.textureChanges, boardGear.tags);
-            }
-            else if (gear is CharacterGearInfo charGear)
-            {
-                customGear = new CustomCharacterGearInfo(charGear.name, charGear.type, charGear.isCustom, charGear.textureChanges, charGear.tags);
-            }
+        //    if (setGearList) SetGearList();
+        //}
 
-            if (customGear != null)
-            {
-                NestedCustomGear.Add(customGear.Info);
-            }
-        }
+        //public void MoveUpDirectory()
+        //{
+        //    CurrentFolder = CurrentFolder.Parent as CustomFolderInfo;
 
-        public static void AddGear(GearInfoSingleMaterial gear, ref CustomFolderInfo parent)
-        {
-            ICustomGearInfo customGear = null;
+        //    SetGearList();
+        //}
 
-            if (gear is BoardGearInfo)
-            {
-                customGear = new CustomBoardGearInfo(gear.name, gear.type, gear.isCustom, gear.textureChanges, gear.tags);
-                customGear.Info.Parent = parent;
-            }
-            else if (gear is CharacterGearInfo)
-            {
-                customGear = new CustomCharacterGearInfo(gear.name, gear.type, gear.isCustom, gear.textureChanges, gear.tags);
-                customGear.Info.Parent = parent;
-            }
-            
-            if (customGear != null)
-            {
-                if (parent != null && parent.Children.All(x => x != customGear.Info))
-                {
-                    parent.Children.Add(customGear.Info);
-                }
-                else
-                {
-                    NestedCustomGear.Add(customGear.Info);
-                }
-            }
-        }
+        //public void SetGearList()
+        //{
+        //    var gearSelector = FindObjectOfType<GearSelectionController>();
+        //    if (gearSelector != null && gearSelector.visibleGear != null)
+        //    {
+        //        gearSelector.visibleGear.Clear();
 
-        public static void AddFolder(string folder, string path, ref CustomFolderInfo parent)
-        {
-            var folderName = $"\\{folder}";
+        //        if (CurrentFolder == null)
+        //        {
+        //            gearSelector.visibleGear.AddRange(NestedItems.Select(x => x.GetParentObject() as ICustomGearInfo));
+        //            gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
+        //        }
+        //        else
+        //        {
+        //            gearSelector.visibleGear.AddRange(CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo));
+        //            if (Main.BlackSprites != null)
+        //            {
+        //                gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
+        //                gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+        //            }
+        //        }
 
-            if (parent != null)
-            {
-                var child = parent.Children.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
-                if (child == null)
-                {
-                    var customFolder = new CustomGearFolderInfo(folderName, path, parent);
-                    child = customFolder.FolderInfo;
-                    parent.Children.Add(child);
-                }
+        //        gearSelector.listView.UpdateList();
+        //    }
+        //}
 
-                parent = child;
-            }
-            else
-            {
-                var child = NestedCustomGear.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
-                if (child == null)
-                {
-                    var customFolder = new CustomGearFolderInfo(folderName, path, parent);
-                    child = customFolder.FolderInfo;
-                    NestedCustomGear.Add(child);
-                }
-
-                parent = child;
-            }
-        }
-
-        public static void SetCurrentFolder(CustomFolderInfo folder, bool setGearList = true)
-        {
-            CurrentFolder = folder;
-
-            if (setGearList) SetGearList();
-        }
-
-        public static void MoveUpDirectory()
-        {
-            CurrentFolder = CurrentFolder.Parent as CustomFolderInfo;
-
-            SetGearList();
-        }
-
-        public static void SetGearList()
-        {
-            var gearSelector = FindObjectOfType<GearSelectionController>();
-            if (gearSelector != null && gearSelector.visibleGear != null)
-            {
-                gearSelector.visibleGear.Clear();
-
-                if (CurrentFolder == null)
-                {
-                    gearSelector.visibleGear.AddRange(NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo));
-                    gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
-                }
-                else
-                {
-                    gearSelector.visibleGear.AddRange(CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo));
-                    if (Main.BlackSprites != null)
-                    {
-                        gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
-                        gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
-                    }
-                }
-
-                gearSelector.listView.UpdateList();
-            }
-        }
-
-        public static void UpdateLabel()
+        public override void UpdateLabel()
         {
             var gearSelector = FindObjectOfType<GearSelectionController>();
             if (gearSelector == null) return;
 
-            if (CurrentFolder == null)
-            {
-                gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
-            }
-            else
-            {
-                if (Main.BlackSprites != null)
-                {
-                    gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
-                    gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
-                }
-            }
+            UserInterfaceHelper.SetCategoryButtonLabel(ref gearSelector.gearTypeFiltering.gearCategoryButton.label, CurrentFolder.GetName(), "Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel(), CurrentFolder == null);
         }
 
-        public static List<ICustomInfo> SortList(List<ICustomInfo> gear)
+        public override List<ICustomInfo> SortList(List<ICustomInfo> gear)
         {
+            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentSort).ToString());
+
             List<ICustomInfo> sorted;
 
-            switch (CurrentGearSort)
+            switch (CurrentSort)
             {
                 case (int)GearSortMethod.Newest:
                     sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
@@ -231,65 +137,72 @@ namespace XLMenuMod.Gear
         }
 
         // Not currently used, but already written and may be useful later.
-        public static void OnPreviousSort()
+       
+
+        public override void OnPreviousSort<T>()
         {
-            CurrentGearSort--;
+            //CurrentGearSort--;
 
-            if (CurrentGearSort < 0)
-                CurrentGearSort = Enum.GetValues(typeof(GearSortMethod)).Length - 1;
+            //if (CurrentGearSort < 0)
+            //    CurrentGearSort = Enum.GetValues(typeof(GearSortMethod)).Length - 1;
 
-            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
+            //UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
 
-            var gearSelector = FindObjectOfType<GearSelectionController>();
-            if (gearSelector != null)
-            {
-                gearSelector.visibleGear.Clear();
-                if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
-                {
-                    CurrentFolder.Children = SortList(CurrentFolder.Children);
-                    var list = CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo);
-                    gearSelector.visibleGear.AddRange(list);
-                }
-                else
-                {
-                    NestedCustomGear = SortList(NestedCustomGear);
-                    var list = NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo);
-                    gearSelector.visibleGear.AddRange(list);
-                }
+            //var gearSelector = FindObjectOfType<GearSelectionController>();
+            //if (gearSelector != null)
+            //{
+            //    gearSelector.visibleGear.Clear();
+            //    if (CurrentFolder != null && CurrentFolder.Children != null && CurrentFolder.Children.Any())
+            //    {
+            //        CurrentFolder.Children = SortList(CurrentFolder.Children);
+            //        var list = CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo);
+            //        gearSelector.visibleGear.AddRange(list);
+            //    }
+            //    else
+            //    {
+            //        NestedCustomGear = SortList(NestedCustomGear);
+            //        var list = NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo);
+            //        gearSelector.visibleGear.AddRange(list);
+            //    }
 
-                Traverse.Create(gearSelector).Method("UpdateList").GetValue();
-            }
+            //    Traverse.Create(gearSelector).Method("UpdateList").GetValue();
+            //}
+            base.OnPreviousSort<GearSortMethod>();
+
+            EventSystem.current.SetSelectedGameObject(null);
+            Traverse.Create(FindObjectOfType<GearSelectionController>())?.Method("UpdateList").GetValue();
         }
 
-        public static void OnNextSort()
+        public override void OnNextSort<T>()
         {
-            CurrentGearSort++;
 
-            if (CurrentGearSort > Enum.GetValues(typeof(GearSortMethod)).Length - 1)
-                CurrentGearSort = 0;
 
-            UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentGearSort).ToString());
+            //var gearSelector = FindObjectOfType<GearSelectionController>();
+            //if (gearSelector != null)
+            //{
+            //    gearSelector.visibleGear.Clear();
 
-            var gearSelector = FindObjectOfType<GearSelectionController>();
-            if (gearSelector != null)
-            {
-                gearSelector.visibleGear.Clear();
+            //    if (CurrentFolder?.Children != null && CurrentFolder.Children.Any())
+            //    {
+            //        CurrentFolder.Children = SortList(CurrentFolder.Children);
+            //        var list = CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo);
+            //        gearSelector.visibleGear.AddRange(list);
+            //    }
+            //    else
+            //    {
+            //        NestedCustomGear = SortList(NestedCustomGear);
+            //        var list = NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo);
+            //        gearSelector.visibleGear.AddRange(list);
+            //    }
 
-                if (CurrentFolder?.Children != null && CurrentFolder.Children.Any())
-                {
-                    CurrentFolder.Children = SortList(CurrentFolder.Children);
-                    var list = CurrentFolder.Children.Select(x => x.GetParentObject() as ICustomGearInfo);
-                    gearSelector.visibleGear.AddRange(list);
-                }
-                else
-                {
-                    NestedCustomGear = SortList(NestedCustomGear);
-                    var list = NestedCustomGear.Select(x => x.GetParentObject() as ICustomGearInfo);
-                    gearSelector.visibleGear.AddRange(list);
-                }
+                
+            //}
 
-                Traverse.Create(gearSelector).Method("UpdateList").GetValue();
-            }
+
+            base.OnNextSort<GearSortMethod>();
+
+            EventSystem.current.SetSelectedGameObject(null);
+            Traverse.Create(FindObjectOfType<GearSelectionController>())?.Method("UpdateList").GetValue();
         }
     }
 }
