@@ -10,6 +10,7 @@ As of the V3 beta, the Maps folder did not allow you to place maps in subdirecto
     * Compatible with (but somewhat replaces the need for) DawgVinci's Map Extension Mod.  Any extension DLLs only get loaded up if they aren't already loaded by another mod.
     
 ![](maps.gif)
+<img align="right" src="maps.gif">
     
 * Gear
   * This mod allows you to place your custom gear in any subdirectory structure you want (within Windows path limits), and will render that directory structure in the game's UI.
