@@ -26,7 +26,7 @@ As of the V3 beta, the Maps folder did not allow you to place maps in subdirecto
 
 | Maps | Gear | Sorting | 
 |------|------|---------|
-|<img align="right" src="maps.gif">|<img align="left" src="gear.gif">|<img align="center" src="sorting.gif">|
+|<img src="maps.gif">|<img src="gear.gif">|<img src="sorting.gif">|
 
 
 
