@@ -73,7 +73,7 @@ namespace XLMenuMod
                 }
                 else if (typeof(T) == typeof(CustomGearFolderInfo))
                 {
-                    newFolder = new CustomGearFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+                    newFolder = new CustomGearFolderInfo($"\\{folder}", path, parent);
                 }
                 else return;
 
