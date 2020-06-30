@@ -14,7 +14,7 @@ namespace XLMenuMod.Patches.Gear
                 EventSystem.current.SetSelectedGameObject(null);
 
                 CustomGearManager.CurrentGearFilterIndex = ___currentFilterIndex;
-                CustomGearManager.Instance.CurrentFolder = null;
+                CustomGearManager.Instance.SetCurrentFolder(null, ___showCustomGear);
 
                 if (CustomGearManager.Instance.SortLabel != null)
                 {
