@@ -24,10 +24,10 @@ As of the V3 beta, the Maps folder did not allow you to place maps in subdirecto
 * There's a setting to shrink down the default font size of the Gear/Maps lists.  By default, the font size is 36 which is a little large.  Currently you can set it to Normal (36), Small (30), Smaller (24). 
   * Note: Because of the way the game recycles list objects, it's recommended to set this value prior to entering the gear/maps menus OR to restart the game after setting this value.
 
-![](fontsize.png)
-<img align="right" src="maps.gif">
-<img align="center" src="sorting.gif">
-<img align="left" src="gear.gif">
+| Maps | Gear | Sorting | 
+|------|------|---------|
+|<img align="right" src="maps.gif">|<img align="left" src="gear.gif">|<img align="center" src="sorting.gif">|
+
 
 
 
