@@ -52,17 +52,6 @@ namespace XLMenuMod.Patches.Level
                     CustomLevelManager.Instance.CurrentFolder = null;
                     CustomLevelManager.Instance.UpdateLabel();
 
-                    if (level is CustomLevelInfo customLevel)
-                    {
-                        var found = LevelManager.Instance.CustomLevels.FirstOrDefault(x => x.hash == customLevel.hash);
-                        if (found != null && found is CustomLevelInfo)
-                        {
-                            (found as CustomLevelInfo).Info.UsageCount++;
-                            (found as CustomLevelInfo).Info.LastUsage = DateTime.Now;
-                        }
-                        SaveManager.Instance.SaveCustomLevelListCache(JsonConvert.SerializeObject(LevelManager.Instance.CustomLevels, Formatting.Indented));
-                    }
-
                     return true;
                 }
             }

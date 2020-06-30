@@ -126,15 +126,15 @@ namespace XLMenuMod.Levels
 
             switch (CurrentSort)
             {
-                case (int)LevelSortMethod.Recently_Played:
-                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(y => y.GetLastUsage()).ToList();
-                    break;
-                case (int)LevelSortMethod.Least_Played:
-                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetUsageCount()).ToList();
-                    break;
-                case (int)LevelSortMethod.Most_Played:
-                    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetUsageCount()).ToList();
-                    break;
+                //case (int)LevelSortMethod.Recently_Played:
+                //    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(y => y.GetLastUsage()).ToList();
+                //    break;
+                //case (int)LevelSortMethod.Least_Played:
+                //    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetUsageCount()).ToList();
+                //    break;
+                //case (int)LevelSortMethod.Most_Played:
+                //    sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetUsageCount()).ToList();
+                //    break;
                 case (int)LevelSortMethod.Newest:
                     sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
                     break;

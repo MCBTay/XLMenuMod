@@ -63,9 +63,9 @@
         Filesize_DESC,
         Newest,
         Oldest,
-        Most_Played,
-        Least_Played,
-        Recently_Played
+        //Most_Played,
+        //Least_Played,
+        //Recently_Played
     }
 
     public enum GearSortMethod
