@@ -47,6 +47,11 @@ namespace XLMenuMod.Patches.Level
 
                     return false;
                 }
+                else if (level is CustomLevelInfo selectedlevel)
+                {
+                    level = selectedlevel;
+                    return true;
+                }
                 else
                 {
                     CustomLevelManager.Instance.CurrentFolder = null;

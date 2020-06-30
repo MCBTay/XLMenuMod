@@ -115,7 +115,7 @@ namespace XLMenuMod.Levels
             var levelSelector = FindObjectOfType<LevelSelectionController>();
             if (levelSelector == null) return;
 
-            UserInterfaceHelper.SetCategoryButtonLabel(ref levelSelector.LevelCategoryButton.label, CurrentFolder.GetName(), levelSelector.showCustom ? "Custom Maps" : "Official Maps", CurrentFolder == null);
+            UserInterfaceHelper.SetCategoryButtonLabel(ref levelSelector.LevelCategoryButton.label, CurrentFolder?.GetName(), levelSelector.showCustom ? "Custom Maps" : "Official Maps", CurrentFolder == null);
         }
 
         public override List<ICustomInfo> SortList(List<ICustomInfo> levels)
