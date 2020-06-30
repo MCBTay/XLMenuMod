@@ -60,35 +60,38 @@ namespace XLMenuMod.Gear
             NestedItems = SortList(NestedItems);
         }
 
-        public void SetCurrentFolder(CustomFolderInfo folder, bool setGearList = true)
+        public void SetCurrentFolder(CustomFolderInfo folder, bool showCustom)
         {
             CurrentFolder = folder;
 
-            if (setGearList) SetGearList();
+            SetGearList(showCustom);
         }
 
-        public void SetGearList()
+        public void SetGearList(bool showCustom)
         {
             var gearSelector = FindObjectOfType<GearSelectionController>();
             if (gearSelector != null && gearSelector.visibleGear != null)
             {
-                gearSelector.visibleGear.Clear();
+                if (showCustom)
+                {
+                    gearSelector.visibleGear.Clear();
 
-                if (CurrentFolder == null)
-                {
-                    gearSelector.visibleGear.AddRange(NestedItems.Select(x => x.GetParentObject() as ICharacterCustomizationItem));
-                    gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
-                }
-                else
-                {
-                    gearSelector.visibleGear.AddRange(CurrentFolder.Children.Select(x => x.GetParentObject() as ICharacterCustomizationItem));
-                    if (Main.BlackSprites != null)
+                    if (CurrentFolder == null)
                     {
-                        gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
-                        gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+                        gearSelector.visibleGear.AddRange(NestedItems.Select(x => x.GetParentObject() as ICharacterCustomizationItem));
+                        gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText("Custom " + gearSelector.gearTypeFiltering.GearFilters[CurrentGearFilterIndex].GetLabel());
+                    }
+                    else
+                    {
+                        gearSelector.visibleGear.AddRange(CurrentFolder.Children.Select(x => x.GetParentObject() as ICharacterCustomizationItem));
+                        if (Main.BlackSprites != null)
+                        {
+                            gearSelector.gearTypeFiltering.gearCategoryButton.label.spriteAsset = Main.BlackSprites;
+                            gearSelector.gearTypeFiltering.gearCategoryButton.label.SetText(CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+                        }
                     }
                 }
-
+                
                 gearSelector.listView.UpdateList();
             }
         }

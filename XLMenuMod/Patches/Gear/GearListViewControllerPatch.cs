@@ -42,7 +42,7 @@ namespace XLMenuMod.Patches.Gear
         {
             static void Postfix(ref List<ICharacterCustomizationItem> __result)
             {
-                if (CustomGearManager.Instance.CurrentFolder != null &&CustomGearManager.Instance.CurrentFolder.Children != null && CustomGearManager.Instance.CurrentFolder.Children.Any())
+                if (CustomGearManager.Instance.CurrentFolder != null && CustomGearManager.Instance.CurrentFolder.Children != null && CustomGearManager.Instance.CurrentFolder.Children.Any())
                 {
                     __result = GetGear(CustomGearManager.Instance.CurrentFolder.Children);
                 }
