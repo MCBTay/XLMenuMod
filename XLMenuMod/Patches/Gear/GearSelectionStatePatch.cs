@@ -25,7 +25,7 @@ namespace XLMenuMod.Patches.Gear
                 if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
-                    CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
+                    CustomGearManager.Instance.SetCurrentFolder(CustomGearManager.Instance.CurrentFolder.Parent, true);
                     return false;
                 }
                     
