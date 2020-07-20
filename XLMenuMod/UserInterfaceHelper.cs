@@ -1,4 +1,5 @@
-﻿using Rewired;
+﻿using System;
+using Rewired;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -9,9 +10,7 @@ namespace XLMenuMod
     {
         public static TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort)
         {
-            TMP_Text label;
-
-            label = Instantiate(sourceText, parent);
+            TMP_Text label = Instantiate(sourceText, parent);
             label.transform.localScale = new Vector3(1, 1, 1);
 
             var controllerIcons = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>().FirstOrDefault(x => x.name == "ControllerIcons");
@@ -32,11 +31,16 @@ namespace XLMenuMod
 
         public static void SetSortLabelText(ref TMP_Text label, string text)
         {
-            label.SetText($"<voffset=0.25em><sprite={(int)GetYSpriteIndex()}></voffset> <size=60%><b>Sort By:</b> " + text.Replace('_', ' '));
+            var sortLabelText = $"<voffset=0.25em><sprite={GetSpriteIndex_YButton()}></voffset> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
+            var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
+
+            label.SetText(sortLabelText + defaultLabelText);
         }
 
-        public static ControllerIconSprite GetYSpriteIndex()
+        public static int GetSpriteIndex_YButton()
         {
+	        ControllerIconSprite returnVal;
+
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsPlayer:
@@ -44,17 +48,55 @@ namespace XLMenuMod
                     string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault<Joystick>()?.name ?? "unknown";
                     if (str.Contains("Dual Shock") || str.Contains("DualShock"))
                     {
-                        return ControllerIconSprite.PS4_Triangle_Button;
+                        returnVal = ControllerIconSprite.PS4_Triangle_Button;
+                        break;
                     }
-                    return ControllerIconSprite.XB1_Y;
+                    returnVal = ControllerIconSprite.XB1_Y;
+                    break;
                 case RuntimePlatform.PS4:
-                    return ControllerIconSprite.PS4_Triangle_Button;
+	                returnVal = ControllerIconSprite.PS4_Triangle_Button;
+	                break;
                 case RuntimePlatform.Switch:
-                    return ControllerIconSprite.SWITCH_X;
+	                returnVal = ControllerIconSprite.SWITCH_X;
+	                break;
                 case RuntimePlatform.XboxOne:
                 default:
-                    return ControllerIconSprite.XB1_Y;
+	                returnVal = ControllerIconSprite.XB1_Y;
+	                break;
             }
+
+            return (int)returnVal;
+        }
+
+        public static int GetSpriteIndex_XButton()
+        {
+	        ControllerIconSprite returnVal;
+
+	        switch (Application.platform)
+	        {
+		        case RuntimePlatform.WindowsPlayer:
+		        case RuntimePlatform.WindowsEditor:
+			        string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault<Joystick>()?.name ?? "unknown";
+			        if (str.Contains("Dual Shock") || str.Contains("DualShock"))
+			        {
+				        returnVal = ControllerIconSprite.PS4_Square_Button;
+				        break;
+			        }
+			        returnVal = ControllerIconSprite.XB1_X;
+			        break;
+		        case RuntimePlatform.PS4:
+			        returnVal = ControllerIconSprite.PS4_Square_Button;
+			        break;
+		        case RuntimePlatform.Switch:
+			        returnVal = ControllerIconSprite.SWITCH_X;
+			        break;
+		        case RuntimePlatform.XboxOne:
+		        default:
+			        returnVal = ControllerIconSprite.XB1_X;
+			        break;
+	        }
+
+	        return (int)returnVal;
         }
 
         public static void SetCategoryButtonLabel(ref TMP_Text label, string text, string defaultText, bool useDefault = true)
