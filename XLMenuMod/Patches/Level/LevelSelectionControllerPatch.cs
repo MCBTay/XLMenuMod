@@ -16,8 +16,16 @@ namespace XLMenuMod.Patches.Level
 		{
 			static void Postfix(LevelSelectionController __instance, MVCListHeaderView header)
 			{
-				header.OnNextCategory += () => { CustomLevelManager.Instance.CurrentFolder = null; };
-				header.OnPreviousCategory += () => { CustomLevelManager.Instance.CurrentFolder = null; };
+				//header.OnNextCategory += () =>
+				//{
+				//	CustomLevelManager.Instance.CurrentFolder = null;
+				//	__instance.listView.UpdateList();
+				//};
+				//header.OnPreviousCategory += () =>
+				//{
+				//	CustomLevelManager.Instance.CurrentFolder = null;
+				//	__instance.listView.UpdateList();
+				//};
 
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 
@@ -63,13 +71,16 @@ namespace XLMenuMod.Patches.Level
 
 				var level = Traverse.Create(__instance).Method("GetLevelForIndex", index).GetValue<LevelInfo>();
 
-	            UnityModManager.Logger.Log("XLMenuMod: " + DateTime.Now.ToString("HH:mm:ss.sss") + " OnItemSelected(" + index + "), level.name = " + level.name);
 				if (level is CustomLevelFolderInfo selectedFolder)
 				{
+					selectedFolder.FolderInfo.Children = CustomLevelManager.Instance.SortList(selectedFolder.FolderInfo.Children);
+
+					var currentIndexPath = Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath");
+
 					if (selectedFolder.FolderInfo.GetName() == "..\\")
 					{
 						CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo.Parent;
-						Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Up();
+						currentIndexPath.Value = __instance.listView.currentIndexPath.Up();
 					}
 					else
 					{
@@ -77,11 +88,11 @@ namespace XLMenuMod.Patches.Level
 
 						if (CustomLevelManager.Instance.CurrentFolder.Parent != null)
 						{
-							Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.CurrentFolder.Parent.Children.IndexOf(CustomLevelManager.Instance.CurrentFolder));
+							currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.CurrentFolder.Parent.Children.IndexOf(CustomLevelManager.Instance.CurrentFolder));
 						}
 						else
 						{
-							Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.NestedItems.IndexOf(CustomLevelManager.Instance.CurrentFolder));
+							currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.NestedItems.IndexOf(CustomLevelManager.Instance.CurrentFolder));
 						}
 					}
 
