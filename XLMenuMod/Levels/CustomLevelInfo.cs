@@ -7,13 +7,13 @@ namespace XLMenuMod.Levels
         [JsonIgnore]
         public CustomInfo Info { get; set; }
 
-        // This is here for JSON serialization purposes
-        public CustomLevelInfo()
-        {
-            Info = new CustomInfo { ParentObject = this };
-        }
+		// This is here for JSON serialization purposes
+		public CustomLevelInfo() : base(string.Empty, false)
+		{
+			Info = new CustomInfo { ParentObject = this };
+		}
 
-        public CustomLevelInfo(LevelInfo level)
+		public CustomLevelInfo(LevelInfo level) : base(level.path, level.isAssetBundle)
         {
             name = level.name;
             hash = level.hash;

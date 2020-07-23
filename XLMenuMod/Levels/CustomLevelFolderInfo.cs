@@ -9,7 +9,7 @@ namespace XLMenuMod.Levels
         [JsonIgnore]
         public CustomFolderInfo FolderInfo { get; set; }
 
-        public CustomLevelFolderInfo(string name, string path, CustomFolderInfo parent)
+        public CustomLevelFolderInfo(string name, string path, CustomFolderInfo parent) : base(path, false)
         {
             this.name = name;
             this.path = path;
