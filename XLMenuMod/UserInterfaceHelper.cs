@@ -13,7 +13,7 @@ namespace XLMenuMod
             TMP_Text label = Instantiate(sourceText, parent);
             label.transform.localScale = new Vector3(1, 1, 1);
             label.color = Color.black;
-            
+
             var controllerIcons = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>().FirstOrDefault(x => x.name == "ControllerIcons");
             if (controllerIcons != null)
             {
@@ -25,7 +25,7 @@ namespace XLMenuMod
 
             SetSortLabelText(ref label, sort.Replace('_', ' '));
 
-            label.transform.Translate(new Vector3(0, -30, 0));
+            label.transform.Translate(new Vector3(60, 0, 0));
 
             return label;
         }
@@ -98,19 +98,6 @@ namespace XLMenuMod
 	        }
 
 	        return (int)returnVal;
-        }
-
-        public static void SetCategoryButtonLabel(ref TMP_Text label, string text, string defaultText, bool useDefault = true)
-        {
-            if (useDefault)
-            {
-                label.SetText(defaultText);
-            }
-            else
-            {
-                label.spriteAsset = Main.BlackSprites;
-                label.SetText(text.Replace("\\", "<sprite=10> "));
-            }
         }
     }
 }
