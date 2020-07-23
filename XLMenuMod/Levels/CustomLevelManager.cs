@@ -108,14 +108,8 @@ namespace XLMenuMod.Levels
             }
 
             Traverse.Create(LevelManager.Instance).Method("InitializeCustomLevels").GetValue();
-        }
 
-        public override void UpdateLabel()
-        {
-            var levelSelector = FindObjectOfType<LevelSelectionController>();
-            if (levelSelector == null) return;
-
-            UserInterfaceHelper.SetCategoryButtonLabel(ref levelSelector.LevelCategoryButton.label, CurrentFolder?.GetName(), levelSelector.showCustom ? "Custom Maps" : "Official Maps", CurrentFolder == null);
+            NestedItems = SortList(NestedItems);
         }
 
         public override List<ICustomInfo> SortList(List<ICustomInfo> levels)
@@ -164,20 +158,16 @@ namespace XLMenuMod.Levels
         {
             base.OnPreviousSort<LevelSortMethod>();
 
-            var levelSelector = FindObjectOfType<LevelSelectionController>();
-
             EventSystem.current.SetSelectedGameObject(null);
-            if (levelSelector != null)
-                levelSelector.UpdateList();
+            FindObjectOfType<LevelSelectionController>()?.listView?.UpdateList();
         }
 
         public override void OnNextSort<T>()
         {
             base.OnNextSort<LevelSortMethod>();
 
-
             EventSystem.current.SetSelectedGameObject(null);
-            FindObjectOfType<LevelSelectionController>()?.UpdateList();
+            FindObjectOfType<LevelSelectionController>()?.listView?.UpdateList();
         }
     }
 }

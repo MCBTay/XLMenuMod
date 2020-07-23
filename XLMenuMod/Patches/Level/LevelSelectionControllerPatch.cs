@@ -1,133 +1,236 @@
-﻿using HarmonyLib;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using HarmonyLib;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using XLMenuMod.Interfaces;
+using UnityModManagerNet;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
 {
-    public class LevelSelectionControllerPatch
+	public class LevelSelectionControllerPatch
     {
-        [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ToggleShowCustom))]
-        public static class ToggleShowCustomPatch
-        {
-            static void Postfix(LevelSelectionController __instance)
-            {
-                CustomLevelManager.Instance.CurrentFolder = null;
-                CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
-            }
-        }
+		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ConfigureHeaderView))]
+		public static class ConfigureHeaderViewPatch
+		{
+			static void Postfix(LevelSelectionController __instance, MVCListHeaderView header)
+			{
+				header.OnNextCategory += () => { CustomLevelManager.Instance.CurrentFolder = null; };
+				header.OnPreviousCategory += () => { CustomLevelManager.Instance.CurrentFolder = null; };
 
-        [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.OnItemSelected))]
+				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
+
+				if (CustomLevelManager.Instance.CurrentFolder != null && Main.BlackSprites != null)
+				{
+					header.Label.spriteAsset = Main.BlackSprites;
+					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+				}
+			}
+		}
+
+		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ConfigureListItemView))]
+		public static class ConfigureListItemViewPatch
+		{
+			static void Postfix(ref MVCListItemView itemView)
+			{
+				if (itemView.Label.text.StartsWith("\\"))
+				{
+					if (Main.BlueSprites != null)
+					{
+						itemView.Label.spriteAsset = Main.BlueSprites;
+						itemView.Label.SetText(itemView.Label.text.Replace("\\", "<sprite=10 tint=1> "));
+					}
+				}
+				else if (itemView.Label.text.Equals("..\\"))
+				{
+					if (Main.BlueSprites != null)
+					{
+						itemView.Label.spriteAsset = Main.BlueSprites;
+						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<sprite=9 tint=1> Go Back"));
+					}
+				}
+			}
+		}
+
+		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.OnItemSelected))]
         public static class OnItemSelectedPatch
         {
-            static bool Prefix(LevelSelectionController __instance, ref LevelInfo level)
+            static bool Prefix(LevelSelectionController __instance, ref IndexPath index/*, ref LevelInfo level*/)
             {
-                if (CustomLevelManager.Instance.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.Instance.LastSelectedTime < 0.25f) return false;
-                CustomLevelManager.Instance.LastSelectedTime = Time.realtimeSinceStartup;
+	            if (CustomLevelManager.Instance.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.Instance.LastSelectedTime < 0.25f) return false;
+	            CustomLevelManager.Instance.LastSelectedTime = Time.realtimeSinceStartup;
 
-                if (level is CustomLevelFolderInfo selectedFolder)
-                {
-                    if (selectedFolder.FolderInfo.GetName() == "..\\")
-                    {
-                        CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo.Parent;
-                    }
-                    else
-                    {
-                        CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo;
-                    }
+				var level = Traverse.Create(__instance).Method("GetLevelForIndex", index).GetValue<LevelInfo>();
 
-                    EventSystem.current.SetSelectedGameObject(null);
-                    __instance.UpdateList();
-                    CustomLevelManager.Instance.UpdateLabel();
+	            UnityModManager.Logger.Log("XLMenuMod: " + DateTime.Now.ToString("HH:mm:ss.sss") + " OnItemSelected(" + index + "), level.name = " + level.name);
+				if (level is CustomLevelFolderInfo selectedFolder)
+				{
+					if (selectedFolder.FolderInfo.GetName() == "..\\")
+					{
+						CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo.Parent;
+						Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Up();
+					}
+					else
+					{
+						CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo;
 
-                    return false;
-                }
-                else if (level is CustomLevelInfo selectedlevel)
-                {
-                    level = selectedlevel;
-                    return true;
-                }
-                else
-                {
-                    CustomLevelManager.Instance.CurrentFolder = null;
-                    CustomLevelManager.Instance.UpdateLabel();
+						if (CustomLevelManager.Instance.CurrentFolder.Parent != null)
+						{
+							Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.CurrentFolder.Parent.Children.IndexOf(CustomLevelManager.Instance.CurrentFolder));
+						}
+						else
+						{
+							Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.NestedItems.IndexOf(CustomLevelManager.Instance.CurrentFolder));
+						}
+					}
 
-                    return true;
+					EventSystem.current.SetSelectedGameObject(null);
+					__instance.listView.UpdateList();
+
+					return false;
+				}
+				else if (level is CustomLevelInfo selectedLevel)
+				{
+					level = selectedLevel;
+					return true;
+				}
+				else
+				{
+					CustomLevelManager.Instance.CurrentFolder = null;
+
+					return true;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ItemPrefab), MethodType.Getter)]
-        public static class ItemPrefabPatch
+        [HarmonyPatch(typeof(LevelSelectionController), "OnEnable")]
+        public static class OnEnablePatch
         {
-            static void Postfix(ref ListViewItem<LevelInfo> __result)
-            {
-                if (__result is LevelListItem)
-                {
-                    var levelListViewItem = __result as LevelListItem;
+	        static void Postfix(LevelSelectionController __instance)
+	        {
+		        UpdateFontSize(__instance.listView.ItemPrefab.Label);
 
-                    switch (Main.Settings.FontSize)
-                    {
-                        case FontSizePreset.Small:
-                            levelListViewItem.LevelNameText.fontSize = 30;
-                            break;
-                        case FontSizePreset.Smaller:
-                            levelListViewItem.LevelNameText.fontSize = 24;
-                            break;
-                        case FontSizePreset.Normal:
-                        default:
-                            levelListViewItem.LevelNameText.fontSize = 36;
-                            break;
-                    }
-                }
-            }
+		        foreach (var item in __instance.listView.ItemViews)
+		        {
+					UpdateFontSize(item.Label);
+		        }
+	        }
+			
+	        private static void UpdateFontSize(TMP_Text label)
+	        {
+		        switch (Main.Settings.FontSize)
+		        {
+			        case FontSizePreset.Small:
+				        label.fontSize = 30;
+				        break;
+			        case FontSizePreset.Smaller:
+				        label.fontSize = 24;
+				        break;
+			        case FontSizePreset.Normal:
+			        default:
+				        label.fontSize = 36;
+				        break;
+		        }
+			}
         }
 
-        [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.Items), MethodType.Getter)]
-        public static class ItemsPatch
+        [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.GetNumberOfItems))]
+        public static class GetNumberOfItemsPatch
         {
-            static void Postfix(LevelSelectionController __instance, ref List<LevelInfo> __result)
-            {
-                if (__instance.showCustom)
-                {
-                    if (CustomLevelManager.Instance.CurrentFolder != null && CustomLevelManager.Instance.CurrentFolder.Children != null && CustomLevelManager.Instance.CurrentFolder.Children.Any())
-                    {
-                        __result = GetLevels(CustomLevelManager.Instance.CurrentFolder.Children);
-                    }
-                    else
-                    {
-                        __result = GetLevels(CustomLevelManager.Instance.NestedItems);
-                    }
-                }
-            }
-
-            static List<LevelInfo> GetLevels(List<ICustomInfo> customLevels)
-            {
-                var levels = new List<LevelInfo>();
-
-                foreach (var customLevel in CustomLevelManager.Instance.SortList(customLevels))
-                {
-                    if (customLevel.IsFolder)
-                        levels.Add(customLevel.GetParentObject() as CustomLevelFolderInfo);
-                    else
-                        levels.Add(customLevel.GetParentObject() as CustomLevelInfo);
-                }
-
-                return levels;
-            }
+	        static void Postfix(ref int __result, IndexPath index)
+	        {
+		        if (index[0] == 1)
+		        {
+			        if (CustomLevelManager.Instance.CurrentFolder != null &&
+			            CustomLevelManager.Instance.CurrentFolder.Children != null &&
+			            CustomLevelManager.Instance.CurrentFolder.Children.Any())
+			        {
+				        __result = CustomLevelManager.Instance.CurrentFolder.Children.Count;
+			        }
+			        else
+			        {
+						__result = CustomLevelManager.Instance.NestedItems.Count;
+					}
+		        }
+	        }
         }
+
+        [HarmonyPatch(typeof(LevelSelectionController), "GetLevelForIndex")]
+        public static class GetLevelForIndexPatch
+        {
+	        static void Postfix(ref LevelInfo __result, IndexPath index)
+	        {
+		        if (index[0] == 1)
+		        {
+			        if (CustomLevelManager.Instance.CurrentFolder != null &&
+			            CustomLevelManager.Instance.CurrentFolder.Children != null &&
+			            CustomLevelManager.Instance.CurrentFolder.Children.Any())
+			        {
+				        if (index.LastIndex < CustomLevelManager.Instance.CurrentFolder.Children.Count)
+				        {
+					        var customInfo = CustomLevelManager.Instance.CurrentFolder.Children.ElementAt(index.LastIndex);
+
+					        if (customInfo.GetParentObject() is CustomLevelInfo)
+						        __result = customInfo.GetParentObject() as CustomLevelInfo;
+					        else if (customInfo.GetParentObject() is CustomLevelFolderInfo)
+						        __result = customInfo.GetParentObject() as CustomLevelFolderInfo;
+				        }
+					}
+			        else
+			        {
+						if (index.LastIndex < CustomLevelManager.Instance.NestedItems.Count)
+						{
+							var customInfo = CustomLevelManager.Instance.NestedItems.ElementAt(index.LastIndex);
+
+							if (customInfo.GetParentObject() is CustomLevelInfo)
+								__result = customInfo.GetParentObject() as CustomLevelInfo;
+							else if (customInfo.GetParentObject() is CustomLevelFolderInfo)
+								__result = customInfo.GetParentObject() as CustomLevelFolderInfo;
+						}
+					}
+		        }
+	        }
+        }
+
+        [HarmonyPatch(typeof(LevelSelectionController), "GetIndexForLevel")]
+        public static class GetIndexForLevelPatch
+		{
+	        static void Postfix(ref IndexPath __result, LevelInfo level)
+	        {
+		        if (CustomLevelManager.Instance.CurrentFolder != null &&
+		            CustomLevelManager.Instance.CurrentFolder.Children != null &&
+		            CustomLevelManager.Instance.CurrentFolder.Children.Any())
+		        {
+			        if (level is CustomLevelInfo)
+			        {
+				        __result = new IndexPath(1, CustomLevelManager.Instance.CurrentFolder.Children.IndexOf((level as CustomLevelInfo).Info));
+			        }
+			        else if (level is CustomLevelFolderInfo)
+			        {
+				        __result = new IndexPath(1, CustomLevelManager.Instance.CurrentFolder.Children.IndexOf((level as CustomLevelFolderInfo).FolderInfo));
+			        }
+				}
+		        else
+		        {
+					if (level is CustomLevelInfo)
+					{
+						__result = new IndexPath(1, CustomLevelManager.Instance.NestedItems.IndexOf((level as CustomLevelInfo).Info));
+					}
+					else if (level is CustomLevelFolderInfo)
+					{
+						__result = new IndexPath(1, CustomLevelManager.Instance.NestedItems.IndexOf((level as CustomLevelFolderInfo).FolderInfo));
+					}
+		        }
+			}
+		}
 
         [HarmonyPatch(typeof(LevelSelectionController), "Awake")]
         public static class AwakePatch
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.LevelCategoryButton.label, __instance.LevelCategoryButton.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
+                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.Label.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
             }
         }
     }

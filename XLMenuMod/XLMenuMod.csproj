@@ -109,7 +109,6 @@
     <Compile Include="Patches\Gear\GearSelectionControllerPatch.cs" />
     <Compile Include="Patches\Gear\GearSelectionStatePatch.cs" />
     <Compile Include="Patches\Gear\GearTypeFilteringControllerPatch.cs" />
-    <Compile Include="Patches\Level\LevelListItemPatch.cs" />
     <Compile Include="Patches\Level\LevelManagerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionControllerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionStatePatch.cs" />

@@ -35,7 +35,7 @@ namespace XLMenuMod
             var sortLabelText = $"<voffset=0.25em><sprite={GetSpriteIndex_YButton()}></voffset> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
             //var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
 
-            label.SetText(sortLabelText); //+ defaultLabelText);
+            label?.SetText(sortLabelText); //+ defaultLabelText);
         }
 
         public static int GetSpriteIndex_YButton()

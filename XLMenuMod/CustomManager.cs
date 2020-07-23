@@ -121,7 +121,6 @@ namespace XLMenuMod
         }
 
         public abstract List<ICustomInfo> SortList(List<ICustomInfo> sourceList);
-        public abstract void UpdateLabel();
         public abstract void LoadNestedItems();
     }
 }
