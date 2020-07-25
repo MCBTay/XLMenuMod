@@ -1,38 +1,13 @@
 ﻿using HarmonyLib;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
-using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
 {
-    public class LevelManagerPatch
+	public class LevelManagerPatch
     {
-        [HarmonyPatch(typeof(LevelManager), nameof(LevelManager.LoadCachedLevels))]
-        public static class LoadCachedLevelsPatch
-        {
-            static bool Prefix(DateTime ___lastHashingTime)
-            {
-                if (LevelManager.Instance.IsHashing)
-                    return false;
-                string str = SaveManager.Instance.LoadCustomLevelListCache();
-                if (str == null)
-                    return false;
-                ___lastHashingTime = File.GetLastWriteTime(SaveManager.Instance.CachedLevelsPath);
-
-                LevelManager.Instance.CustomLevels.Clear();
-                LevelManager.Instance.CustomLevels.AddRange(JsonConvert.DeserializeObject<List<CustomLevelInfo>>(str));
-
-                Debug.Log($"XLMenuMod: Loaded CustomLevel Cache with {LevelManager.Instance.CustomLevels.Count} Levels last updated on from {___lastHashingTime.ToShortDateString()} at {___lastHashingTime.ToShortTimeString()}");
-
-                return false;
-            }
-        }
-
         /// <summary>
         /// Some levels have custom script assemblies that go with them.  Find if an assembly exists that matches the maps file name, and load it if soo.
         /// </summary>

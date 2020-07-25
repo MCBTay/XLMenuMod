@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -7,10 +6,11 @@ using UnityEngine;
 using UnityModManagerNet;
 using XLMenuMod.Gear;
 using XLMenuMod.Levels;
+using Object = UnityEngine.Object;
 
 namespace XLMenuMod
 {
-    static class Main
+	static class Main
     {
         public static bool Enabled { get; private set; }
 
@@ -53,11 +53,11 @@ namespace XLMenuMod
                 CustomLevelManagerGameObject.AddComponent<CustomLevelManager>();
                 Object.DontDestroyOnLoad(CustomLevelManagerGameObject);
 
-                CustomGearManagerGameObject = new GameObject();
-                CustomGearManagerGameObject.AddComponent<CustomGearManager>();
-                Object.DontDestroyOnLoad(CustomGearManagerGameObject);
+				CustomGearManagerGameObject = new GameObject();
+				CustomGearManagerGameObject.AddComponent<CustomGearManager>();
+				Object.DontDestroyOnLoad(CustomGearManagerGameObject);
 
-                Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
+				Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
 
                 var spriteAssets = Assets.LoadAllAssets<TMP_SpriteAsset>();
                 if (spriteAssets != null)
@@ -66,12 +66,6 @@ namespace XLMenuMod
                     BlueSprites = spriteAssets.ElementAt(1);
                 }
 
-                // Replace CustomLevelsCache.json with saved version if it exists. 
-                // This is to prevent unnecessary hashes.
-                if (File.Exists(Path.Combine(ModPath, "CachedCustomLevels.json")))
-                {
-                    File.Copy(Path.Combine(ModPath, "CachedCustomLevels.json"), SaveManager.Instance.CachedLevelsPath, true);
-                }
                 CustomLevelManager.Instance.LoadNestedItems();
             }
             else
@@ -82,8 +76,6 @@ namespace XLMenuMod
 
                 Object.Destroy(CustomLevelManagerGameObject.GetComponent<CustomLevelManager>());
                 Object.Destroy(CustomGearManagerGameObject.GetComponent<CustomGearManager>());
-
-                // TODO: At this point, we likely need to revert the custom levels to their original.
             }
 
             return true;

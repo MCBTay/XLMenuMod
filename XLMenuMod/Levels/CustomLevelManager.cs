@@ -40,6 +40,7 @@ namespace XLMenuMod.Levels
             return nestedLevels;
         }
 
+        //TODO: Spoke with Kiwi on 7/23, who is planning to make the LoadCustomLevels method look for level files recursively.  Because of this, we don't particularly need to read them from disk any more.  Hopefully I can get the build before release to update this code.
         public override void LoadNestedItems()
         {
             var levelsToRemove = new List<LevelInfo>();
