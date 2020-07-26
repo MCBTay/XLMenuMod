@@ -18,6 +18,7 @@ namespace XLMenuMod.Levels
             name = level.name;
             hash = level.hash;
             path = level.path;
+            previewImage = level.previewImage;
             isAssetBundle = level.isAssetBundle;
 
             Info = new CustomInfo(level.name, level.path, null, isAssetBundle)
