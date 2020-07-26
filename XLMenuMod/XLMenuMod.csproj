@@ -105,8 +105,6 @@
     <Compile Include="Levels\CustomLevelManager.cs" />
     <Compile Include="Patches\Gear\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\Gear\GearDatabasePatch.cs" />
-    <Compile Include="Patches\Gear\GearListViewControllerPatch.cs" />
-    <Compile Include="Patches\Gear\GearListViewItemPatch.cs" />
     <Compile Include="Patches\Gear\GearSelectionControllerPatch.cs" />
     <Compile Include="Patches\Gear\GearSelectionStatePatch.cs" />
     <Compile Include="Patches\Level\LevelManagerPatch.cs" />
