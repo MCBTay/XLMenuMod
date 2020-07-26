@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using HarmonyLib;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -23,8 +24,11 @@ namespace XLMenuMod
         public static Settings Settings { get; private set; }
 
         public static AssetBundle Assets { get; private set; }
-        public static TMP_SpriteAsset BlackSprites { get; private set; }
-        public static TMP_SpriteAsset BlueSprites { get; private set; }
+        public static List<TMP_SpriteAsset> Sprites { get; private set; }
+
+        public static TMP_SpriteAsset BlackSprites => Sprites?.ElementAt(0);
+        public static TMP_SpriteAsset BlueSprites => Sprites?.ElementAt(1);
+        public static TMP_SpriteAsset WhiteSprites => Sprites?.ElementAt(2);
 
         static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -62,8 +66,7 @@ namespace XLMenuMod
                 var spriteAssets = Assets.LoadAllAssets<TMP_SpriteAsset>();
                 if (spriteAssets != null)
                 {
-                    BlackSprites = spriteAssets.First();
-                    BlueSprites = spriteAssets.ElementAt(1);
+	                Sprites = spriteAssets.ToList();
                 }
 
                 CustomLevelManager.Instance.LoadNestedItems();
