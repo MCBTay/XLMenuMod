@@ -228,7 +228,7 @@ namespace XLMenuMod.Patches.Gear
 
 					if (!Main.Settings.DisableBToMoveUpDirectory)
 					{
-						//UISounds.Instance?.PlayOneShotSelectMajor();
+						UISounds.Instance?.PlayOneShotSelectMajor();
 						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
 						GearSelectionController.Instance.listView.UpdateList(__instance.listView.currentIndexPath.Up());
 						return false;
