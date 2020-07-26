@@ -96,6 +96,12 @@ namespace XLMenuMod.Levels
                 case (int)LevelSortMethod.Name_ASC:
                     sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
                     break;
+                case (int)LevelSortMethod.Author_ASC:
+	                sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenBy(x => ((LevelInfo)x.GetParentObject()).author).ToList();
+	                break;
+                case (int)LevelSortMethod.Author_DESC:
+	                sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => ((LevelInfo)x.GetParentObject()).author).ToList();
+                    break;
                 case (int)LevelSortMethod.Name_DESC:
                 default:
                     sorted = levels.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();

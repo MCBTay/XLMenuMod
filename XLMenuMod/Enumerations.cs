@@ -63,6 +63,8 @@
         Filesize_DESC,
         Newest,
         Oldest,
+        Author_ASC,
+        Author_DESC,
         //Most_Played,
         //Least_Played,
         //Recently_Played
