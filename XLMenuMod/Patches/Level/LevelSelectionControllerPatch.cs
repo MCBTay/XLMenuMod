@@ -151,9 +151,7 @@ namespace XLMenuMod.Patches.Level
 	        {
 		        if (index[0] == 1)
 		        {
-			        if (CustomLevelManager.Instance.CurrentFolder != null &&
-			            CustomLevelManager.Instance.CurrentFolder.Children != null &&
-			            CustomLevelManager.Instance.CurrentFolder.Children.Any())
+			        if (CustomLevelManager.Instance.CurrentFolder.HasChildren())
 			        {
 				        __result = CustomLevelManager.Instance.CurrentFolder.Children.Count;
 			        }
@@ -205,9 +203,7 @@ namespace XLMenuMod.Patches.Level
 		{
 	        static void Postfix(ref IndexPath __result, LevelInfo level)
 	        {
-		        if (CustomLevelManager.Instance.CurrentFolder != null &&
-		            CustomLevelManager.Instance.CurrentFolder.Children != null &&
-		            CustomLevelManager.Instance.CurrentFolder.Children.Any())
+		        if (CustomLevelManager.Instance.CurrentFolder.HasChildren())
 		        {
 			        if (level is CustomLevelInfo)
 			        {
