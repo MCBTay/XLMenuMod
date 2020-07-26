@@ -1,10 +1,11 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
 using XLMenuMod.Gear;
 using XLMenuMod.Gear.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
-    public class CharacterCustomizerPatch
+	public class CharacterCustomizerPatch
     {
         [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.HasEquipped), new[] { typeof(ICharacterCustomizationItem) })]
         static class HasEquippedPatch
@@ -21,6 +22,16 @@ namespace XLMenuMod.Patches.Gear
 
                 return true;
             }
+        }
+
+        [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.PreviewItem))]
+        static class PreviewItemPatch
+        {
+	        static bool Prefix(GearInfo preview, List<GearInfo> toBeCachedGear)
+	        {
+		        if (preview is CustomGearFolderInfo highlightedFolder) return false;
+		        return true;
+	        }
         }
 
         [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.LoadGearAsync))]
