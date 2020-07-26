@@ -110,7 +110,7 @@ namespace XLMenuMod
             if (CurrentSort > Enum.GetValues(typeof(T)).Length - 1)
                 CurrentSort = 0;
 
-            if (CurrentFolder?.Children != null && CurrentFolder.Children.Any())
+            if (CurrentFolder.HasChildren())
             {
                 CurrentFolder.Children = SortList(CurrentFolder.Children);
             }
@@ -121,6 +121,6 @@ namespace XLMenuMod
         }
 
         public abstract List<ICustomInfo> SortList(List<ICustomInfo> sourceList);
-        public abstract void LoadNestedItems();
+        public abstract void LoadNestedItems(object[] objectsToLoad = null);
     }
 }

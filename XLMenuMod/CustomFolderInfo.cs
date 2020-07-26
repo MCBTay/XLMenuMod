@@ -138,9 +138,13 @@ namespace XLMenuMod
 
             IsFolder = true;
 
-            if (GetName() != "..\\" && !string.IsNullOrEmpty(path))
+            if (GetName() != "..\\")
             {
-                Size = GetDirectorySize(path);
+	            if (!string.IsNullOrEmpty(path))
+	            {
+		            Size = GetDirectorySize(path);
+                }
+                
                 Children.Add(new CustomFolderInfo("..\\", Parent == null ? string.Empty : System.IO.Path.GetDirectoryName(Parent.GetPath()), Parent));
             }
         }
@@ -157,5 +161,14 @@ namespace XLMenuMod
 
             return directorySize;
         }
+    }
+
+    public static class CustomFolderInfoExtensions
+    {
+	    public static bool HasChildren(this CustomFolderInfo folderInfo)
+	    {
+		    if (folderInfo != null && folderInfo.Children != null && folderInfo.Children.Any()) return true;
+		    return false;
+	    }
     }
 }

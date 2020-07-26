@@ -20,7 +20,7 @@ namespace XLMenuMod.Levels
             path = level.path;
             isAssetBundle = level.isAssetBundle;
 
-            Info = new CustomInfo(level.name, level.path, null)
+            Info = new CustomInfo(level.name, level.path, null, isAssetBundle)
             {
                 ParentObject = this
             };
