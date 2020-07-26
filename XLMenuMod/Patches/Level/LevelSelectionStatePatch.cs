@@ -30,12 +30,9 @@ namespace XLMenuMod.Patches.Level
                 if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
-
                     CustomLevelManager.Instance.CurrentFolder = CustomLevelManager.Instance.CurrentFolder.Parent;
-
                     EventSystem.current.SetSelectedGameObject(null);
                     levelSelection.listView.UpdateList();
-
                     return false;
                 }
 

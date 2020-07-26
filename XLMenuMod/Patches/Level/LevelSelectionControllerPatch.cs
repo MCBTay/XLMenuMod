@@ -1,10 +1,8 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -32,7 +30,8 @@ namespace XLMenuMod.Patches.Level
 				if (CustomLevelManager.Instance.CurrentFolder != null && Main.BlackSprites != null)
 				{
 					header.Label.spriteAsset = Main.WhiteSprites;
-					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+					int spriteIndex = header.Label.text.Equals("\\Easy Day") ? 8 : 10;
+					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}> "));
 				}
 			}
 		}
@@ -44,7 +43,7 @@ namespace XLMenuMod.Patches.Level
 			{
 				if (itemView.Label.text.StartsWith("\\"))
 				{
-					if (Main.BlueSprites != null)
+					if (Main.WhiteSprites != null)
 					{
 						itemView.Label.spriteAsset = Main.WhiteSprites;
 
@@ -54,7 +53,7 @@ namespace XLMenuMod.Patches.Level
 				}
 				else if (itemView.Label.text.Equals("..\\"))
 				{
-					if (Main.BlueSprites != null)
+					if (Main.WhiteSprites != null)
 					{
 						itemView.Label.spriteAsset = Main.WhiteSprites;
 						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<sprite=9 tint=1> Go Back"));
@@ -66,11 +65,8 @@ namespace XLMenuMod.Patches.Level
 		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.OnItemSelected))]
         public static class OnItemSelectedPatch
         {
-            static bool Prefix(LevelSelectionController __instance, ref IndexPath index/*, ref LevelInfo level*/)
+            static bool Prefix(LevelSelectionController __instance, IndexPath index)
             {
-	            if (CustomLevelManager.Instance.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.Instance.LastSelectedTime < 0.25f) return false;
-	            CustomLevelManager.Instance.LastSelectedTime = Time.realtimeSinceStartup;
-
 				var level = Traverse.Create(__instance).Method("GetLevelForIndex", index).GetValue<LevelInfo>();
 
 				if (level is CustomLevelFolderInfo selectedFolder)
