@@ -1,5 +1,6 @@
 ﻿using GameManagement;
 using HarmonyLib;
+using UnityEngine.EventSystems;
 using XLMenuMod.Gear;
 
 namespace XLMenuMod.Patches.Gear
@@ -25,7 +26,9 @@ namespace XLMenuMod.Patches.Gear
                 if (!Main.Settings.DisableBToMoveUpDirectory)
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
-                    CustomGearManager.Instance.SetCurrentFolder(CustomGearManager.Instance.CurrentFolder.Parent, true);
+                    CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
+                    EventSystem.current.SetSelectedGameObject(null);
+                    GearSelectionController.Instance.listView.UpdateList();
                     return false;
                 }
                     
