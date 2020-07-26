@@ -31,7 +31,7 @@ namespace XLMenuMod.Patches.Level
 				{
 					header.Label.spriteAsset = Main.WhiteSprites;
 					int spriteIndex = header.Label.text.Equals("\\Easy Day") ? 8 : 10;
-					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}> "));
+					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}>"));
 				}
 			}
 		}
@@ -48,7 +48,7 @@ namespace XLMenuMod.Patches.Level
 						itemView.Label.spriteAsset = Main.WhiteSprites;
 
 						int spriteIndex = itemView.Label.text.Equals("\\Easy Day") ? 8 : 10;
-						itemView.Label.SetText(itemView.Label.text.Replace("\\", $"<sprite={spriteIndex} tint=1> "));
+						itemView.Label.SetText(itemView.Label.text.Replace("\\", $"<space=10px><sprite={spriteIndex} tint=1>"));
 					}
 				}
 				else if (itemView.Label.text.Equals("..\\"))
@@ -56,7 +56,7 @@ namespace XLMenuMod.Patches.Level
 					if (Main.WhiteSprites != null)
 					{
 						itemView.Label.spriteAsset = Main.WhiteSprites;
-						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<sprite=9 tint=1> Go Back"));
+						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint=1>Go Back"));
 					}
 				}
 			}
