@@ -14,7 +14,6 @@ namespace XLMenuMod
     {
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }
-        public float LastSelectedTime { get; set; }
         public TMP_Text SortLabel;
         public int CurrentSort { get; set; }
 
