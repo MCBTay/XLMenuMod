@@ -49,7 +49,7 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(IndexPath index, ref GearInfo __result)
 			{
-				if (index.depth >= 3 && index[1] != 0)
+				if (index.depth >= 3 && index[1] >= 12)
 				{
 					List<ICustomInfo> sourceList = null;
 

@@ -40,24 +40,11 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(IndexPath index, ref MVCListItemView itemView)
 			{
-				if (itemView.Label.text.StartsWith("\\"))
+				if (Main.WhiteSprites != null)
 				{
-					if (Main.WhiteSprites != null)
-					{
-						itemView.Label.spriteAsset = Main.WhiteSprites;
-						itemView.Label.richText = true;
-						itemView.Label.SetText(itemView.Label.text.Replace("\\", "<space=15px><sprite=10 tint=1>"));
-					}
+					itemView.Label.spriteAsset = Main.WhiteSprites;
 				}
-				else if (itemView.Label.text.Equals("..\\"))
-				{
-					if (Main.WhiteSprites != null)
-					{
-						itemView.Label.spriteAsset = Main.WhiteSprites;
-						itemView.Label.richText = true;
-						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=15px><sprite=9 tint=1>Go Back"));
-					}
-				}
+				itemView.Label.richText = true;
 
 				switch (Main.Settings.FontSize)
 				{
@@ -84,7 +71,18 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
-						itemView.SetText(gearAtIndex.name, true);
+						if (gearAtIndex.name.StartsWith("\\"))
+						{
+							itemView.SetText(gearAtIndex.name.Replace("\\", "<space=15px><sprite=10 tint=1>"), true);
+						}
+						else if (gearAtIndex.name.Equals("..\\"))
+						{
+							itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=15px><sprite=9 tint=1>Go Back"), true);
+						}
+						else
+						{
+							itemView.SetText(gearAtIndex.name, true);
+						}
 						Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, GearSelectionController.Instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
 					}
 				}
@@ -175,7 +173,7 @@ namespace XLMenuMod.Patches.Gear
 			/// <param name="index"></param>
 			static void Postfix(GearSelectionController __instance, IndexPath index)
 			{
-				if (index.depth > 3)
+				if (index.depth >= 3)
 				{
 					GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
 					if (gearAtIndex1 == (GearInfo)null)
@@ -187,7 +185,15 @@ namespace XLMenuMod.Patches.Gear
 						if (gearAtIndex2 != (GearInfo)null)
 							toBeCachedGear.Add(gearAtIndex2);
 					}
-					__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
+
+					if (gearAtIndex1 is CustomGearFolderInfo)
+					{
+						__instance.previewCustomizer.PreviewItem(null, toBeCachedGear);
+					}
+					else
+					{
+						__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
+					}
 				}
 			}
 		}
@@ -206,30 +212,28 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static bool Prefix(GearSelectionController __instance)
 			{
+				var player = Traverse.Create(__instance).Field("player").GetValue<Player>();
+				if (player.GetButtonDown("Y"))
+				{
+					UISounds.Instance?.PlayOneShotSelectionChange();
+
+					CustomGearManager.Instance.OnNextSort<GearSortMethod>();
+					return false;
+				}
+
 				if (__instance.listView.currentIndexPath.depth >= 3)
 				{
-					var player = Traverse.Create(__instance).Field("player").GetValue<Player>();
-					if (player.GetButtonDown("Y"))
-					{
-						UISounds.Instance?.PlayOneShotSelectionChange();
-
-						CustomGearManager.Instance.OnNextSort<GearSortMethod>();
-						return false;
-					}
-
 					if (CustomGearManager.Instance.CurrentFolder == null) return true;
 					if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
 
 					if (!Main.Settings.DisableBToMoveUpDirectory)
 					{
-						UISounds.Instance?.PlayOneShotSelectMajor();
+						//UISounds.Instance?.PlayOneShotSelectMajor();
 						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
-						EventSystem.current.SetSelectedGameObject(null);
-						GearSelectionController.Instance.listView.UpdateList();
+						GearSelectionController.Instance.listView.UpdateList(__instance.listView.currentIndexPath.Up());
 						return false;
 					}
 				}
-
 
 				return true;
 			}
