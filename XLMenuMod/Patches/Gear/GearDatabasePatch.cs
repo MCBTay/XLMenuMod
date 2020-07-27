@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
+using UnityModManagerNet;
 using XLMenuMod.Gear;
 using XLMenuMod.Interfaces;
 
@@ -13,25 +14,27 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[] __result)
 			{
+				UnityModManager.Logger.Log("XLMenuMod: Entering GetGearListAtIndex(" + index + ") - results.length = " + __result.Length);
+
 				var gear = Traverse.Create(__instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 				List<ICustomInfo> sourceList = null;
 
 				if (index[1] < gear[index[0]].Length)
 				{
-					// Ignore Skin Tone (0), and Hair (1) for now.
-					if (index[1] != 0 && index[1] != 1)
-					{
-						CustomGearManager.Instance.LoadNestedOfficialItems(gear[index[0]][index[1]]);
+					//// Ignore Skin Tone (0), and Hair (1) for now.
+					//if (index[1] != 0 && index[1] != 1)
+					//{
+					//	CustomGearManager.Instance.LoadNestedOfficialItems(gear[index[0]][index[1]]);
 
-						if (CustomGearManager.Instance.CurrentFolder.HasChildren())
-						{
-							sourceList = CustomGearManager.Instance.CurrentFolder.Children;
-						}
-						else
-						{
-							sourceList = CustomGearManager.Instance.NestedOfficialItems;
-						}
-					}
+					//	if (CustomGearManager.Instance.CurrentFolder.HasChildren())
+					//	{
+					//		sourceList = CustomGearManager.Instance.CurrentFolder.Children;
+					//	}
+					//	else
+					//	{
+					//		sourceList = CustomGearManager.Instance.NestedOfficialItems;
+					//	}
+					//}
 				}
 				else
 				{
@@ -57,6 +60,8 @@ namespace XLMenuMod.Patches.Gear
 				if (sourceList == null) return;
 
 				__result = sourceList.Select(x => x.GetParentObject() as GearInfo).ToArray();
+
+				UnityModManager.Logger.Log("XLMenuMod: GetGearListAtIndex(" + index + ") - results.length = " + __result.Length);
 			}
 		}
 
@@ -75,11 +80,12 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
-						if (index[1] < 12 && index[1] != 0 && index[1] != 1)
-						{
-							sourceList = CustomGearManager.Instance.NestedOfficialItems;
-						}
-						else if (index[1] >= 12)
+						//if (index[1] < 12 && index[1] != 0 && index[1] != 1)
+						//{
+						//	sourceList = CustomGearManager.Instance.NestedOfficialItems;
+						//}
+						//else
+						if (index[1] >= 12)
 						{
 							sourceList = CustomGearManager.Instance.NestedItems;
 						}
@@ -99,6 +105,8 @@ namespace XLMenuMod.Patches.Gear
 							__result = customInfo.GetParentObject() as CustomGearFolderInfo;
 					}
 				}
+
+				UnityModManager.Logger.Log("XLMenuMod: GetGearAtIndex(" + index + ") - result = " + __result);
 			}
 		}
 	}

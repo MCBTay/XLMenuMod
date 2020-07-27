@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Rewired;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Gear;
 
 namespace XLMenuMod.Patches.Gear
@@ -12,14 +13,29 @@ namespace XLMenuMod.Patches.Gear
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
 		{
-			static void Postfix(GearSelectionController __instance, MVCListHeaderView itemView)
+			static void Postfix(GearSelectionController __instance, IndexPath index, MVCListHeaderView itemView)
 			{
 				CustomGearManager.Instance.SortLabel.gameObject.SetActive(__instance.listView.currentIndexPath[1] >= 12);
 
-				if (CustomGearManager.Instance.CurrentFolder != null && Main.WhiteSprites != null)
+				if (CustomGearManager.Instance.CurrentFolder != null)
 				{
-					itemView.Label.spriteAsset = Main.WhiteSprites;
-					itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+					var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+
+					if (index[0] < 0) return;
+					bool isCustom = index[1] >= gear[index[0]].Length;
+
+					if (isCustom)
+					{
+						if (Main.WhiteSprites != null)
+						{
+							itemView.Label.spriteAsset = Main.WhiteSprites;
+							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+						}
+					}
+					else
+					{
+						SetBrandSprite(CustomGearManager.Instance.CurrentFolder.GetParentObject() as CustomGearFolderInfo, itemView);
+					}
 				}
 			}
 		}
@@ -37,14 +53,7 @@ namespace XLMenuMod.Patches.Gear
 
 				bool isCustom = index[1] >= gear[index[0]].Length;
 
-				if (!isCustom)
-				{
-					if (Main.BrandSprites != null) itemView.Label.spriteAsset = Main.BrandSprites;
-				}
-				else
-				{
-					if (Main.WhiteSprites != null) itemView.Label.spriteAsset = Main.WhiteSprites;
-				}
+				if (Main.WhiteSprites != null) itemView.Label.spriteAsset = Main.WhiteSprites;
 
 				switch (Main.Settings.FontSize)
 				{
@@ -79,15 +88,7 @@ namespace XLMenuMod.Patches.Gear
 							}
 							else
 							{
-								string spriteName = string.Empty;
-
-								spriteName = gearAtIndex.name.TrimStart('\\').Replace(' ', '_').ToLower();
-
-								if (spriteName == "411") spriteName = "fouroneone";
-								else if (spriteName.ToLower() == "és") spriteName = "es";
-								else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
-
-								itemView.SetText(gearAtIndex.name.Replace("\\", $"<space=15px><size=150%><sprite name=\"{spriteName}\" tint=1><size=100%>"), true);
+								SetBrandSprite(gearAtIndex, itemView);
 							}
 						}
 						else if (gearAtIndex.name.Equals("..\\"))
@@ -104,14 +105,49 @@ namespace XLMenuMod.Patches.Gear
 			}
 		}
 
+		static void SetBrandSprite(GearInfo gear, MVCListItemView itemView)
+		{
+			string spriteName = gear.name.TrimStart('\\').Replace(' ', '_').ToLower();
+
+			if (spriteName == "411") spriteName = "fouroneone";
+			else if (spriteName.ToLower() == "és") spriteName = "es";
+			else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
+
+			if (Main.BrandSprites != null) itemView.Label.spriteAsset = Main.BrandSprites;
+
+			itemView.SetText(gear.name.Replace("\\", $"<space=15px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
+		}
+
+		static void SetBrandSprite(GearInfo gear, MVCListHeaderView headerView)
+		{
+			string spriteName = gear.name.TrimStart('\\').Replace(' ', '_').ToLower();
+
+			if (spriteName == "411") spriteName = "fouroneone";
+			else if (spriteName.ToLower() == "és") spriteName = "es";
+			else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
+
+			if (Main.BrandSprites != null) headerView.Label.spriteAsset = Main.BrandSprites;
+
+			headerView.SetText(gear.name.Replace("\\", $"<space=15px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
+		}
+
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.GetNumberOfItems))]
 		public static class GetNumberOfItemsPatch
 		{
 			static void Postfix(ref int __result, IndexPath index)
 			{
-				if (index.depth >= 3)
+				var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+
+				if (index[0] < 0) return;
+				bool isCustom = index[0] < gear.Length && index[1] >= gear[index[0]].Length;
+
+				if (isCustom && index.depth >= 3)
 				{
 					__result = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children.Count : CustomGearManager.Instance.NestedItems.Count;
+				}
+				else if (!isCustom && index.depth >= 3)
+				{
+					__result = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children.Count : CustomGearManager.Instance.NestedOfficialItems.Count;
 				}
 			}
 		}
@@ -144,7 +180,18 @@ namespace XLMenuMod.Patches.Gear
 						}
 						else
 						{
-							currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomGearManager.Instance.NestedItems.IndexOf(CustomGearManager.Instance.CurrentFolder));
+							var gearList = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+
+							bool isCustom = index[1] >= gearList[index[0]].Length;
+
+							if (isCustom)
+							{
+								currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomGearManager.Instance.NestedItems.IndexOf(CustomGearManager.Instance.CurrentFolder));
+							}
+							else
+							{
+								currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomGearManager.Instance.NestedOfficialItems.IndexOf(CustomGearManager.Instance.CurrentFolder));
+							}
 						}
 					}
 
@@ -244,8 +291,14 @@ namespace XLMenuMod.Patches.Gear
 					if (!Main.Settings.DisableBToMoveUpDirectory)
 					{
 						UISounds.Instance?.PlayOneShotSelectMajor();
+
 						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
-						GearSelectionController.Instance.listView.UpdateList(__instance.listView.currentIndexPath.Up());
+
+						var currentIndexPath = Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath");
+						currentIndexPath.Value = __instance.listView.currentIndexPath.Up();
+						EventSystem.current.SetSelectedGameObject(null);
+						__instance.listView.UpdateList();
+
 						return false;
 					}
 				}

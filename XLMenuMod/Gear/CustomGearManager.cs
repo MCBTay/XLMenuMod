@@ -30,8 +30,6 @@ namespace XLMenuMod.Gear
 
 			foreach (var gear in gearToLoad)
 			{
-				UnityModManager.Logger.Log("XLMenuMod: Process gear: " + gear.name);
-
 				List<string> unbrandedItems = new List<string>
 				{
 					#region Decks
