@@ -14,7 +14,7 @@ namespace XLMenuMod.Gear
             var textureChange = textureChanges?.FirstOrDefault();
             if (textureChange != null)
             {
-                Info = new CustomInfo(name, textureChange.texturePath, null) { ParentObject = this };
+                Info = new CustomInfo(name, textureChange.texturePath, null, isCustom) { ParentObject = this };
             }
         }
     }
