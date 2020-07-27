@@ -30,6 +30,9 @@ namespace XLMenuMod
         public static TMP_SpriteAsset BlueSprites => Sprites?.ElementAt(1);
         public static TMP_SpriteAsset WhiteSprites => Sprites?.ElementAt(2);
 
+        public static AssetBundle BrandAssets { get; private set; }
+        public static TMP_SpriteAsset BrandSprites { get; private set; }
+
         static bool Load(UnityModManager.ModEntry modEntry)
         {
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
@@ -69,11 +72,20 @@ namespace XLMenuMod
 	                Sprites = spriteAssets.ToList();
                 }
 
+                BrandAssets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
+
+                var spriteBrandAssets = BrandAssets.LoadAllAssets<TMP_SpriteAsset>();
+                if (spriteBrandAssets != null)
+                {
+	                BrandSprites = spriteBrandAssets.FirstOrDefault();
+                }
+
                 CustomLevelManager.Instance.LoadNestedItems();
             }
             else
             {
                 Assets?.Unload(true);
+                BrandAssets?.Unload(true);
 
                 Harmony.UnpatchAll(Harmony.Id);
 
