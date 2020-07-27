@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
@@ -12,7 +12,78 @@ namespace XLMenuMod.Gear
 		private static CustomGearManager _instance;
 		public static CustomGearManager Instance => _instance ?? (_instance = new CustomGearManager());
 
-		public static int CurrentGearFilterIndex { get; set; }
+		public List<ICustomInfo> NestedOfficialItems { get; set; }
+
+		public CustomGearManager()
+		{
+			NestedOfficialItems = new List<ICustomInfo>();
+		}
+
+		public void LoadNestedOfficialItems(object[] objectsToLoad = null)
+		{
+			NestedOfficialItems.Clear();
+
+			var gearToLoad = (GearInfo[])objectsToLoad;
+			if (gearToLoad == null) return;
+
+			CustomFolderInfo parent = null;
+
+			foreach (var gear in gearToLoad)
+			{
+				UnityModManager.Logger.Log("XLMenuMod: Process gear: " + gear.name);
+
+				List<string> unbrandedItems = new List<string>
+				{
+					#region Decks
+					"Tie Dye Light",
+					"Skater XL Obstacles Deck",
+					#endregion
+
+					#region Grip
+					"Black",
+					"Camo Grey",
+					"Easy Day Logo",
+					#endregion
+
+					#region Trucks
+					"Black",
+					"Silver",
+					"White",
+					#endregion
+
+					#region Wheels
+					"Purple",
+					"Red/Blue Swirl",
+					"White",
+					#endregion
+				};
+
+				if (gear.name.StartsWith("Blank") || gear.name.StartsWith("Unbranded") || unbrandedItems.Contains(gear.name))
+				{
+					AddItem(gear, NestedOfficialItems, ref parent);
+				}
+				else
+				{
+					var nameSplit = gear.name.Split(' ');
+
+					if (string.IsNullOrEmpty(nameSplit.FirstOrDefault())) continue;
+
+					var brand = nameSplit.FirstOrDefault();
+
+					if (brand.ToLower() == "old") brand = OfficialBrands.Old_Friends.ToString();
+					else if (brand.ToLower() == "the") brand = "The " + OfficialBrands.Nine_Club;
+					else if (brand.ToLower() == "tws") brand = OfficialBrands.Transworld.ToString();
+					else if (brand.ToLower() == "new") brand = OfficialBrands.New_Balance.ToString();
+					else if (brand.ToLower() == "santa") brand = OfficialBrands.Santa_Cruz.ToString();
+					else if (brand.ToLower() == "grimple") brand = OfficialBrands.Grimple_Stix.ToString();
+
+					AddFolder<CustomGearFolderInfo>(brand, null, NestedOfficialItems, ref parent);
+					AddItem(gear, parent.Children, ref parent);
+				}
+			}
+
+			NestedOfficialItems = SortList(NestedOfficialItems);
+		}
 
 		public override void LoadNestedItems(object[] objectsToLoad = null)
 		{
@@ -42,7 +113,7 @@ namespace XLMenuMod.Gear
 				if (folders.Count == 1 || Path.GetExtension(folders.First()).ToLower() == ".png")
 				{
 					// This gear item is at the root.
-					AddItem(singleMaterialGear, ref parent);
+					AddItem(singleMaterialGear, NestedItems, ref parent);
 					continue;
 				}
 
@@ -51,11 +122,11 @@ namespace XLMenuMod.Gear
 				{
 					if (Path.GetExtension(folder).ToLower() == ".png")
 					{
-						AddItem(singleMaterialGear, ref parent);
+						AddItem(singleMaterialGear, parent == null ? NestedItems : parent.Children, ref parent);
 					}
 					else
 					{
-						AddFolder<CustomGearFolderInfo>(folder, Path.GetDirectoryName(textureChange.texturePath), ref parent);
+						AddFolder<CustomGearFolderInfo>(folder, Path.GetDirectoryName(textureChange.texturePath), parent == null ? NestedItems : parent.Children, ref parent);
 					}
 				}
 			}

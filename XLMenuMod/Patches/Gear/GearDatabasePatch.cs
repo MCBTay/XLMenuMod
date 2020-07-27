@@ -13,29 +13,45 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[] __result)
 			{
-				//TODO: Look into a better way to handle this.
-				if (index[1] < 12) return;
-
 				var gear = Traverse.Create(__instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-
-				if (index[1] >= gear[index[0]].Length)
-				{
-					var customGear = Traverse.Create(__instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
-
-					var tempIndex = index[1] - customGear[index[0]].Length;
-
-					CustomGearManager.Instance.LoadNestedItems(customGear[index[0]][tempIndex]);
-				}
-
 				List<ICustomInfo> sourceList = null;
 
-				if (CustomGearManager.Instance.CurrentFolder.HasChildren())
+				if (index[1] < gear[index[0]].Length)
 				{
-					sourceList = CustomGearManager.Instance.CurrentFolder.Children;
+					// Ignore Skin Tone (0), and Hair (1) for now.
+					if (index[1] != 0 && index[1] != 1)
+					{
+						CustomGearManager.Instance.LoadNestedOfficialItems(gear[index[0]][index[1]]);
+
+						if (CustomGearManager.Instance.CurrentFolder.HasChildren())
+						{
+							sourceList = CustomGearManager.Instance.CurrentFolder.Children;
+						}
+						else
+						{
+							sourceList = CustomGearManager.Instance.NestedOfficialItems;
+						}
+					}
 				}
 				else
 				{
-					sourceList = CustomGearManager.Instance.NestedItems;
+					if (index[1] >= gear[index[0]].Length)
+					{
+						var customGear = Traverse.Create(__instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
+
+						var tempIndex = index[1] - customGear[index[0]].Length;
+
+						CustomGearManager.Instance.LoadNestedItems(customGear[index[0]][tempIndex]);
+					}
+
+					if (CustomGearManager.Instance.CurrentFolder.HasChildren())
+					{
+						sourceList = CustomGearManager.Instance.CurrentFolder.Children;
+					}
+					else
+					{
+						sourceList = CustomGearManager.Instance.NestedItems;
+					}
 				}
 
 				if (sourceList == null) return;
@@ -49,7 +65,7 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(IndexPath index, ref GearInfo __result)
 			{
-				if (index.depth >= 3 && index[1] >= 12)
+				if (index.depth >= 3)
 				{
 					List<ICustomInfo> sourceList = null;
 
@@ -59,7 +75,14 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
-						sourceList = CustomGearManager.Instance.NestedItems;
+						if (index[1] < 12 && index[1] != 0 && index[1] != 1)
+						{
+							sourceList = CustomGearManager.Instance.NestedOfficialItems;
+						}
+						else if (index[1] >= 12)
+						{
+							sourceList = CustomGearManager.Instance.NestedItems;
+						}
 					}
 
 					if (sourceList == null) return;

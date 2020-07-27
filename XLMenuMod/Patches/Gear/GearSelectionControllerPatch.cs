@@ -85,8 +85,9 @@ namespace XLMenuMod.Patches.Gear
 
 								if (spriteName == "411") spriteName = "fouroneone";
 								else if (spriteName.ToLower() == "és") spriteName = "es";
+								else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
 
-								itemView.SetText(gearAtIndex.name.Replace("\\", $"<space=15px><size=120%><sprite name=\"{spriteName}\" tint=1><size=100%>"), true);
+								itemView.SetText(gearAtIndex.name.Replace("\\", $"<space=15px><size=150%><sprite name=\"{spriteName}\" tint=1><size=100%>"), true);
 							}
 						}
 						else if (gearAtIndex.name.Equals("..\\"))
