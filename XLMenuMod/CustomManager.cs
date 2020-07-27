@@ -14,6 +14,7 @@ namespace XLMenuMod
     {
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }
+        public float LastSelectedTime { get; set; }
         public TMP_Text SortLabel;
         public int CurrentSort { get; set; }
 
@@ -23,11 +24,9 @@ namespace XLMenuMod
             NestedItems = new List<ICustomInfo>();
         }
 
-        public virtual void AddItem<T>(T source, ref CustomFolderInfo parent) where T : class
+        public virtual void AddItem<T>(T source, List<ICustomInfo> sourceList, ref CustomFolderInfo parent) where T : class
         {
-            var sourceList = parent == null ? NestedItems : parent.Children;
-
-            if (source is LevelInfo level)
+	        if (source is LevelInfo level)
             {
                 var existing = sourceList.FirstOrDefault(x => x.GetName() == level.name);
              
@@ -55,11 +54,9 @@ namespace XLMenuMod
             }
         }
 
-        public virtual void AddFolder<T>(string folder, string path, ref CustomFolderInfo parent) where T : ICustomFolderInfo
+        public virtual void AddFolder<T>(string folder, string path, List<ICustomInfo> sourceList, ref CustomFolderInfo parent) where T : ICustomFolderInfo
         {
             string folderName = $"\\{folder}";
-
-            var sourceList = parent == null ? NestedItems : parent.Children;
 
             var child = sourceList.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
             if (child == null)
