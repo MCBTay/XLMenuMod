@@ -77,4 +77,41 @@
         Newest,
         Oldest
     }
+
+    public enum OfficialBrands
+    {
+	    FourOneOne,
+        Almost,
+        Blind,
+        Bones,
+        Crupie,
+        Enjoi,
+        Etnies, 
+	    Grizzly,
+	    Independent,
+        Lakai, 
+	    Old_Friends,
+	    Sk8Mafia,
+        SOVRN, 
+	    DC, 
+	    Dickies, 
+	    Element,
+	    Emerica,
+	    eS,
+	    Grimple_Stix,
+        HUF, 
+	    Jenkem,
+	    Mob,
+        New_Balance,
+        Pepper,
+        Primitive,
+        Ricta,
+        Santa_Cruz,
+	    Spitfire,
+        Nine_Club,
+        Thunder,
+        Transworld,
+        Vans,
+	    Venture,
+    }
 }
