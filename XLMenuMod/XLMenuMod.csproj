@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\xlmenumod" />
+    <EmbeddedResource Include="Assets\spritesheets_brands" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
