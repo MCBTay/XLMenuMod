@@ -14,17 +14,6 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearSelectionController __instance, MVCListHeaderView itemView)
 			{
-				//header.OnNextCategory += () =>
-				//{
-				//	CustomLevelManager.Instance.CurrentFolder = null;
-				//	__instance.listView.UpdateList();
-				//};
-				//header.OnPreviousCategory += () =>
-				//{
-				//	CustomLevelManager.Instance.CurrentFolder = null;
-				//	__instance.listView.UpdateList();
-				//};
-
 				CustomGearManager.Instance.SortLabel.gameObject.SetActive(__instance.listView.currentIndexPath[1] >= 12);
 
 				if (CustomGearManager.Instance.CurrentFolder != null && Main.WhiteSprites != null)
@@ -40,11 +29,22 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(IndexPath index, ref MVCListItemView itemView)
 			{
-				if (Main.WhiteSprites != null)
-				{
-					itemView.Label.spriteAsset = Main.WhiteSprites;
-				}
+				if (index[1] < 0) return;
+
 				itemView.Label.richText = true;
+
+				var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+
+				bool isCustom = index[1] >= gear[index[0]].Length;
+
+				if (!isCustom)
+				{
+					if (Main.BrandSprites != null) itemView.Label.spriteAsset = Main.BrandSprites;
+				}
+				else
+				{
+					if (Main.WhiteSprites != null) itemView.Label.spriteAsset = Main.WhiteSprites;
+				}
 
 				switch (Main.Settings.FontSize)
 				{
@@ -73,7 +73,21 @@ namespace XLMenuMod.Patches.Gear
 					{
 						if (gearAtIndex.name.StartsWith("\\"))
 						{
-							itemView.SetText(gearAtIndex.name.Replace("\\", "<space=15px><sprite=10 tint=1>"), true);
+							if (isCustom)
+							{
+								itemView.SetText(gearAtIndex.name.Replace("\\", "<space=15px><sprite=10 tint=1>"), true);
+							}
+							else
+							{
+								string spriteName = string.Empty;
+
+								spriteName = gearAtIndex.name.TrimStart('\\').Replace(' ', '_').ToLower();
+
+								if (spriteName == "411") spriteName = "fouroneone";
+								else if (spriteName.ToLower() == "és") spriteName = "es";
+
+								itemView.SetText(gearAtIndex.name.Replace("\\", $"<space=15px><size=120%><sprite name=\"{spriteName}\" tint=1><size=100%>"), true);
+							}
 						}
 						else if (gearAtIndex.name.Equals("..\\"))
 						{
