@@ -15,7 +15,7 @@ namespace XLMenuMod.Levels
             var levelsToRemove = new List<LevelInfo>();
             CustomFolderInfo parent = null;
 
-            AddFolder<CustomLevelFolderInfo>("Easy Day", null, ref parent);
+            AddFolder<CustomLevelFolderInfo>("Easy Day", null, NestedItems, ref parent);
 
             var easyDayFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\Easy Day" && x.GetPath() == null) as CustomFolderInfo;
 
@@ -25,7 +25,7 @@ namespace XLMenuMod.Levels
 
 	            if (!level.isAssetBundle)
 	            {
-		            AddItem(level, ref easyDayFolder);
+		            AddItem(level, NestedItems, ref easyDayFolder);
 		            continue;
 	            }
 
@@ -40,7 +40,7 @@ namespace XLMenuMod.Levels
 	            if (folders.Count == 1)
 	            {
 		            // This level is at the root
-		            AddItem(LevelManager.Instance.LevelInfoForPath(level.path), ref parent);
+		            AddItem(LevelManager.Instance.LevelInfoForPath(level.path), NestedItems, ref parent);
 		            continue;
 	            }
 
@@ -52,11 +52,11 @@ namespace XLMenuMod.Levels
 
 		            if (folder == folders.Last())
 		            {
-			            AddItem(LevelManager.Instance.LevelInfoForPath(level.path), ref parent);
+			            AddItem(LevelManager.Instance.LevelInfoForPath(level.path), parent == null ? NestedItems : parent.Children, ref parent);
 		            }
 		            else
 		            {
-			            AddFolder<CustomLevelFolderInfo>(folder, level.path, ref parent);
+			            AddFolder<CustomLevelFolderInfo>(folder, level.path, parent == null ? NestedItems : parent.Children, ref parent);
 		            }
 	            }
             }
