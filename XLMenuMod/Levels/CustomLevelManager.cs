@@ -17,6 +17,8 @@ namespace XLMenuMod.Levels
 
             AddFolder<CustomLevelFolderInfo>("Easy Day", null, NestedItems, ref parent);
 
+            parent = null;
+
             var easyDayFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\Easy Day" && x.GetPath() == null) as CustomFolderInfo;
 
             foreach (var level in LevelManager.Instance.CustomLevels)
@@ -25,7 +27,7 @@ namespace XLMenuMod.Levels
 
 	            if (!level.isAssetBundle)
 	            {
-		            AddItem(level, NestedItems, ref easyDayFolder);
+		            AddItem(level, easyDayFolder.Children, ref easyDayFolder);
 		            continue;
 	            }
 
