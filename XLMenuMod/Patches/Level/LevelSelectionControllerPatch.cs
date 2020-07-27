@@ -1,8 +1,10 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
@@ -14,17 +16,6 @@ namespace XLMenuMod.Patches.Level
 		{
 			static void Postfix(LevelSelectionController __instance, MVCListHeaderView header)
 			{
-				//header.OnNextCategory += () =>
-				//{
-				//	CustomLevelManager.Instance.CurrentFolder = null;
-				//	__instance.listView.UpdateList();
-				//};
-				//header.OnPreviousCategory += () =>
-				//{
-				//	CustomLevelManager.Instance.CurrentFolder = null;
-				//	__instance.listView.UpdateList();
-				//};
-
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 
 				if (CustomLevelManager.Instance.CurrentFolder != null && Main.BlackSprites != null)
@@ -67,6 +58,9 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix(LevelSelectionController __instance, IndexPath index)
             {
+				if (CustomLevelManager.Instance.LastSelectedTime != 0d && Time.realtimeSinceStartup - CustomLevelManager.Instance.LastSelectedTime < 0.25f) return false;
+				CustomLevelManager.Instance.LastSelectedTime = Time.realtimeSinceStartup;
+
 				var level = Traverse.Create(__instance).Method("GetLevelForIndex", index).GetValue<LevelInfo>();
 
 				if (level is CustomLevelFolderInfo selectedFolder)
@@ -107,10 +101,9 @@ namespace XLMenuMod.Patches.Level
 				else
 				{
 					CustomLevelManager.Instance.CurrentFolder = null;
-
 					return true;
-                }
-            }
+				}
+			}
         }
 
         [HarmonyPatch(typeof(LevelSelectionController), "OnEnable")]
