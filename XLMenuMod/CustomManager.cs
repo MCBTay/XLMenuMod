@@ -58,7 +58,7 @@ namespace XLMenuMod
         {
             string folderName = $"\\{folder}";
 
-            var child = sourceList.FirstOrDefault(x => x.GetName() == folderName && x is CustomFolderInfo) as CustomFolderInfo;
+            var child = sourceList.FirstOrDefault(x => x.GetName().Equals(folderName, StringComparison.InvariantCultureIgnoreCase) && x is CustomFolderInfo) as CustomFolderInfo;
             if (child == null)
             {
                 ICustomFolderInfo newFolder;
