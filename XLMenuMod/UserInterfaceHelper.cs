@@ -19,11 +19,6 @@ namespace XLMenuMod
             if (controllerIcons != null)
             {
                 label.spriteAsset = controllerIcons;
-
-                foreach (var icon in controllerIcons.spriteCharacterTable)
-                {
-	                UnityModManager.Logger.Log(icon.name);
-                }
             }
 
             label.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
