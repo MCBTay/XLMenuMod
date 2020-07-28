@@ -265,7 +265,7 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearSelectionController __instance)
 			{
-				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.Label.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString());
+				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
 			}
 		}
 

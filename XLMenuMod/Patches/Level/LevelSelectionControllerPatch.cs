@@ -226,7 +226,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.Label.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
+                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
             }
         }
     }

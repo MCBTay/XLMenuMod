@@ -55,6 +55,60 @@
         XB1_LeftStick = 47
     }
 
+    /// <summary>
+    /// Maps to the TMP_SpriteAsset ControllerIcons_ReversedOut_Grayish found within the game.
+    /// </summary>
+    public enum ControllerIconSprite_Gray
+    {
+	    PS4_Circle,
+	    PS4_L1,
+	    PS4_L2,
+	    PS4_R1,
+	    PS4_R2,
+	    PS4_TouchPad,
+	    XB1_LB,
+	    PS4_Square_Button,
+	    PS4_Triangle_Button,
+	    SWITCH_A,
+	    SWITCH_LEFT,
+	    SWITCH_UP,
+	    XB1_LT,
+	    XB1_RT,
+	    PS4_Options,
+	    XB1_RB,
+	    SWITCH_ZL,
+	    SWITCH_R,
+	    PS4_Cross_Button,
+	    PS4_Triangle,
+	    XB1_View,
+	    SWITCH_DOWN,
+	    SWITCH_RIGHT,
+	    SWITCH_PLUS,
+	    SWITCH_SL,
+	    SWITCH_ZR,
+	    PS4_Circle_Button,
+	    XB1_Y,
+	    SWITCH_Y,
+	    XB1_Menu,
+	    d_pad_down,
+	    d_pad_right,
+	    PS4_Square,
+	    PS4_Cross,
+	    SWITCH_B,
+	    SWITCH_X,
+	    SWITCH_SR,
+	    d_pad_left,
+	    d_pad_up,
+	    XB1_A,
+	    SWITCH_L,
+	    SWITCH_MINUS,
+	    XB1_B,
+	    XB1_X,
+	    LeftStick,
+	    RightStick,
+	    PS4_Options_Alt,
+    }
+
     public enum LevelSortMethod
     {
         Name_ASC,
