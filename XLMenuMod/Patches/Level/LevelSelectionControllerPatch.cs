@@ -18,10 +18,10 @@ namespace XLMenuMod.Patches.Level
 			{
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 
-				if (CustomLevelManager.Instance.CurrentFolder != null && Main.BlackSprites != null)
+				if (CustomLevelManager.Instance.CurrentFolder != null && Main.WhiteSprites != null)
 				{
 					header.Label.spriteAsset = Main.WhiteSprites;
-					int spriteIndex = header.Label.text.Equals("\\Easy Day") ? 8 : 10;
+					int spriteIndex = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day") ? 8 : 10;
 					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}>"));
 				}
 			}
