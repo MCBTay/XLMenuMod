@@ -79,8 +79,6 @@ namespace XLMenuMod
                 {
 	                BrandSprites = spriteBrandAssets.FirstOrDefault();
                 }
-
-                CustomLevelManager.Instance.LoadNestedItems();
             }
             else
             {
