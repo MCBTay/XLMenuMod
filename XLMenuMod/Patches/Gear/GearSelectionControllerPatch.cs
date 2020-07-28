@@ -1,9 +1,8 @@
 ﻿using HarmonyLib;
+using Rewired;
 using System;
 using System.Collections.Generic;
-using Rewired;
 using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Gear;
 
 namespace XLMenuMod.Patches.Gear
@@ -115,7 +114,7 @@ namespace XLMenuMod.Patches.Gear
 
 			if (Main.BrandSprites != null) itemView.Label.spriteAsset = Main.BrandSprites;
 
-			itemView.SetText(gear.name.Replace("\\", $"<space=15px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
+			itemView.SetText(gear.name.Replace("\\", $"<space=30px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
 		}
 
 		static void SetBrandSprite(GearInfo gear, MVCListHeaderView headerView)
@@ -128,7 +127,7 @@ namespace XLMenuMod.Patches.Gear
 
 			if (Main.BrandSprites != null) headerView.Label.spriteAsset = Main.BrandSprites;
 
-			headerView.SetText(gear.name.Replace("\\", $"<space=15px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
+			headerView.SetText(gear.name.Replace("\\", $"<space=30px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.GetNumberOfItems))]
@@ -291,10 +290,10 @@ namespace XLMenuMod.Patches.Gear
 					if (!Main.Settings.DisableBToMoveUpDirectory)
 					{
 						UISounds.Instance?.PlayOneShotSelectMajor();
-						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
 
-						var currentIndexPath = Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath");
-						currentIndexPath.Value = __instance.listView.currentIndexPath.Up();
+						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
+						Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Up();
+
 						EventSystem.current.SetSelectedGameObject(null);
 						__instance.listView.UpdateList();
 

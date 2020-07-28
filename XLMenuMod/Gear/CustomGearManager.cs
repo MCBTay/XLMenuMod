@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
-using UnityModManagerNet;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
@@ -26,10 +25,10 @@ namespace XLMenuMod.Gear
 			var gearToLoad = (GearInfo[])objectsToLoad;
 			if (gearToLoad == null) return;
 
-			CustomFolderInfo parent = null;
-
 			foreach (var gear in gearToLoad)
 			{
+				CustomFolderInfo parent = null;
+
 				List<string> unbrandedItems = new List<string>
 				{
 					#region Decks

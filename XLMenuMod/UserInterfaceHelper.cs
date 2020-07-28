@@ -1,13 +1,11 @@
-﻿using System;
-using Rewired;
+﻿using Rewired;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityModManagerNet;
 
 namespace XLMenuMod
 {
-    public class UserInterfaceHelper : MonoBehaviour
+	public class UserInterfaceHelper : MonoBehaviour
     {
         public static TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
         {
