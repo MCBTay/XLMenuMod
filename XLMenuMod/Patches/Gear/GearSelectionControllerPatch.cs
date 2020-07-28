@@ -291,7 +291,6 @@ namespace XLMenuMod.Patches.Gear
 					if (!Main.Settings.DisableBToMoveUpDirectory)
 					{
 						UISounds.Instance?.PlayOneShotSelectMajor();
-
 						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
 
 						var currentIndexPath = Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath");

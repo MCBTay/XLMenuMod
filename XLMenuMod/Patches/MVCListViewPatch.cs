@@ -12,15 +12,24 @@ namespace XLMenuMod.Patches
 		{
 			static void Prefix(MVCListView __instance)
 			{
-				if (__instance.DataSource != null && __instance.currentIndexPath.depth >= 3)
+				if (__instance.DataSource != null)
 				{
-					while (__instance.currentIndexPath.depth > 3)
+					var newIndexPath = __instance.currentIndexPath;
+					
+					if (__instance.DataSource is LevelSelectionController && __instance.currentIndexPath.depth > 1)
 					{
-						Traverse.Create(__instance).Property("currentIndexPath").SetValue(__instance.currentIndexPath.Up());
-					}
+						while (newIndexPath.depth != 1) { newIndexPath = newIndexPath.Up(); }
 
-					if (__instance.DataSource is LevelSelectionController) CustomLevelManager.Instance.CurrentFolder = null;
-					else if (__instance.DataSource is GearSelectionController) CustomGearManager.Instance.CurrentFolder = null;
+						Traverse.Create(__instance).Property("currentIndexPath").SetValue(newIndexPath);
+						CustomLevelManager.Instance.CurrentFolder = null;
+					}
+					else if (__instance.DataSource is GearSelectionController && __instance.currentIndexPath.depth > 2)
+					{
+						while (newIndexPath.depth != 2) { newIndexPath = newIndexPath.Up(); }
+
+						Traverse.Create(__instance).Property("currentIndexPath").SetValue(newIndexPath);
+						CustomGearManager.Instance.CurrentFolder = null;
+					}
 				}
 			}
 		}
@@ -30,15 +39,24 @@ namespace XLMenuMod.Patches
 		{
 			static void Prefix(MVCListView __instance)
 			{
-				if (__instance.DataSource != null && __instance.currentIndexPath.depth >= 3)
+				if (__instance.DataSource != null)
 				{
-					while (__instance.currentIndexPath.depth > 3)
-					{
-						Traverse.Create(__instance).Property("currentIndexPath").SetValue(__instance.currentIndexPath.Up());
-					}
+					var newIndexPath = __instance.currentIndexPath;
 
-					if (__instance.DataSource is LevelSelectionController) CustomLevelManager.Instance.CurrentFolder = null;
-					else if (__instance.DataSource is GearSelectionController) CustomGearManager.Instance.CurrentFolder = null;
+					if (__instance.DataSource is LevelSelectionController && __instance.currentIndexPath.depth > 1)
+					{
+						while (newIndexPath.depth != 1) { newIndexPath = newIndexPath.Up(); }
+
+						Traverse.Create(__instance).Property("currentIndexPath").SetValue(newIndexPath);
+						CustomLevelManager.Instance.CurrentFolder = null;
+					}
+					else if (__instance.DataSource is GearSelectionController && __instance.currentIndexPath.depth > 2)
+					{
+						while (newIndexPath.depth != 2) { newIndexPath = newIndexPath.Up(); }
+
+						Traverse.Create(__instance).Property("currentIndexPath").SetValue(newIndexPath);
+						CustomGearManager.Instance.CurrentFolder = null;
+					}
 				}
 			}
 		}
