@@ -79,13 +79,13 @@ namespace XLMenuMod
                 {
 	                BrandSprites = spriteBrandAssets.FirstOrDefault();
                 }
+
+                Assets.Unload(false);
+                BrandAssets.Unload(false);
             }
             else
             {
-                Assets?.Unload(true);
-                BrandAssets?.Unload(true);
-
-                Harmony.UnpatchAll(Harmony.Id);
+	            Harmony.UnpatchAll(Harmony.Id);
 
                 Object.Destroy(CustomLevelManagerGameObject.GetComponent<CustomLevelManager>());
                 Object.Destroy(CustomGearManagerGameObject.GetComponent<CustomGearManager>());
