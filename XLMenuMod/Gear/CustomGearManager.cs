@@ -91,16 +91,25 @@ namespace XLMenuMod.Gear
 			
 			foreach (var gear in gearToLoad)
 			{
-				var singleMaterialGear = gear as GearInfoSingleMaterial;
+				GearInfo newGear = null;
+				TextureChange textureChange = null;
 
-				// For now all I saw was one texture change per gear type, so assuming first.
-				var textureChange = singleMaterialGear?.textureChanges?.FirstOrDefault();
+				if (gear is GearInfoSingleMaterial singleMaterialGear)
+				{
+					textureChange = singleMaterialGear?.textureChanges?.FirstOrDefault();
+					newGear = singleMaterialGear;
+				}
+				else if (gear is CharacterBodyInfo characterBodyInfo)
+				{
+					var materialChange = characterBodyInfo.materialChanges.FirstOrDefault();
+					textureChange = materialChange?.textureChanges?.FirstOrDefault();
+					newGear = characterBodyInfo;
+				}
+
 				if (textureChange == null) continue;
-
 				if (string.IsNullOrEmpty(textureChange.texturePath) || !textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir)) continue;
-
+				var texturePath = textureChange.texturePath;
 				var textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomGearDir + '\\', string.Empty);
-
 				if (string.IsNullOrEmpty(textureSubPath)) continue;
 
 				var folders = textureSubPath.Split('\\').ToList();
@@ -110,7 +119,7 @@ namespace XLMenuMod.Gear
 				if (folders.Count == 1 || Path.GetExtension(folders.First()).ToLower() == ".png")
 				{
 					// This gear item is at the root.
-					AddItem(singleMaterialGear, NestedItems, ref parent);
+					AddItem(newGear, NestedItems, ref parent);
 					continue;
 				}
 
@@ -119,11 +128,11 @@ namespace XLMenuMod.Gear
 				{
 					if (Path.GetExtension(folder).ToLower() == ".png")
 					{
-						AddItem(singleMaterialGear, parent == null ? NestedItems : parent.Children, ref parent);
+						AddItem(newGear, parent == null ? NestedItems : parent.Children, ref parent);
 					}
 					else
 					{
-						AddFolder<CustomGearFolderInfo>(folder, Path.GetDirectoryName(textureChange.texturePath), parent == null ? NestedItems : parent.Children, ref parent);
+						AddFolder<CustomGearFolderInfo>(folder, Path.GetDirectoryName(texturePath), parent == null ? NestedItems : parent.Children, ref parent);
 					}
 				}
 			}

@@ -93,6 +93,7 @@
     <Compile Include="CustomManager.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Gear\CustomBoardGearInfo.cs" />
+    <Compile Include="Gear\CustomCharacterBodyInfo.cs" />
     <Compile Include="Gear\CustomCharacterGearInfo.cs" />
     <Compile Include="Gear\CustomGearFolderInfo.cs" />
     <Compile Include="Gear\CustomGearManager.cs" />

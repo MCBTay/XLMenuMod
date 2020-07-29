@@ -52,6 +52,17 @@ namespace XLMenuMod
                     }
                 }
             }
+            else if (source is CharacterBodyInfo characterBodyInfo)
+	        {
+		        var existing = sourceList.FirstOrDefault(x => x.GetName() == characterBodyInfo.name);
+
+		        if (existing == null)
+		        {
+                    var customGear = new CustomCharacterBodyInfo(characterBodyInfo.name, characterBodyInfo.type, characterBodyInfo.isCustom, characterBodyInfo.materialChanges, characterBodyInfo.tags);
+                    customGear.Info.Parent = parent;
+                    sourceList.Add(customGear.Info);
+		        }
+	        }
         }
 
         public virtual void AddFolder<T>(string folder, string path, List<ICustomInfo> sourceList, ref CustomFolderInfo parent) where T : ICustomFolderInfo

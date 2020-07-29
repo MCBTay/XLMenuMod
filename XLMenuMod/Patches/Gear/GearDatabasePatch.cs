@@ -75,12 +75,12 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
-						if (index[1] < 12 && index[1] != 0 && index[1] != 1)
+						if (index[1] < 10 && index[1] != 0 && index[1] != 1)
 						{
 							sourceList = CustomGearManager.Instance.NestedOfficialItems;
 						}
 						else
-						if (index[1] >= 12)
+						if (index[1] >= 10)
 						{
 							sourceList = CustomGearManager.Instance.NestedItems;
 						}
@@ -96,6 +96,8 @@ namespace XLMenuMod.Patches.Gear
 							__result = customInfo.GetParentObject() as CustomBoardGearInfo;
 						else if (customInfo.GetParentObject() is CustomCharacterGearInfo)
 							__result = customInfo.GetParentObject() as CustomCharacterGearInfo;
+						else if (customInfo.GetParentObject() is CustomCharacterBodyInfo)
+							__result = customInfo.GetParentObject() as CustomCharacterBodyInfo;
 						else if (customInfo.GetParentObject() is CustomGearFolderInfo)
 							__result = customInfo.GetParentObject() as CustomGearFolderInfo;
 					}
