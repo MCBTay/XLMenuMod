@@ -6,6 +6,7 @@ As of the V3 beta, the Maps folder did not allow you to place maps in subdirecto
 ## Features
 ### Maps
 * This mod allows you to place your custom maps in any subdirectory structure you want (within Windows path limits), and will render that directory structure in the game's UI.
+  * Any map with a preview image will also display in folders as long as the preview image is beside the map.
   * Any map that needs an additional DLL file with it for extensions, the mod expects the DLL to be in the same folder with the same name as the map file.
   * Compatible with (but somewhat replaces the need for) DawgVinci's Map Extension Mod.  Any extension DLLs only get loaded up if they aren't already loaded by another mod.
 * **Sorting**
@@ -14,6 +15,7 @@ As of the V3 beta, the Maps folder did not allow you to place maps in subdirecto
     * For newest/oldest sorting, a folder will be treated as it's oldest/newest content.
     
 ### Gear
+* This mod groups the built in official gear into brand folders.
 * This mod allows you to place your custom gear in any subdirectory structure you want (within Windows path limits), and will render that directory structure in the game's UI.
 * **Sorting**
   * The following sort methods are supported: Name ascending, name descending, newest, and oldest.
@@ -24,6 +26,7 @@ As of the V3 beta, the Maps folder did not allow you to place maps in subdirecto
 * There's a setting to shrink down the default font size of the Gear/Maps lists.  By default, the font size is 36 which is a little large.  Currently you can set it to Normal (36), Small (30), Smaller (24). 
   * Note: Because of the way the game recycles list objects, it's recommended to set this value prior to entering the gear/maps menus OR to restart the game after setting this value.
 
+Note: The GIFs below are outdated and need to be updated.
 | Maps | Gear | Sorting | Font Size | 
 |------|------|---------|-----------|
 |<img src="maps.gif">|<img src="gear.gif">|<img src="sorting.gif">|<img src="fontsize.png">|
