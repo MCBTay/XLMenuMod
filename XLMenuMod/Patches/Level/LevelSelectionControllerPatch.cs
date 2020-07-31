@@ -1,16 +1,20 @@
 ﻿using System;
 using HarmonyLib;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using GameManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityModManagerNet;
 using XLMenuMod.Levels;
+using Object = System.Object;
 
 namespace XLMenuMod.Patches.Level
 {
 	public class LevelSelectionControllerPatch
-    {
+	{
 		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
 		{
@@ -18,9 +22,9 @@ namespace XLMenuMod.Patches.Level
 			{
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 
-				if (CustomLevelManager.Instance.CurrentFolder != null && Main.WhiteSprites != null)
+				if (CustomLevelManager.Instance.CurrentFolder != null && UserInterfaceHelper.Instance.WhiteSprites != null)
 				{
-					header.Label.spriteAsset = Main.WhiteSprites;
+					header.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
 					int spriteIndex = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day") ? 8 : 10;
 					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}>"));
 				}
@@ -34,9 +38,9 @@ namespace XLMenuMod.Patches.Level
 			{
 				if (itemView.Label.text.StartsWith("\\"))
 				{
-					if (Main.WhiteSprites != null)
+					if (UserInterfaceHelper.Instance.WhiteSprites != null)
 					{
-						itemView.Label.spriteAsset = Main.WhiteSprites;
+						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
 
 						int spriteIndex = itemView.Label.text.Equals("\\Easy Day") ? 8 : 10;
 						itemView.Label.SetText(itemView.Label.text.Replace("\\", $"<space=10px><sprite={spriteIndex} tint=1>"));
@@ -44,9 +48,9 @@ namespace XLMenuMod.Patches.Level
 				}
 				else if (itemView.Label.text.Equals("..\\"))
 				{
-					if (Main.WhiteSprites != null)
+					if (UserInterfaceHelper.Instance.WhiteSprites != null)
 					{
-						itemView.Label.spriteAsset = Main.WhiteSprites;
+						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
 						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint=1>Go Back"));
 					}
 				}
@@ -113,11 +117,16 @@ namespace XLMenuMod.Patches.Level
 	        {
 		        UpdateFontSize(__instance.listView.ItemPrefab.Label);
 
+		        UpdateLabelColor(__instance.listView.ItemPrefab);
+				UpdateLabelColor(__instance.listView.HeaderView);
+
+
 		        foreach (var item in __instance.listView.ItemViews)
 		        {
-					UpdateFontSize(item.Label);
-		        }
-	        }
+			        UpdateFontSize(item.Label);
+			        UpdateLabelColor(item);
+				}
+			}
 			
 	        private static void UpdateFontSize(TMP_Text label)
 	        {
@@ -135,7 +144,39 @@ namespace XLMenuMod.Patches.Level
 				        break;
 		        }
 			}
-        }
+
+	        private static void UpdateLabelColor(MVCListItemView item)
+	        {
+		        var color = new Color32(246, 254, 247, 255);
+
+		        item.colors = new ColorBlock
+		        {
+			        colorMultiplier = 1,
+			        disabledColor = color,
+			        normalColor = color,
+			        selectedColor = Color.red,
+			        highlightedColor = color,
+		        };
+
+		        //label.faceColor = new Color32(255, 254, 247, 255);
+		        //label.faceColor = new Color32(244, 245, 245, 255);
+		        //label.faceColor = new Color32(243, 243, 243, 255);
+			}
+
+			private static void UpdateLabelColor(MVCListHeaderView header)
+	        {
+		        var color = new Color32(246, 254, 247, 255);
+
+		        header.colors = new ColorBlock
+		        {
+			        colorMultiplier = 1,
+			        disabledColor = color,
+			        normalColor = color,
+			        selectedColor = Color.red,
+			        highlightedColor = color,
+		        };
+	        }
+		}
 
         [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.GetNumberOfItems))]
         public static class GetNumberOfItemsPatch
@@ -226,7 +267,14 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
+                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
+
+                var textures = GameStateMachine.Instance.LevelSelectionObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "MenuPanelBackground");
+
+                if (textures != null && UserInterfaceHelper.Instance.DarkModeBackground != null)
+                {
+	                textures.sprite = UserInterfaceHelper.Instance.DarkModeBackground;
+                }
             }
         }
     }

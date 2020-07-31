@@ -142,7 +142,7 @@ namespace XLMenuMod.Gear
 
 		public override List<ICustomInfo> SortList(List<ICustomInfo> gear)
 		{
-			UserInterfaceHelper.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentSort).ToString());
+			UserInterfaceHelper.Instance.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentSort).ToString());
 
 			List<ICustomInfo> sorted;
 

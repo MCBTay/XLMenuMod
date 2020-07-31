@@ -25,9 +25,9 @@ namespace XLMenuMod.Patches.Gear
 
 					if (isCustom)
 					{
-						if (Main.WhiteSprites != null)
+						if (UserInterfaceHelper.Instance.WhiteSprites != null)
 						{
-							itemView.Label.spriteAsset = Main.WhiteSprites;
+							itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
 							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
 						}
 					}
@@ -52,7 +52,7 @@ namespace XLMenuMod.Patches.Gear
 
 				bool isCustom = index[1] >= gear[index[0]].Length;
 
-				if (Main.WhiteSprites != null) itemView.Label.spriteAsset = Main.WhiteSprites;
+				if (UserInterfaceHelper.Instance.WhiteSprites != null) itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
 
 				switch (Main.Settings.FontSize)
 				{
@@ -112,7 +112,7 @@ namespace XLMenuMod.Patches.Gear
 			else if (spriteName.ToLower() == "és") spriteName = "es";
 			else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
 
-			if (Main.BrandSprites != null) itemView.Label.spriteAsset = Main.BrandSprites;
+			if (UserInterfaceHelper.Instance.BrandSprites != null) itemView.Label.spriteAsset = UserInterfaceHelper.Instance.BrandSprites;
 
 			itemView.SetText(gear.name.Replace("\\", $"<space=30px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
 		}
@@ -125,7 +125,7 @@ namespace XLMenuMod.Patches.Gear
 			else if (spriteName.ToLower() == "és") spriteName = "es";
 			else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
 
-			if (Main.BrandSprites != null) headerView.Label.spriteAsset = Main.BrandSprites;
+			if (UserInterfaceHelper.Instance.BrandSprites != null) headerView.Label.spriteAsset = UserInterfaceHelper.Instance.BrandSprites;
 
 			headerView.SetText(gear.name.Replace("\\", $"<space=30px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
 		}
@@ -264,7 +264,7 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearSelectionController __instance)
 			{
-				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
+				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
 			}
 		}
 

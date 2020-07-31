@@ -1,15 +1,48 @@
-﻿using Rewired;
+﻿using System.Collections.Generic;
+using Rewired;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 
 namespace XLMenuMod
 {
-	public class UserInterfaceHelper : MonoBehaviour
+	public class UserInterfaceHelper
     {
-        public static TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
+	    public AssetBundle Assets { get; private set; }
+	    public List<TMP_SpriteAsset> Sprites { get; private set; }
+
+	    public TMP_SpriteAsset WhiteSprites => Sprites?.ElementAt(2);
+
+	    public AssetBundle BrandAssets { get; private set; }
+	    public TMP_SpriteAsset BrandSprites { get; private set; }
+
+	    public Sprite DarkModeBackground { get; private set; }
+
+		public static UserInterfaceHelper Instance { get; set; }
+
+		public UserInterfaceHelper()
+		{
+			Instance = this;
+		}
+
+		public void LoadAssets()
+		{
+			Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
+			Sprites = LoadSpriteSheet(Assets).ToList();
+
+			BrandAssets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
+			BrandSprites = LoadSpriteSheet(BrandAssets).FirstOrDefault();
+
+			Assets.Unload(false);
+			BrandAssets.Unload(false);
+
+			LoadBackgroundTexture();
+		}
+
+		public TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
         {
-            TMP_Text label = Instantiate(sourceText, parent);
+            TMP_Text label = GameObject.Instantiate(sourceText, parent);
             label.transform.localScale = new Vector3(1, 1, 1);
             label.color = Color.black;
 
@@ -30,7 +63,7 @@ namespace XLMenuMod
             return label;
         }
 
-        public static void SetSortLabelText(ref TMP_Text label, string text)
+        public void SetSortLabelText(ref TMP_Text label, string text)
         {
             var sortLabelText = $"<size=80%><sprite={GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
             //var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
@@ -38,7 +71,7 @@ namespace XLMenuMod
             label?.SetText(sortLabelText); //+ defaultLabelText);
         }
 
-        public static int GetSpriteIndex_YButton_Gray()
+        public int GetSpriteIndex_YButton_Gray()
         {
 	        ControllerIconSprite_Gray returnVal;
 
@@ -69,7 +102,7 @@ namespace XLMenuMod
 	        return (int)returnVal;
         }
 
-        public static int GetSpriteIndex_YButton()
+        public int GetSpriteIndex_YButton()
         {
 	        ControllerIconSprite returnVal;
 
@@ -100,7 +133,7 @@ namespace XLMenuMod
             return (int)returnVal;
         }
 
-        public static int GetSpriteIndex_XButton()
+        public int GetSpriteIndex_XButton()
         {
 	        ControllerIconSprite returnVal;
 
@@ -130,5 +163,37 @@ namespace XLMenuMod
 
 	        return (int)returnVal;
         }
-    }
+
+        private void LoadBackgroundTexture()
+        {
+	        var texture2d = new Texture2D(2, 2);
+	        if (!texture2d.LoadImage(ExtractResource("XLMenuMod.Assets.darkmode.png"))) return;
+
+	        Sprite sprite = Sprite.Create(texture2d, new Rect(0, 0, texture2d.width, texture2d.height), new Vector2(0.5f, 0.5f));
+	        DarkModeBackground = sprite;
+        }
+
+        private List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
+        {
+	        var spriteBrandAssets = bundle.LoadAllAssets<TMP_SpriteAsset>();
+	        if (spriteBrandAssets != null)
+	        {
+		        return spriteBrandAssets.ToList();
+	        }
+
+	        return null;
+        }
+
+        private byte[] ExtractResource(string filename)
+        {
+	        Assembly a = Assembly.GetExecutingAssembly();
+	        using (var resFilestream = a.GetManifestResourceStream(filename))
+	        {
+		        if (resFilestream == null) return null;
+		        byte[] ba = new byte[resFilestream.Length];
+		        resFilestream.Read(ba, 0, ba.Length);
+		        return ba;
+	        }
+        }
+	}
 }
