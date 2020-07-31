@@ -268,13 +268,6 @@ namespace XLMenuMod.Patches.Level
             static void Postfix(LevelSelectionController __instance)
             {
                 CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
-
-                var textures = GameStateMachine.Instance.LevelSelectionObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "MenuPanelBackground");
-
-                if (textures != null && UserInterfaceHelper.Instance.DarkModeBackground != null)
-                {
-	                textures.sprite = UserInterfaceHelper.Instance.DarkModeBackground;
-                }
             }
         }
     }
