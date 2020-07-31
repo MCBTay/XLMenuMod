@@ -26,12 +26,12 @@ namespace XLMenuMod
         public static AssetBundle Assets { get; private set; }
         public static List<TMP_SpriteAsset> Sprites { get; private set; }
 
-        public static TMP_SpriteAsset BlackSprites => Sprites?.ElementAt(0);
-        public static TMP_SpriteAsset BlueSprites => Sprites?.ElementAt(1);
         public static TMP_SpriteAsset WhiteSprites => Sprites?.ElementAt(2);
 
         public static AssetBundle BrandAssets { get; private set; }
         public static TMP_SpriteAsset BrandSprites { get; private set; }
+
+        public static Sprite DarkModeBackground { get; private set; }
 
         static bool Load(UnityModManager.ModEntry modEntry)
         {
@@ -65,23 +65,15 @@ namespace XLMenuMod
 				Object.DontDestroyOnLoad(CustomGearManagerGameObject);
 
 				Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
-
-                var spriteAssets = Assets.LoadAllAssets<TMP_SpriteAsset>();
-                if (spriteAssets != null)
-                {
-	                Sprites = spriteAssets.ToList();
-                }
+				Sprites = LoadSpriteSheet(Assets).ToList();
 
                 BrandAssets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
-
-                var spriteBrandAssets = BrandAssets.LoadAllAssets<TMP_SpriteAsset>();
-                if (spriteBrandAssets != null)
-                {
-	                BrandSprites = spriteBrandAssets.FirstOrDefault();
-                }
+                BrandSprites = LoadSpriteSheet(BrandAssets).FirstOrDefault();
 
                 Assets.Unload(false);
                 BrandAssets.Unload(false);
+
+                LoadBackgroundTexture();
             }
             else
             {
@@ -94,7 +86,18 @@ namespace XLMenuMod
             return true;
         }
 
-        private static byte[] ExtractResource(string filename)
+        private static List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
+        {
+	        var spriteBrandAssets = bundle.LoadAllAssets<TMP_SpriteAsset>();
+	        if (spriteBrandAssets != null)
+	        {
+		        return spriteBrandAssets.ToList();
+	        }
+
+	        return null;
+        }
+
+        public static byte[] ExtractResource(string filename)
         {
             Assembly a = Assembly.GetExecutingAssembly();
             using (var resFilestream = a.GetManifestResourceStream(filename))
@@ -104,6 +107,17 @@ namespace XLMenuMod
                 resFilestream.Read(ba, 0, ba.Length);
                 return ba;
             }
+        }
+
+        
+
+        public static void LoadBackgroundTexture()
+        {
+	        var texture2d = new Texture2D(2, 2);
+	        if (!texture2d.LoadImage(Main.ExtractResource("XLMenuMod.Assets.darkmode.png"))) return;
+
+	        Sprite sprite = Sprite.Create(texture2d, new Rect(0, 0, texture2d.width, texture2d.height), new Vector2(0.5f, 0.5f));
+	        DarkModeBackground = sprite;
         }
 
         private static void OnSaveGUI(UnityModManager.ModEntry modEntry)
