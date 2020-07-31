@@ -2,8 +2,10 @@
 using Rewired;
 using System.Linq;
 using System.Reflection;
+using GameManagement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace XLMenuMod
 {
@@ -17,9 +19,15 @@ namespace XLMenuMod
 	    public AssetBundle BrandAssets { get; private set; }
 	    public TMP_SpriteAsset BrandSprites { get; private set; }
 
+		public Sprite OriginalBackgroundTexture { get; private set; }
 	    public Sprite DarkModeBackground { get; private set; }
 
-		public static UserInterfaceHelper Instance { get; set; }
+	    private static UserInterfaceHelper _instance;
+	    public static UserInterfaceHelper Instance
+	    {
+		    get { return _instance ?? (_instance = new UserInterfaceHelper()); }
+		    private set { _instance = value; }
+	    }
 
 		public UserInterfaceHelper()
 		{
@@ -30,11 +38,10 @@ namespace XLMenuMod
 		{
 			Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
 			Sprites = LoadSpriteSheet(Assets).ToList();
+			Assets.Unload(false);
 
 			BrandAssets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
 			BrandSprites = LoadSpriteSheet(BrandAssets).FirstOrDefault();
-
-			Assets.Unload(false);
 			BrandAssets.Unload(false);
 
 			LoadBackgroundTexture();
@@ -171,7 +178,33 @@ namespace XLMenuMod
 
 	        Sprite sprite = Sprite.Create(texture2d, new Rect(0, 0, texture2d.width, texture2d.height), new Vector2(0.5f, 0.5f));
 	        DarkModeBackground = sprite;
-        }
+
+	        LoadBackgroundTexture(GameStateMachine.Instance.PauseObject);
+	        LoadBackgroundTexture(GameStateMachine.Instance.LevelSelectionObject);
+			LoadBackgroundTexture(GameStateMachine.Instance.SettingsObject);
+		}
+
+        private void LoadBackgroundTexture(GameObject gameObject)
+        {
+	        var textures = gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "MenuPanelBackground");
+
+	        if (textures != null)
+	        {
+		        if (OriginalBackgroundTexture == null)
+		        {
+			        OriginalBackgroundTexture = textures.sprite;
+				}
+
+		        if (Main.Settings.EnableDarkMode && DarkModeBackground != null)
+		        {
+			        textures.sprite = DarkModeBackground;
+				}
+		        else
+		        {
+			        textures.sprite = OriginalBackgroundTexture;
+		        }
+	        }
+		}
 
         private List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
         {
