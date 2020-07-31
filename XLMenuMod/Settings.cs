@@ -9,6 +9,7 @@ namespace XLMenuMod
     {
         public bool DisableBToMoveUpDirectory { get; set; }
         public FontSizePreset FontSize { get; set; } = FontSizePreset.Normal;
+        public bool EnableDarkMode { get; set; }
 
         public Settings() : base()
         {
@@ -22,8 +23,12 @@ namespace XLMenuMod
         public void OnSettingsGUI(UnityModManager.ModEntry modEntry)
         {
             GUILayout.BeginVertical();
+
+            GUILayout.BeginHorizontal();
             DisableBToMoveUpDirectory = GUILayout.Toggle(DisableBToMoveUpDirectory, new GUIContent("Disable B/O Button to Move Up Directory"));
-            
+            EnableDarkMode = GUILayout.Toggle(EnableDarkMode, new GUIContent("Enable Dark Mode"));
+            GUILayout.EndHorizontal();
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Gear/Map Font Size: ");
             string[] fontOptions = { FontSizePreset.Normal.ToString(), FontSizePreset.Small.ToString(), FontSizePreset.Smaller.ToString() };
