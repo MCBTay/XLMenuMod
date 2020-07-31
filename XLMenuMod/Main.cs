@@ -51,9 +51,7 @@ namespace XLMenuMod
 				CustomGearManagerGameObject.AddComponent<CustomGearManager>();
 				Object.DontDestroyOnLoad(CustomGearManagerGameObject);
 
-				
                 UserInterfaceHelper.Instance.LoadAssets();
-                
             }
             else
             {
