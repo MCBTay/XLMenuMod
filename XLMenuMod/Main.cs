@@ -52,6 +52,7 @@ namespace XLMenuMod
 				Object.DontDestroyOnLoad(CustomGearManagerGameObject);
 
                 UserInterfaceHelper.Instance.LoadAssets();
+                UserInterfaceHelper.Instance.ToggleDarkMode(Settings.EnableDarkMode);
             }
             else
             {
