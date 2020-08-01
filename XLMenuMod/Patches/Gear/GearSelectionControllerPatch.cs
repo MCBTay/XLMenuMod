@@ -14,7 +14,7 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearSelectionController __instance, IndexPath index, MVCListHeaderView itemView)
 			{
-				CustomGearManager.Instance.SortLabel.gameObject.SetActive(__instance.listView.currentIndexPath[1] >= 12);
+				CustomGearManager.Instance.SortLabel.gameObject.SetActive(__instance.listView.currentIndexPath[1] >= 10);
 
 				if (CustomGearManager.Instance.CurrentFolder != null)
 				{
@@ -54,20 +54,6 @@ namespace XLMenuMod.Patches.Gear
 
 				if (UserInterfaceHelper.Instance.WhiteSprites != null) itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
 
-				switch (Main.Settings.FontSize)
-				{
-					case FontSizePreset.Small:
-						itemView.Label.fontSize = 30;
-						break;
-					case FontSizePreset.Smaller:
-						itemView.Label.fontSize = 24;
-						break;
-					case FontSizePreset.Normal:
-					default:
-						itemView.Label.fontSize = 36;
-						break;
-				}
-
 				if (index.depth >= 3)
 				{
 					GearInfo gearAtIndex = GearDatabase.Instance.GetGearAtIndex(index, out bool _);
@@ -99,6 +85,8 @@ namespace XLMenuMod.Patches.Gear
 							itemView.SetText(gearAtIndex.name, true);
 						}
 						Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, GearSelectionController.Instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
+
+						UserInterfaceHelper.Instance.ToggleDarkMode(itemView, Main.Settings.EnableDarkMode);
 					}
 				}
 			}
@@ -265,6 +253,7 @@ namespace XLMenuMod.Patches.Gear
 			static void Postfix(GearSelectionController __instance)
 			{
 				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
+				UserInterfaceHelper.Instance.ToggleDarkMode(__instance.gameObject, Main.Settings.EnableDarkMode);
 			}
 		}
 

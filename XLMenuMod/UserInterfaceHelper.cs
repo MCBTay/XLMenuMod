@@ -46,19 +46,22 @@ namespace XLMenuMod
 			BrandAssets.Unload(false);
 
 			LoadBackgroundTexture();
+
+			var spriteAssets = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>();
+			DarkControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_Greyish");
+			LightControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_White");
 		}
+
+		private static TMP_SpriteAsset DarkControllerIcons { get; set; }
+		private static TMP_SpriteAsset LightControllerIcons { get; set; }
 
 		public TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
         {
             TMP_Text label = GameObject.Instantiate(sourceText, parent);
             label.transform.localScale = new Vector3(1, 1, 1);
-            label.color = Color.black;
-
-            var controllerIcons = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>().FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_Greyish");
-            if (controllerIcons != null)
-            {
-                label.spriteAsset = controllerIcons;
-            }
+            
+            UpdateLabelColor(label, Main.Settings.EnableDarkMode ? DarkModeText : DefaultText);
+            label.spriteAsset = Main.Settings.EnableDarkMode ? LightControllerIcons : DarkControllerIcons;
 
             label.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
             label.gameObject.SetActive(false);
@@ -181,8 +184,6 @@ namespace XLMenuMod
 	        DarkModeBackground = sprite;
         }
 
-        
-
         private List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
         {
 	        var spriteBrandAssets = bundle.LoadAllAssets<TMP_SpriteAsset>();
@@ -223,6 +224,11 @@ namespace XLMenuMod
 	        button.colors = color;
         }
 
+		public void UpdateLabelColor(TMP_Text label, ColorBlock color)
+		{
+			label.color = color.normalColor;
+		}
+
         public void UpdateFontSize(TMP_Text label)
         {
 	        switch (Main.Settings.FontSize)
@@ -246,7 +252,8 @@ namespace XLMenuMod
 			ToggleDarkMode(GameStateMachine.Instance.SettingsObject, enabled);
 
 			ToggleDarkMode(GameStateMachine.Instance.TutorialMenuObject, enabled);
-			ToggleDarkMode(GameStateMachine.Instance.FeetControlTutorialObject, enabled);
+			ToggleDarkMode(GameStateMachine.Instance.FeetControlTutorialObject, enabled, true);
+			ToggleDarkMode(GameStateMachine.Instance.TutorialFlowObject, enabled, true);
 
 			ToggleDarkMode(GameStateMachine.Instance.ChallengeSummaryObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.ChallengePlayObject, enabled);
@@ -254,35 +261,64 @@ namespace XLMenuMod
 
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
-
+			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true);
+			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
         }
 
-        private void ToggleDarkMode(GameObject gameObject, bool enabled)
+        public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false)
         {
-			SetBackgroundTexture(gameObject);
+	        SetBackgroundTexture(gameObject);
 
-			UpdateControls<MenuButton>(gameObject, enabled);
-			UpdateControls<MenuSlider>(gameObject, enabled);
-			UpdateControls<MenuToggle>(gameObject, enabled);
+	        if (hasStaticText)
+	        {
+		        var components = gameObject.GetComponentsInChildren<TMP_Text>();
+		        if (components != null)
+		        {
+			        foreach (var text in components)
+			        {
+				        //UnityModManager.Logger.Log("XLMenuMod: Updating TMP_Text: " + text.text + ", dark mode enabled: " + enabled);
+				        UpdateLabelColor(text, enabled ? DarkModeText : DefaultText);
+
+				        if (text.text.Contains("<sprite"))
+				        {
+					        text.spriteAsset = enabled ? LightControllerIcons : DarkControllerIcons;
+				        }
+			        }
+		        }
+	        }
+
+	        ToggleDarkMode<MenuButton>(gameObject, enabled);
+			ToggleDarkMode<MenuSlider>(gameObject, enabled);
+			ToggleDarkMode<MenuToggle>(gameObject, enabled);
 
 			var listView = gameObject.GetComponentInChildren<MVCListView>();
-			if (listView == null) return;
-
-			UpdateFontSize(listView.ItemPrefab.Label);
-
-			var textColor = Main.Settings.EnableDarkMode ? DarkModeText : DefaultText;
-
-			UpdateLabelColor(listView.ItemPrefab, textColor);
-			UpdateLabelColor(listView.HeaderView, textColor);
-
-			foreach (var item in listView.ItemViews)
-			{
-				UpdateFontSize(item.Label);
-				UpdateLabelColor(item, textColor);
-			}
+			ToggleDarkMode(listView, enabled);
         }
 
-        private void UpdateControls<T>(GameObject gameObject, bool enabled) where T : Selectable
+        public void ToggleDarkMode(MVCListView listView, bool enabled)
+        {
+	        if (listView == null) return;
+
+	        UpdateFontSize(listView.ItemPrefab.Label);
+
+	        ToggleDarkMode(listView.ItemPrefab, enabled);
+	        UpdateLabelColor(listView.HeaderView, enabled ? DarkModeText : DefaultText);
+
+	        foreach (var item in listView.ItemViews)
+	        {
+		        ToggleDarkMode(item, enabled);
+	        }
+		}
+
+        public void ToggleDarkMode(MVCListItemView listItemView, bool enabled)
+        {
+	        var textColor = enabled ? DarkModeText : DefaultText;
+
+	        UpdateFontSize(listItemView.Label);
+	        UpdateLabelColor(listItemView, textColor);
+		}
+
+        private void ToggleDarkMode<T>(GameObject gameObject, bool enabled) where T : Selectable
         {
 	        if (gameObject == null) return;
 
