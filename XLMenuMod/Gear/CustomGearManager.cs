@@ -116,7 +116,7 @@ namespace XLMenuMod.Gear
 				if (!folders.Any()) continue;
 
 				CustomFolderInfo parent = null;
-				if (folders.Count == 1 || Path.GetExtension(folders.First()).ToLower() == ".png")
+				if (folders.Count == 1 || IsImage(folders.First()))
 				{
 					// This gear item is at the root.
 					AddItem(newGear, NestedItems, ref parent);
@@ -126,7 +126,7 @@ namespace XLMenuMod.Gear
 				parent = null;
 				foreach (var folder in folders)
 				{
-					if (Path.GetExtension(folder).ToLower() == ".png")
+					if (IsImage(folder))
 					{
 						AddItem(newGear, parent == null ? NestedItems : parent.Children, ref parent);
 					}
@@ -138,6 +138,18 @@ namespace XLMenuMod.Gear
 			}
 
 			NestedItems = SortList(NestedItems);
+		}
+
+		private bool IsImage(string filepath)
+		{
+			string extension = Path.GetExtension(filepath).ToLower();
+
+			if (extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".tga")
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		public override List<ICustomInfo> SortList(List<ICustomInfo> gear)
