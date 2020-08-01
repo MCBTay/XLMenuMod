@@ -6,6 +6,7 @@ using GameManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityModManagerNet;
 
 namespace XLMenuMod
 {
@@ -178,33 +179,9 @@ namespace XLMenuMod
 
 	        Sprite sprite = Sprite.Create(texture2d, new Rect(0, 0, texture2d.width, texture2d.height), new Vector2(0.5f, 0.5f));
 	        DarkModeBackground = sprite;
+        }
 
-	        LoadBackgroundTexture(GameStateMachine.Instance.PauseObject);
-	        LoadBackgroundTexture(GameStateMachine.Instance.LevelSelectionObject);
-			LoadBackgroundTexture(GameStateMachine.Instance.SettingsObject);
-		}
-
-        private void LoadBackgroundTexture(GameObject gameObject)
-        {
-	        var textures = gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "MenuPanelBackground");
-
-	        if (textures != null)
-	        {
-		        if (OriginalBackgroundTexture == null)
-		        {
-			        OriginalBackgroundTexture = textures.sprite;
-				}
-
-		        if (Main.Settings.EnableDarkMode && DarkModeBackground != null)
-		        {
-			        textures.sprite = DarkModeBackground;
-				}
-		        else
-		        {
-			        textures.sprite = OriginalBackgroundTexture;
-		        }
-	        }
-		}
+        
 
         private List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
         {
@@ -217,7 +194,106 @@ namespace XLMenuMod
 	        return null;
         }
 
-        private byte[] ExtractResource(string filename)
+		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
+
+		public static ColorBlock DarkModeText = new ColorBlock
+		{
+			colorMultiplier = 1,
+			disabledColor = DarkModeTextColor,
+			fadeDuration = 0,
+			highlightedColor = DarkModeTextColor,
+			normalColor = DarkModeTextColor,
+			pressedColor = DarkModeTextColor,
+			selectedColor = DarkModeTextColor
+		};
+
+		public static ColorBlock DefaultText = new ColorBlock
+		{
+			colorMultiplier = 1,
+			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
+			fadeDuration = 0,
+			highlightedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f),
+			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
+			pressedColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
+			selectedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f)
+		};
+
+		public void UpdateLabelColor(MVCListItemView item, ColorBlock color)
+		{
+			item.colors = color;
+		}
+
+        public void UpdateLabelColor(MVCListHeaderView header, ColorBlock color)
+        {
+	        header.colors = color;
+		}
+
+        public void UpdateLabelColor(MenuButton button, ColorBlock color)
+        {
+	        button.colors = color;
+        }
+
+        public void UpdateFontSize(TMP_Text label)
+        {
+	        switch (Main.Settings.FontSize)
+	        {
+		        case FontSizePreset.Small:
+			        label.fontSize = 30;
+			        break;
+		        case FontSizePreset.Smaller:
+			        label.fontSize = 24;
+			        break;
+		        case FontSizePreset.Normal:
+		        default:
+			        label.fontSize = 36;
+			        break;
+	        }
+        }
+
+        public void ToggleDarkMode(bool enabled)
+        {
+	        SetBackgroundTexture(GameStateMachine.Instance.PauseObject);
+	        var buttons = GameStateMachine.Instance.PauseObject.GetComponentsInChildren<MenuButton>();
+	        foreach (var button in buttons)
+	        {
+		        UpdateLabelColor(button, enabled ? DarkModeText : DefaultText);
+	        }
+
+	        SetBackgroundTexture(GameStateMachine.Instance.LevelSelectionObject);
+
+	        SetBackgroundTexture(GameStateMachine.Instance.SettingsObject);
+	        buttons = GameStateMachine.Instance.SettingsObject.GetComponentsInChildren<MenuButton>();
+	        foreach (var button in buttons)
+	        {
+		        UpdateLabelColor(button, enabled ? DarkModeText : DefaultText);
+	        }
+		}
+
+        private void SetBackgroundTexture(GameObject gameObject)
+        {
+	        var textures = gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "MenuPanelBackground");
+
+	        if (textures != null)
+	        {
+		        if (OriginalBackgroundTexture == null)
+		        {
+			        OriginalBackgroundTexture = textures.sprite;
+		        }
+
+		        if (Main.Settings.EnableDarkMode && DarkModeBackground != null)
+		        {
+			        textures.sprite = DarkModeBackground;
+		        }
+		        else
+		        {
+			        textures.sprite = OriginalBackgroundTexture;
+		        }
+	        }
+        }
+
+
+
+		private byte[] ExtractResource(string filename)
         {
 	        Assembly a = Assembly.GetExecutingAssembly();
 	        using (var resFilestream = a.GetManifestResourceStream(filename))

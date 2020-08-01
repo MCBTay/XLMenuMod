@@ -115,68 +115,22 @@ namespace XLMenuMod.Patches.Level
         {
 	        static void Postfix(LevelSelectionController __instance)
 	        {
-		        UpdateFontSize(__instance.listView.ItemPrefab.Label);
+		        UserInterfaceHelper.Instance.UpdateFontSize(__instance.listView.ItemPrefab.Label);
 
-		        UpdateLabelColor(__instance.listView.ItemPrefab);
-				UpdateLabelColor(__instance.listView.HeaderView);
+		        var textColor = Main.Settings.EnableDarkMode
+			        ? UserInterfaceHelper.DarkModeText
+			        : UserInterfaceHelper.DefaultText;
 
+		        UserInterfaceHelper.Instance.UpdateLabelColor(__instance.listView.ItemPrefab, textColor);
+		        UserInterfaceHelper.Instance.UpdateLabelColor(__instance.listView.HeaderView, textColor);
 
 		        foreach (var item in __instance.listView.ItemViews)
 		        {
-			        UpdateFontSize(item.Label);
-			        UpdateLabelColor(item);
-				}
-			}
-			
-	        private static void UpdateFontSize(TMP_Text label)
-	        {
-		        switch (Main.Settings.FontSize)
-		        {
-			        case FontSizePreset.Small:
-				        label.fontSize = 30;
-				        break;
-			        case FontSizePreset.Smaller:
-				        label.fontSize = 24;
-				        break;
-			        case FontSizePreset.Normal:
-			        default:
-				        label.fontSize = 36;
-				        break;
+			        UserInterfaceHelper.Instance.UpdateFontSize(item.Label);
+			        UserInterfaceHelper.Instance.UpdateLabelColor(item, textColor);
 		        }
-			}
-
-	        private static void UpdateLabelColor(MVCListItemView item)
-	        {
-		        var color = new Color32(246, 254, 247, 255);
-
-		        item.colors = new ColorBlock
-		        {
-			        colorMultiplier = 1,
-			        disabledColor = color,
-			        normalColor = color,
-			        selectedColor = Color.red,
-			        highlightedColor = color,
-		        };
-
-		        //label.faceColor = new Color32(255, 254, 247, 255);
-		        //label.faceColor = new Color32(244, 245, 245, 255);
-		        //label.faceColor = new Color32(243, 243, 243, 255);
-			}
-
-			private static void UpdateLabelColor(MVCListHeaderView header)
-	        {
-		        var color = new Color32(246, 254, 247, 255);
-
-		        header.colors = new ColorBlock
-		        {
-			        colorMultiplier = 1,
-			        disabledColor = color,
-			        normalColor = color,
-			        selectedColor = Color.red,
-			        highlightedColor = color,
-		        };
 	        }
-		}
+        }
 
         [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.GetNumberOfItems))]
         public static class GetNumberOfItemsPatch
