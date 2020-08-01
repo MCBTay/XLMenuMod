@@ -18,6 +18,8 @@ namespace XLMenuMod
         public override void Save(UnityModManager.ModEntry modEntry)
         {
             Save(this, modEntry);
+
+            UserInterfaceHelper.Instance.ToggleDarkMode(EnableDarkMode);
         }
 
         public void OnSettingsGUI(UnityModManager.ModEntry modEntry)
