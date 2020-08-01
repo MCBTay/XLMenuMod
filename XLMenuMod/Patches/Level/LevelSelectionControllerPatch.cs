@@ -110,27 +110,6 @@ namespace XLMenuMod.Patches.Level
 			}
         }
 
-        [HarmonyPatch(typeof(LevelSelectionController), "OnEnable")]
-        public static class OnEnablePatch
-        {
-	        static void Postfix(LevelSelectionController __instance)
-	        {
-		        UserInterfaceHelper.Instance.UpdateFontSize(__instance.listView.ItemPrefab.Label);
-
-		        var textColor = Main.Settings.EnableDarkMode
-			        ? UserInterfaceHelper.DarkModeText
-			        : UserInterfaceHelper.DefaultText;
-
-		        UserInterfaceHelper.Instance.UpdateLabelColor(__instance.listView.ItemPrefab, textColor);
-		        UserInterfaceHelper.Instance.UpdateLabelColor(__instance.listView.HeaderView, textColor);
-
-		        foreach (var item in __instance.listView.ItemViews)
-		        {
-			        UserInterfaceHelper.Instance.UpdateFontSize(item.Label);
-			        UserInterfaceHelper.Instance.UpdateLabelColor(item, textColor);
-		        }
-	        }
-        }
 
         [HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.GetNumberOfItems))]
         public static class GetNumberOfItemsPatch

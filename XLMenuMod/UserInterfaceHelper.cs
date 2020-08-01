@@ -218,17 +218,7 @@ namespace XLMenuMod
 			selectedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f)
 		};
 
-		public void UpdateLabelColor(MVCListItemView item, ColorBlock color)
-		{
-			item.colors = color;
-		}
-
-        public void UpdateLabelColor(MVCListHeaderView header, ColorBlock color)
-        {
-	        header.colors = color;
-		}
-
-        public void UpdateLabelColor(MenuButton button, ColorBlock color)
+		public void UpdateLabelColor(Selectable button, ColorBlock color)
         {
 	        button.colors = color;
         }
@@ -252,25 +242,61 @@ namespace XLMenuMod
 
         public void ToggleDarkMode(bool enabled)
         {
-	        SetBackgroundTexture(GameStateMachine.Instance.PauseObject);
-	        var buttons = GameStateMachine.Instance.PauseObject.GetComponentsInChildren<MenuButton>();
-	        foreach (var button in buttons)
-	        {
-		        UpdateLabelColor(button, enabled ? DarkModeText : DefaultText);
-	        }
+			ToggleDarkMode(GameStateMachine.Instance.PauseObject, enabled);
+			ToggleDarkMode(GameStateMachine.Instance.SettingsObject, enabled);
 
-	        SetBackgroundTexture(GameStateMachine.Instance.LevelSelectionObject);
+			ToggleDarkMode(GameStateMachine.Instance.TutorialMenuObject, enabled);
+			ToggleDarkMode(GameStateMachine.Instance.FeetControlTutorialObject, enabled);
 
-	        SetBackgroundTexture(GameStateMachine.Instance.SettingsObject);
-	        buttons = GameStateMachine.Instance.SettingsObject.GetComponentsInChildren<MenuButton>();
-	        foreach (var button in buttons)
+			ToggleDarkMode(GameStateMachine.Instance.ChallengeSummaryObject, enabled);
+			ToggleDarkMode(GameStateMachine.Instance.ChallengePlayObject, enabled);
+			ToggleDarkMode(GameStateMachine.Instance.SpotSelectionObject, enabled);
+
+			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
+
+
+        }
+
+        private void ToggleDarkMode(GameObject gameObject, bool enabled)
+        {
+			SetBackgroundTexture(gameObject);
+
+			UpdateControls<MenuButton>(gameObject, enabled);
+			UpdateControls<MenuSlider>(gameObject, enabled);
+			UpdateControls<MenuToggle>(gameObject, enabled);
+
+			var listView = gameObject.GetComponentInChildren<MVCListView>();
+			if (listView == null) return;
+
+			UpdateFontSize(listView.ItemPrefab.Label);
+
+			var textColor = Main.Settings.EnableDarkMode ? DarkModeText : DefaultText;
+
+			UpdateLabelColor(listView.ItemPrefab, textColor);
+			UpdateLabelColor(listView.HeaderView, textColor);
+
+			foreach (var item in listView.ItemViews)
+			{
+				UpdateFontSize(item.Label);
+				UpdateLabelColor(item, textColor);
+			}
+        }
+
+        private void UpdateControls<T>(GameObject gameObject, bool enabled) where T : Selectable
+        {
+	        if (gameObject == null) return;
+
+	        var controls = gameObject.GetComponentsInChildren<T>();
+	        foreach (var control in controls)
 	        {
-		        UpdateLabelColor(button, enabled ? DarkModeText : DefaultText);
+		        UpdateLabelColor(control, enabled ? DarkModeText : DefaultText);
 	        }
 		}
 
         private void SetBackgroundTexture(GameObject gameObject)
         {
+	        if (gameObject == null) return;
+
 	        var textures = gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "MenuPanelBackground");
 
 	        if (textures != null)
