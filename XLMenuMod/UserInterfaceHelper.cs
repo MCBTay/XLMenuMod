@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using GameManagement;
+using HarmonyLib;
+using ReplayEditor;
 using Rewired;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using GameManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,8 +22,10 @@ namespace XLMenuMod
 	    public AssetBundle BrandAssets { get; private set; }
 	    public TMP_SpriteAsset BrandSprites { get; private set; }
 
-		public Sprite OriginalBackgroundTexture { get; private set; }
+		public Sprite OriginalBackground { get; private set; }
 	    public Sprite DarkModeBackground { get; private set; }
+		public Texture2D OriginalReplayBackground { get; private set; }
+		public Texture2D DarkModeReplayBackground { get; private set; }
 
 	    private static UserInterfaceHelper _instance;
 	    public static UserInterfaceHelper Instance
@@ -177,11 +181,13 @@ namespace XLMenuMod
 
         private void LoadBackgroundTexture()
         {
-	        var texture2d = new Texture2D(2, 2);
-	        if (!texture2d.LoadImage(ExtractResource("XLMenuMod.Assets.darkmode.png"))) return;
+	        var menuBackground = new Texture2D(2, 2);
+	        if (!menuBackground.LoadImage(ExtractResource("XLMenuMod.Assets.darkmode.png"))) return;
 
-	        Sprite sprite = Sprite.Create(texture2d, new Rect(0, 0, texture2d.width, texture2d.height), new Vector2(0.5f, 0.5f));
-	        DarkModeBackground = sprite;
+	        DarkModeBackground = Sprite.Create(menuBackground, new Rect(0, 0, menuBackground.width, menuBackground.height), new Vector2(0.5f, 0.5f));
+
+			DarkModeReplayBackground = new Texture2D(2, 2);
+	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Assets.PanelTransparent.png"))) return;
         }
 
         private List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
@@ -203,9 +209,21 @@ namespace XLMenuMod
 			disabledColor = DarkModeTextColor,
 			fadeDuration = 0,
 			highlightedColor = DarkModeTextColor,
+			//highlightedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f),
 			normalColor = DarkModeTextColor,
 			pressedColor = DarkModeTextColor,
 			selectedColor = DarkModeTextColor
+		};
+
+		public static ColorBlock DarkModeSliderText = new ColorBlock
+		{
+			colorMultiplier = 1,
+			disabledColor = DarkModeTextColor,
+			fadeDuration = 0,
+			highlightedColor = new Color(0.204f, 0.541f, 0.961f, 1.000f),
+			normalColor = DarkModeTextColor,
+			pressedColor = DarkModeTextColor,
+			selectedColor = new Color(0.204f, 0.541f, 0.961f, 1.000f)
 		};
 
 		public static ColorBlock DefaultText = new ColorBlock
@@ -217,6 +235,17 @@ namespace XLMenuMod
 			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
 			pressedColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
 			selectedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f)
+		};
+
+		public static ColorBlock DefaultSliderText = new ColorBlock
+		{
+			colorMultiplier = 1,
+			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
+			fadeDuration = 0,
+			highlightedColor = new Color(0.204f, 0.541f, 0.961f, 1.000f),
+			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
+			pressedColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
+			selectedColor = new Color(0.2204f, 0.541f, 0.961f, 1.000f)
 		};
 
 		public void UpdateLabelColor(Selectable button, ColorBlock color)
@@ -253,6 +282,7 @@ namespace XLMenuMod
 
 			ToggleDarkMode(GameStateMachine.Instance.TutorialMenuObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.FeetControlTutorialObject, enabled, true);
+			ToggleDarkMode(GameStateMachine.Instance.TricksMenuObject, enabled, true);
 			ToggleDarkMode(GameStateMachine.Instance.TutorialFlowObject, enabled, true);
 
 			ToggleDarkMode(GameStateMachine.Instance.ChallengeSummaryObject, enabled);
@@ -261,35 +291,99 @@ namespace XLMenuMod
 
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
-			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true);
+			
+			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
+			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
+			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
+
+			var replayImages = ReplayEditorController.Instance.ReplayUI.GetComponentsInChildren<Image>(true);
+			foreach (var image in replayImages)
+			{
+				if (image.mainTexture.name == "PanelTransparent")
+				{
+					if (OriginalReplayBackground == null)
+					{
+						OriginalReplayBackground = image.mainTexture as Texture2D;
+					}
+
+					var texture = enabled ? DarkModeReplayBackground : OriginalReplayBackground;
+					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
+					image.sprite = newSprite;
+				}
+				else if (image.mainTexture.name == "UnityWhite")
+				{
+					image.color = enabled ? new Color(63/255, 63/255, 63/255, 0.8f) : Color.white;
+				}
+			}
+
+			var replaySaveMenuImage = ReplayEditorController.Instance.SaveMenu.GetComponentsInChildren<Image>(true);
+			foreach (var image in replaySaveMenuImage)
+			{
+				if (image.mainTexture.name == "PanelTransparent")
+				{
+					if (OriginalReplayBackground == null)
+					{
+						OriginalReplayBackground = image.mainTexture as Texture2D;
+					}
+
+					var texture = enabled ? DarkModeReplayBackground : OriginalReplayBackground;
+					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
+					image.sprite = newSprite;
+				}
+				else if (image.mainTexture.name == "UnityWhite")
+				{
+					image.color = enabled ? new Color(63 / 255, 63 / 255, 63 / 255, 0.8f) : Color.white;
+				}
+			}
         }
 
-        public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false)
+        public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false, bool hasSubmeshes = false)
         {
+	        if (gameObject == null) return;
+
 	        SetBackgroundTexture(gameObject);
 
 	        if (hasStaticText)
 	        {
-		        var components = gameObject.GetComponentsInChildren<TMP_Text>();
-		        if (components != null)
+		        var labels = gameObject.GetComponentsInChildren<TMP_Text>(true);
+		        if (labels != null)
 		        {
-			        foreach (var text in components)
+			        foreach (var label in labels)
 			        {
-				        //UnityModManager.Logger.Log("XLMenuMod: Updating TMP_Text: " + text.text + ", dark mode enabled: " + enabled);
-				        UpdateLabelColor(text, enabled ? DarkModeText : DefaultText);
-
-				        if (text.text.Contains("<sprite"))
-				        {
-					        text.spriteAsset = enabled ? LightControllerIcons : DarkControllerIcons;
-				        }
+				        UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
 			        }
 		        }
 	        }
 
+	        if (hasSubmeshes)
+	        {
+		        var submeshes = gameObject.GetComponentsInChildren<TMP_SubMeshUI>(true);
+		        if (submeshes != null)
+		        {
+			        foreach (var controllerButton in submeshes)
+			        {
+				        if (controllerButton?.material != null)
+				        {
+					        controllerButton.material.color = enabled ? DarkModeText.normalColor : DefaultText.normalColor;
+				        }
+			        }
+		        }
+			}
+
 	        ToggleDarkMode<MenuButton>(gameObject, enabled);
 			ToggleDarkMode<MenuSlider>(gameObject, enabled);
 			ToggleDarkMode<MenuToggle>(gameObject, enabled);
+
+			var trickList = gameObject.GetComponentInChildren<ChallengeTrickListController>();
+			if (trickList != null)
+			{
+				var trickListItemViews = Traverse.Create<ChallengeTrickListController>().Field<List<ChallengeTrickItemView>>("ItemViews").Value;
+				if (trickListItemViews != null && trickListItemViews.Any())
+				{
+					trickListItemViews.ToggleDarkMode(enabled);
+				}
+			}
 
 			var listView = gameObject.GetComponentInChildren<MVCListView>();
 			ToggleDarkMode(listView, enabled);
@@ -318,14 +412,30 @@ namespace XLMenuMod
 	        UpdateLabelColor(listItemView, textColor);
 		}
 
+        
+
         private void ToggleDarkMode<T>(GameObject gameObject, bool enabled) where T : Selectable
         {
 	        if (gameObject == null) return;
 
-	        var controls = gameObject.GetComponentsInChildren<T>();
+	        var controls = gameObject.GetComponentsInChildren<T>(true);
 	        foreach (var control in controls)
 	        {
-		        UpdateLabelColor(control, enabled ? DarkModeText : DefaultText);
+		        if (control is MenuSlider menuSlider)
+		        {
+			        if (menuSlider.selectionIndicator == null)
+			        {
+				        UpdateLabelColor(control, enabled ? DarkModeSliderText : DefaultSliderText);
+					}
+			        else
+			        {
+						UpdateLabelColor(control, enabled ? DarkModeText : DefaultText);
+					}
+		        }
+		        else
+		        {
+					UpdateLabelColor(control, enabled ? DarkModeText : DefaultText);
+				}
 	        }
 		}
 
@@ -337,9 +447,9 @@ namespace XLMenuMod
 
 	        if (textures != null)
 	        {
-		        if (OriginalBackgroundTexture == null)
+		        if (OriginalBackground == null)
 		        {
-			        OriginalBackgroundTexture = textures.sprite;
+			        OriginalBackground = textures.sprite;
 		        }
 
 		        if (Main.Settings.EnableDarkMode && DarkModeBackground != null)
@@ -348,7 +458,7 @@ namespace XLMenuMod
 		        }
 		        else
 		        {
-			        textures.sprite = OriginalBackgroundTexture;
+			        textures.sprite = OriginalBackground;
 		        }
 	        }
         }
@@ -366,5 +476,16 @@ namespace XLMenuMod
 		        return ba;
 	        }
         }
+	}
+
+	public static class Extensions
+	{
+		public static void ToggleDarkMode(this List<ChallengeTrickItemView> trickList, bool enabled)
+		{
+			foreach (var trick in trickList)
+			{
+				UserInterfaceHelper.Instance.UpdateLabelColor(trick.label, enabled ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
+			}
+		}
 	}
 }
