@@ -202,6 +202,7 @@ namespace XLMenuMod
         }
 
 		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
+		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
 
 		public static ColorBlock DarkModeText = new ColorBlock
 		{
@@ -220,10 +221,10 @@ namespace XLMenuMod
 			colorMultiplier = 1,
 			disabledColor = DarkModeTextColor,
 			fadeDuration = 0,
-			highlightedColor = new Color(0.204f, 0.541f, 0.961f, 1.000f),
+			highlightedColor = BlueAccentColor,
 			normalColor = DarkModeTextColor,
 			pressedColor = DarkModeTextColor,
-			selectedColor = new Color(0.204f, 0.541f, 0.961f, 1.000f)
+			selectedColor = BlueAccentColor
 		};
 
 		public static ColorBlock DefaultText = new ColorBlock
@@ -242,10 +243,10 @@ namespace XLMenuMod
 			colorMultiplier = 1,
 			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
 			fadeDuration = 0,
-			highlightedColor = new Color(0.204f, 0.541f, 0.961f, 1.000f),
+			highlightedColor = BlueAccentColor,
 			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
 			pressedColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
-			selectedColor = new Color(0.2204f, 0.541f, 0.961f, 1.000f)
+			selectedColor = BlueAccentColor
 		};
 
 		public void UpdateLabelColor(Selectable button, ColorBlock color)
@@ -292,7 +293,7 @@ namespace XLMenuMod
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
 			
-			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
+			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true);
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
 			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
