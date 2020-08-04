@@ -44,6 +44,9 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(IndexPath index, ref MVCListItemView itemView)
 			{
+				if (index.depth == 1)
+					UserInterfaceHelper.Instance.ToggleDarkMode(itemView, Main.Settings.EnableDarkMode);
+
 				if (index[1] < 0) return;
 
 				itemView.Label.richText = true;
