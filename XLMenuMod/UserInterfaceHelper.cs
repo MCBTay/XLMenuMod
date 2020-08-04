@@ -287,6 +287,7 @@ namespace XLMenuMod
 			ToggleDarkMode(GameStateMachine.Instance.TutorialFlowObject, enabled, true);
 
 			ToggleDarkMode(GameStateMachine.Instance.ChallengeSummaryObject, enabled);
+
 			ToggleDarkMode(GameStateMachine.Instance.ChallengePlayObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.SpotSelectionObject, enabled);
 
@@ -413,8 +414,6 @@ namespace XLMenuMod
 	        UpdateLabelColor(listItemView, textColor);
 		}
 
-        
-
         private void ToggleDarkMode<T>(GameObject gameObject, bool enabled) where T : Selectable
         {
 	        if (gameObject == null) return;
@@ -464,9 +463,7 @@ namespace XLMenuMod
 	        }
         }
 
-
-
-		private byte[] ExtractResource(string filename)
+        private byte[] ExtractResource(string filename)
         {
 	        Assembly a = Assembly.GetExecutingAssembly();
 	        using (var resFilestream = a.GetManifestResourceStream(filename))

@@ -104,6 +104,7 @@
     <Compile Include="Levels\CustomLevelInfo.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Levels\CustomLevelManager.cs" />
+    <Compile Include="Patches\Challenges\ChallengeTrickListControllerPatch.cs" />
     <Compile Include="Patches\Gear\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\Gear\GearDatabasePatch.cs" />
     <Compile Include="Patches\Gear\GearSelectionControllerPatch.cs" />
@@ -129,6 +130,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\PanelTransparent.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
