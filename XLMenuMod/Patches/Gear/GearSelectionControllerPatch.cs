@@ -23,7 +23,7 @@ namespace XLMenuMod.Patches.Gear
 					if (index[0] < 0) return;
 					bool isCustom = index[1] >= gear[index[0]].Length;
 
-					if (isCustom)
+					if (isCustom || index[1] == 1)
 					{
 						if (UserInterfaceHelper.Instance.WhiteSprites != null)
 						{
@@ -70,7 +70,7 @@ namespace XLMenuMod.Patches.Gear
 					{
 						if (gearAtIndex.name.StartsWith("\\"))
 						{
-							if (isCustom)
+							if (isCustom || index[1] == 1)
 							{
 								itemView.SetText(gearAtIndex.name.Replace("\\", "<space=15px><sprite=10 tint=1>"), true);
 							}

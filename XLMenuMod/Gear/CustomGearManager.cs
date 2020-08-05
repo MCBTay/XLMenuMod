@@ -18,6 +18,45 @@ namespace XLMenuMod.Gear
 			NestedOfficialItems = new List<ICustomInfo>();
 		}
 
+		public void LoadNestedHairItems(object[] objectsToLoad = null)
+		{
+			NestedOfficialItems.Clear();
+
+			var gearToLoad = (GearInfo[])objectsToLoad;
+			if (gearToLoad == null) return;
+
+			List<string> hairstyles = new List<string>
+			{
+				"Long Afro",
+				"Short Afro",
+				"Conterpart",
+				"Curly Long",
+				"Curly Short",
+				"Dreads",
+				"Pompadour",
+				"Sidepart"
+			};
+
+			foreach (var gear in gearToLoad)
+			{
+				CustomFolderInfo parent = null;
+
+				var nameSplit = gear.name.Split(' ');
+
+				if (string.IsNullOrEmpty(nameSplit.FirstOrDefault())) continue;
+
+				var hairStyle = nameSplit.FirstOrDefault();
+
+				if (hairStyle.ToLower() == "long" || hairStyle.ToLower() == "short" || hairStyle.ToLower() == "curly") 
+					hairStyle = $"{hairStyle} {nameSplit[1]}";
+
+				AddFolder<CustomGearFolderInfo>(hairStyle, null, NestedOfficialItems, ref parent);
+				AddItem(gear, parent.Children, ref parent);
+			}
+
+			NestedOfficialItems = SortList(NestedOfficialItems);
+		}
+
 		public void LoadNestedOfficialItems(object[] objectsToLoad = null)
 		{
 			NestedOfficialItems.Clear();
@@ -25,35 +64,35 @@ namespace XLMenuMod.Gear
 			var gearToLoad = (GearInfo[])objectsToLoad;
 			if (gearToLoad == null) return;
 
+			List<string> unbrandedItems = new List<string>
+			{
+				#region Decks
+				"Tie Dye Light",
+				"Skater XL Obstacles Deck",
+				#endregion
+
+				#region Grip
+				"Black",
+				"Camo Grey",
+				"Easy Day Logo",
+				#endregion
+
+				#region Trucks
+				"Black",
+				"Silver",
+				"White",
+				#endregion
+
+				#region Wheels
+				"Purple",
+				"Red/Blue Swirl",
+				"White",
+				#endregion
+			};
+
 			foreach (var gear in gearToLoad)
 			{
 				CustomFolderInfo parent = null;
-
-				List<string> unbrandedItems = new List<string>
-				{
-					#region Decks
-					"Tie Dye Light",
-					"Skater XL Obstacles Deck",
-					#endregion
-
-					#region Grip
-					"Black",
-					"Camo Grey",
-					"Easy Day Logo",
-					#endregion
-
-					#region Trucks
-					"Black",
-					"Silver",
-					"White",
-					#endregion
-
-					#region Wheels
-					"Purple",
-					"Red/Blue Swirl",
-					"White",
-					#endregion
-				};
 
 				if (gear.name.StartsWith("Blank") || gear.name.StartsWith("Unbranded") || unbrandedItems.Contains(gear.name))
 				{

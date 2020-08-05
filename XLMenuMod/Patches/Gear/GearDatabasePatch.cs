@@ -18,8 +18,22 @@ namespace XLMenuMod.Patches.Gear
 
 				if (index[1] < gear[index[0]].Length)
 				{
-					//// Ignore Skin Tone (0), and Hair (1) for now.
-					if (index[1] != 0 && index[1] != 1)
+					// Hair
+					if (index[1] == 1)
+					{
+						CustomGearManager.Instance.LoadNestedHairItems(gear[index[0]][index[1]]);
+
+						if (CustomGearManager.Instance.CurrentFolder.HasChildren())
+						{
+							sourceList = CustomGearManager.Instance.CurrentFolder.Children;
+						}
+						else
+						{
+							sourceList = CustomGearManager.Instance.NestedOfficialItems;
+						}
+					}
+					// Ignore Skin Tone (0)
+					else if (index[1] != 0)
 					{
 						CustomGearManager.Instance.LoadNestedOfficialItems(gear[index[0]][index[1]]);
 
@@ -75,7 +89,7 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
-						if (index[1] < 10 && index[1] != 0 && index[1] != 1)
+						if (index[1] < 10 && index[1] != 0)
 						{
 							sourceList = CustomGearManager.Instance.NestedOfficialItems;
 						}
