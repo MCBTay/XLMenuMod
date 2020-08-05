@@ -2,7 +2,10 @@
 using Rewired;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityModManagerNet;
 using XLMenuMod.Gear;
 
 namespace XLMenuMod.Patches.Gear
@@ -68,6 +71,10 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
+						// To ensure the items have the proper font and weight.
+						itemView.Label.font = FontDatabase.bookOblique;
+						itemView.Label.fontStyle = FontStyles.Normal;
+
 						if (gearAtIndex.name.StartsWith("\\"))
 						{
 							if (isCustom || index[1] == 1)
@@ -225,27 +232,37 @@ namespace XLMenuMod.Patches.Gear
 			/// <param name="index"></param>
 			static void Postfix(GearSelectionController __instance, IndexPath index)
 			{
+				if (index.depth == 2 || index[1] == 1)
+				{
+					//GearInfo gearAtIndex = GearDatabase.Instance
+				}
+
 				if (index.depth >= 3)
 				{
-					GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
-					if (gearAtIndex1 == (GearInfo)null)
-						return;
-					List<GearInfo> toBeCachedGear = new List<GearInfo>();
-					for (int steps = -__instance.preloadedItemsPerSide; steps <= __instance.preloadedItemsPerSide; ++steps)
-					{
-						GearInfo gearAtIndex2 = GearDatabase.Instance.GetGearAtIndex(index.Horizontal(steps));
-						if (gearAtIndex2 != (GearInfo)null)
-							toBeCachedGear.Add(gearAtIndex2);
-					}
+					PreviewGear(__instance, index);
+				}
+			}
 
-					if (gearAtIndex1 is CustomGearFolderInfo)
-					{
-						__instance.previewCustomizer.PreviewItem(null, toBeCachedGear);
-					}
-					else
-					{
-						__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
-					}
+			private static void PreviewGear(GearSelectionController __instance, IndexPath index)
+			{
+				GearInfo gearAtIndex1 = GearDatabase.Instance.GetGearAtIndex(index);
+				if (gearAtIndex1 == (GearInfo)null)
+					return;
+				List<GearInfo> toBeCachedGear = new List<GearInfo>();
+				for (int steps = -__instance.preloadedItemsPerSide; steps <= __instance.preloadedItemsPerSide; ++steps)
+				{
+					GearInfo gearAtIndex2 = GearDatabase.Instance.GetGearAtIndex(index.Horizontal(steps));
+					if (gearAtIndex2 != (GearInfo)null)
+						toBeCachedGear.Add(gearAtIndex2);
+				}
+
+				if (gearAtIndex1 is CustomGearFolderInfo)
+				{
+					__instance.previewCustomizer.PreviewItem(null, toBeCachedGear);
+				}
+				else
+				{
+					__instance.previewCustomizer.PreviewItem(gearAtIndex1, toBeCachedGear);
 				}
 			}
 		}
