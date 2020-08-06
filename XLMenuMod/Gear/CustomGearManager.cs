@@ -25,18 +25,6 @@ namespace XLMenuMod.Gear
 			var gearToLoad = (GearInfo[])objectsToLoad;
 			if (gearToLoad == null) return;
 
-			List<string> hairstyles = new List<string>
-			{
-				"Long Afro",
-				"Short Afro",
-				"Conterpart",
-				"Curly Long",
-				"Curly Short",
-				"Dreads",
-				"Pompadour",
-				"Sidepart"
-			};
-
 			foreach (var gear in gearToLoad)
 			{
 				CustomFolderInfo parent = null;
