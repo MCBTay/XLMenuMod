@@ -291,7 +291,7 @@ namespace XLMenuMod
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
 			
-			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true);
+			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
 			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
@@ -351,7 +351,15 @@ namespace XLMenuMod
 			        foreach (var label in labels)
 			        {
 				        UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
-			        }
+
+				        if (label.text.Contains("<sprite"))
+				        {
+					        if (label.spriteAsset.name.Contains("Controller"))
+					        {
+						        label.spriteAsset = enabled ? LightControllerIcons : DarkControllerIcons;
+					        }
+				        }
+					}
 		        }
 	        }
 
@@ -362,7 +370,7 @@ namespace XLMenuMod
 		        {
 			        foreach (var controllerButton in submeshes)
 			        {
-				        if (controllerButton?.material != null)
+				        if (controllerButton?.spriteAsset != null && controllerButton?.material != null)
 				        {
 					        controllerButton.material.color = enabled ? DarkModeText.normalColor : DefaultText.normalColor;
 				        }
