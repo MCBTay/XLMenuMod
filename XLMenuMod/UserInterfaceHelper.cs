@@ -15,15 +15,14 @@ namespace XLMenuMod
 	public class UserInterfaceHelper
     {
 	    public AssetBundle Assets { get; private set; }
-	    public List<TMP_SpriteAsset> Sprites { get; private set; }
-
-	    public TMP_SpriteAsset WhiteSprites => Sprites?.ElementAt(2);
+	    public TMP_SpriteAsset Sprites { get; private set; }
 
 	    public AssetBundle BrandAssets { get; private set; }
 	    public TMP_SpriteAsset BrandSprites { get; private set; }
 
 		public Sprite OriginalBackground { get; private set; }
 	    public Sprite DarkModeBackground { get; private set; }
+
 		public Texture2D OriginalReplayBackground { get; private set; }
 		public Texture2D DarkModeReplayBackground { get; private set; }
 
@@ -42,11 +41,11 @@ namespace XLMenuMod
 		public void LoadAssets()
 		{
 			Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
-			Sprites = LoadSpriteSheet(Assets).ToList();
+			Sprites = Assets.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
 			Assets.Unload(false);
 
 			BrandAssets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
-			BrandSprites = LoadSpriteSheet(BrandAssets).FirstOrDefault();
+			BrandSprites = BrandAssets.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
 			BrandAssets.Unload(false);
 
 			LoadBackgroundTexture();
@@ -190,18 +189,7 @@ namespace XLMenuMod
 	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Assets.PanelTransparent.png"))) return;
         }
 
-        private List<TMP_SpriteAsset> LoadSpriteSheet(AssetBundle bundle)
-        {
-	        var spriteBrandAssets = bundle.LoadAllAssets<TMP_SpriteAsset>();
-	        if (spriteBrandAssets != null)
-	        {
-		        return spriteBrandAssets.ToList();
-	        }
-
-	        return null;
-        }
-
-		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
+        public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
 		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
 
 		public static ColorBlock DarkModeText = new ColorBlock

@@ -28,9 +28,9 @@ namespace XLMenuMod.Patches.Gear
 
 					if (isCustom || index[1] == 1)
 					{
-						if (UserInterfaceHelper.Instance.WhiteSprites != null)
+						if (UserInterfaceHelper.Instance.Sprites != null)
 						{
-							itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
+							itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
 							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
 						}
 					}
@@ -58,7 +58,8 @@ namespace XLMenuMod.Patches.Gear
 
 				bool isCustom = index[1] >= gear[index[0]].Length;
 
-				if (UserInterfaceHelper.Instance.WhiteSprites != null) itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
+				if (UserInterfaceHelper.Instance.Sprites != null) 
+					itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
 
 				if (index.depth >= 3)
 				{

@@ -22,9 +22,9 @@ namespace XLMenuMod.Patches.Level
 			{
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 
-				if (CustomLevelManager.Instance.CurrentFolder != null && UserInterfaceHelper.Instance.WhiteSprites != null)
+				if (CustomLevelManager.Instance.CurrentFolder != null && UserInterfaceHelper.Instance.Sprites != null)
 				{
-					header.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
+					header.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
 					int spriteIndex = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day") ? 8 : 10;
 					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}>"));
 				}
@@ -38,9 +38,9 @@ namespace XLMenuMod.Patches.Level
 			{
 				if (itemView.Label.text.StartsWith("\\"))
 				{
-					if (UserInterfaceHelper.Instance.WhiteSprites != null)
+					if (UserInterfaceHelper.Instance.Sprites != null)
 					{
-						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
+						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
 
 						int spriteIndex = itemView.Label.text.Equals("\\Easy Day") ? 8 : 10;
 						itemView.Label.SetText(itemView.Label.text.Replace("\\", $"<space=10px><sprite={spriteIndex} tint=1>"));
@@ -48,9 +48,9 @@ namespace XLMenuMod.Patches.Level
 				}
 				else if (itemView.Label.text.Equals("..\\"))
 				{
-					if (UserInterfaceHelper.Instance.WhiteSprites != null)
+					if (UserInterfaceHelper.Instance.Sprites != null)
 					{
-						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.WhiteSprites;
+						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
 						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint=1>Go Back"));
 					}
 				}
