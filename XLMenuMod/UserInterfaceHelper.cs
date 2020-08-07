@@ -24,6 +24,8 @@ namespace XLMenuMod
 	    public Sprite DarkModeBackground { get; private set; }
 
 		public Texture2D OriginalReplayBackground { get; private set; }
+		public Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
+		public Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
 		public Texture2D DarkModeReplayBackground { get; private set; }
 
 	    private static UserInterfaceHelper _instance;
@@ -187,6 +189,7 @@ namespace XLMenuMod
 
 			DarkModeReplayBackground = new Texture2D(2, 2);
 	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Assets.PanelTransparent.png"))) return;
+	        DarkModeReplayBackground.name = "PanelTransparent";
         }
 
         public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
@@ -303,7 +306,7 @@ namespace XLMenuMod
 				}
 				else if (image.mainTexture.name == "UnityWhite")
 				{
-					image.color = enabled ? new Color(63/255, 63/255, 63/255, 0.8f) : Color.white;
+					image.color = enabled ? DarkModeReplayHeaderColor : OriginalReplayHeaderColor;
 				}
 			}
 
@@ -323,7 +326,7 @@ namespace XLMenuMod
 				}
 				else if (image.mainTexture.name == "UnityWhite")
 				{
-					image.color = enabled ? new Color(63 / 255, 63 / 255, 63 / 255, 0.8f) : Color.white;
+					image.color = enabled ? DarkModeReplayHeaderColor : OriginalReplayHeaderColor;
 				}
 			}
         }
