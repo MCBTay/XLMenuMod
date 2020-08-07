@@ -27,8 +27,10 @@ namespace XLMenuMod
 		public Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
 		public Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
 		public Texture2D DarkModeReplayBackground { get; private set; }
+		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
+		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
 
-	    private static UserInterfaceHelper _instance;
+		private static UserInterfaceHelper _instance;
 	    public static UserInterfaceHelper Instance
 	    {
 		    get { return _instance ?? (_instance = new UserInterfaceHelper()); }
@@ -192,10 +194,7 @@ namespace XLMenuMod
 	        DarkModeReplayBackground.name = "PanelTransparent";
         }
 
-        public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
-		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
-
-		public static ColorBlock DarkModeText = new ColorBlock
+        public static ColorBlock DarkModeText = new ColorBlock
 		{
 			colorMultiplier = 1,
 			disabledColor = DarkModeTextColor,
@@ -278,6 +277,13 @@ namespace XLMenuMod
 			ToggleDarkMode(GameStateMachine.Instance.TutorialFlowObject, enabled, true);
 
 			ToggleDarkMode(GameStateMachine.Instance.ChallengeSummaryObject, enabled);
+
+			var comps = GameStateMachine.Instance.ChallengeSummaryObject.GetComponentInChildren<ChallengeSummaryController>();
+			if (comps != null)
+			{
+				var text = comps.FailureHeader.GetComponentInChildren<TMP_Text>();
+				UpdateLabelColor(text, enabled ? DarkModeText : DefaultText);
+			}
 
 			ToggleDarkMode(GameStateMachine.Instance.ChallengePlayObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.SpotSelectionObject, enabled);
