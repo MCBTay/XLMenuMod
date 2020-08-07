@@ -135,7 +135,8 @@ namespace XLMenuMod.Patches.Level
         {
 	        static void Postfix(ref LevelInfo __result, IndexPath index)
 	        {
-		        if (index[0] == 1)
+				// Ensuring you're on the right game state such that multiplayer mod doesn't execute this code when it doesn't want to.
+		        if (GameStateMachine.Instance.CurrentState.GetType() == typeof(LevelSelectionState) && index[0] == 1)
 		        {
 			        if (CustomLevelManager.Instance.CurrentFolder.HasChildren())
 			        {
