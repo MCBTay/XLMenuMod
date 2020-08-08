@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using UnityModManagerNet;
 using XLMenuMod.Gear;
 
 namespace XLMenuMod.Patches.Gear
@@ -18,6 +16,7 @@ namespace XLMenuMod.Patches.Gear
 			static void Postfix(GearSelectionController __instance, IndexPath index, MVCListHeaderView itemView)
 			{
 				CustomGearManager.Instance.SortLabel.gameObject.SetActive(__instance.listView.currentIndexPath[1] >= 10);
+				UserInterfaceHelper.Instance.UpdateLabelColor(CustomGearManager.Instance.SortLabel, Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
 
 				if (CustomGearManager.Instance.CurrentFolder != null)
 				{
@@ -145,6 +144,9 @@ namespace XLMenuMod.Patches.Gear
 				{
 					__result = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children.Count : CustomGearManager.Instance.NestedOfficialItems.Count;
 				}
+
+				if (Main.Settings.HideOfficialGear && !isCustom && index.depth >= 2 && index[1] != 0 && index[1] != 1)
+					__result = 0;
 			}
 		}
 

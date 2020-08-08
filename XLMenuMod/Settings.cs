@@ -10,6 +10,7 @@ namespace XLMenuMod
         public bool DisableBToMoveUpDirectory { get; set; }
         public FontSizePreset FontSize { get; set; } = FontSizePreset.Normal;
         public bool EnableDarkMode { get; set; }
+        public bool HideOfficialGear { get; set; }
 
         public Settings() : base()
         {
@@ -29,6 +30,7 @@ namespace XLMenuMod
             GUILayout.BeginHorizontal();
             DisableBToMoveUpDirectory = GUILayout.Toggle(DisableBToMoveUpDirectory, new GUIContent("Disable B/O Button to Move Up Directory"));
             EnableDarkMode = GUILayout.Toggle(EnableDarkMode, new GUIContent("Enable Dark Mode"));
+            HideOfficialGear = GUILayout.Toggle(HideOfficialGear, new GUIContent("Hide Official Gear"));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
