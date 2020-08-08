@@ -285,20 +285,12 @@ namespace XLMenuMod
 
 			ToggleDarkMode(GameStateMachine.Instance.ChallengeSummaryObject, enabled);
 
-			var comps = GameStateMachine.Instance.ChallengeSummaryObject.GetComponentInChildren<ChallengeSummaryController>();
-			if (comps != null)
-			{
-				var text = comps.FailureHeader.GetComponentInChildren<TMP_Text>();
-				UpdateLabelColor(text, enabled ? DarkModeText : DefaultText);
-			}
-
 			ToggleDarkMode(GameStateMachine.Instance.ChallengePlayObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.SpotSelectionObject, enabled);
 
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
 			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
-
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
 			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
@@ -388,6 +380,13 @@ namespace XLMenuMod
 	        ToggleDarkMode<MenuButton>(gameObject, enabled);
 			ToggleDarkMode<MenuSlider>(gameObject, enabled);
 			ToggleDarkMode<MenuToggle>(gameObject, enabled);
+
+			var comps = GameStateMachine.Instance.ChallengeSummaryObject.GetComponentInChildren<ChallengeSummaryController>();
+			if (comps != null)
+			{
+				var text = comps.FailureHeader.GetComponentInChildren<TMP_Text>();
+				UpdateLabelColor(text, enabled ? DarkModeText : DefaultText);
+			}
 
 			var trickList = gameObject.GetComponentInChildren<ChallengeTrickListController>();
 			if (trickList != null)

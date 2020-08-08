@@ -45,10 +45,9 @@ namespace XLMenuMod.Patches.Gear
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureListItemView))]
 		public static class ConfigureListItemViewPatch
 		{
-			static void Postfix(IndexPath index, ref MVCListItemView itemView)
+			static void Postfix(GearSelectionController __instance, IndexPath index, ref MVCListItemView itemView)
 			{
-				if (index.depth == 1)
-					UserInterfaceHelper.Instance.ToggleDarkMode(itemView, Main.Settings.EnableDarkMode);
+				__instance.normalColor = Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText.normalColor : UserInterfaceHelper.DefaultText.normalColor;
 
 				if (index[1] < 0) return;
 
@@ -95,9 +94,8 @@ namespace XLMenuMod.Patches.Gear
 						{
 							itemView.SetText(gearAtIndex.name, true);
 						}
-						Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, GearSelectionController.Instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
 
-						UserInterfaceHelper.Instance.ToggleDarkMode(itemView, Main.Settings.EnableDarkMode);
+						Traverse.Create(__instance).Method("SetIsEquippedIndicators", itemView, __instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
 					}
 				}
 			}
