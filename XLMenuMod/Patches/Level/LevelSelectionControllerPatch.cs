@@ -1,15 +1,9 @@
-﻿using System;
+﻿using GameManagement;
 using HarmonyLib;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using GameManagement;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using UnityModManagerNet;
 using XLMenuMod.Levels;
-using Object = System.Object;
 
 namespace XLMenuMod.Patches.Level
 {
@@ -21,6 +15,7 @@ namespace XLMenuMod.Patches.Level
 			static void Postfix(LevelSelectionController __instance, MVCListHeaderView header)
 			{
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
+				UserInterfaceHelper.Instance.UpdateLabelColor(CustomLevelManager.Instance.SortLabel, Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
 
 				if (CustomLevelManager.Instance.CurrentFolder != null && UserInterfaceHelper.Instance.Sprites != null)
 				{
