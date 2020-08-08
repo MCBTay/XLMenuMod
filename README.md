@@ -1,5 +1,5 @@
 # XLMenuMod
-The mod allows you to use subfolders within your Maps and Gear directories for SkaterXL!
+The mod allows you to customize your menu and use subfolders within your Maps and Gear directories for SkaterXL!
 
 ## Features
 ### Maps
