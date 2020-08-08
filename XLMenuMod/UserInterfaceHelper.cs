@@ -246,6 +246,13 @@ namespace XLMenuMod
 
 		public void UpdateLabelColor(TMP_Text label, ColorBlock color)
 		{
+			var blue = new Color(0.007843138f, 0.4509804f, 1.000f, 1.000f);
+			
+			if (Mathf.Approximately(label.color.r, blue.r) &&
+				Mathf.Approximately(label.color.g, blue.g) &&
+				Mathf.Approximately(label.color.b, blue.b) &&
+				Mathf.Approximately(label.color.a, blue.a)) return;
+
 			label.color = color.normalColor;
 		}
 
@@ -290,8 +297,8 @@ namespace XLMenuMod
 
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
-			
 			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
+
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
 			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
