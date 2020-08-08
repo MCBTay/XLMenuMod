@@ -8,7 +8,6 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityModManagerNet;
 
 namespace XLMenuMod
 {
@@ -220,7 +219,7 @@ namespace XLMenuMod
 		public static ColorBlock DefaultText = new ColorBlock
 		{
 			colorMultiplier = 1,
-			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
+			disabledColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
 			fadeDuration = 0,
 			highlightedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f),
 			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
@@ -238,11 +237,16 @@ namespace XLMenuMod
 			pressedColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
 			selectedColor = BlueAccentColor
 		};
-
+		
 		public void UpdateLabelColor(Selectable button, ColorBlock color)
         {
 	        button.colors = color;
         }
+
+		public void UpdateLabelColor(MVCListHeaderView header, ColorBlock color)
+		{
+			header.Label.color = color.normalColor;
+		}
 
 		public void UpdateLabelColor(TMP_Text label, ColorBlock color)
 		{
@@ -391,7 +395,6 @@ namespace XLMenuMod
 
 	        ToggleDarkMode(listView.ItemPrefab, enabled);
 	        UpdateLabelColor(listView.HeaderView, enabled ? DarkModeText : DefaultText);
-
 	        foreach (var item in listView.ItemViews)
 	        {
 		        ToggleDarkMode(item, enabled);
@@ -417,11 +420,11 @@ namespace XLMenuMod
 		        {
 			        if (menuSlider.selectionIndicator == null)
 			        {
-				        UpdateLabelColor(control, enabled ? DarkModeSliderText : DefaultSliderText);
+				        UpdateLabelColor(menuSlider, enabled ? DarkModeSliderText : DefaultSliderText);
 					}
 			        else
 			        {
-						UpdateLabelColor(control, enabled ? DarkModeText : DefaultText);
+						UpdateLabelColor(menuSlider, enabled ? DarkModeText : DefaultText);
 					}
 		        }
 		        else
