@@ -294,46 +294,6 @@ namespace XLMenuMod
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
 			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
-
-			var replayImages = ReplayEditorController.Instance.ReplayUI.GetComponentsInChildren<Image>(true);
-			foreach (var image in replayImages)
-			{
-				if (image.mainTexture.name == "PanelTransparent")
-				{
-					if (OriginalReplayBackground == null)
-					{
-						OriginalReplayBackground = image.mainTexture as Texture2D;
-					}
-
-					var texture = enabled ? DarkModeReplayBackground : OriginalReplayBackground;
-					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
-					image.sprite = newSprite;
-				}
-				else if (image.mainTexture.name == "UnityWhite")
-				{
-					image.color = enabled ? DarkModeReplayHeaderColor : OriginalReplayHeaderColor;
-				}
-			}
-
-			var replaySaveMenuImage = ReplayEditorController.Instance.SaveMenu.GetComponentsInChildren<Image>(true);
-			foreach (var image in replaySaveMenuImage)
-			{
-				if (image.mainTexture.name == "PanelTransparent")
-				{
-					if (OriginalReplayBackground == null)
-					{
-						OriginalReplayBackground = image.mainTexture as Texture2D;
-					}
-
-					var texture = enabled ? DarkModeReplayBackground : OriginalReplayBackground;
-					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
-					image.sprite = newSprite;
-				}
-				else if (image.mainTexture.name == "UnityWhite")
-				{
-					image.color = enabled ? DarkModeReplayHeaderColor : OriginalReplayHeaderColor;
-				}
-			}
         }
 
         public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false, bool hasSubmeshes = false)
@@ -400,7 +360,28 @@ namespace XLMenuMod
 
 			var listView = gameObject.GetComponentInChildren<MVCListView>();
 			ToggleDarkMode(listView, enabled);
-        }
+			
+			// This is for the replay editor UIs
+			var images = gameObject.GetComponentsInChildren<Image>(true);
+			foreach (var image in images)
+			{
+				if (image.mainTexture.name == "PanelTransparent")
+				{
+					if (OriginalReplayBackground == null)
+					{
+						OriginalReplayBackground = image.mainTexture as Texture2D;
+					}
+
+					var texture = enabled ? DarkModeReplayBackground : OriginalReplayBackground;
+					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
+					image.sprite = newSprite;
+				}
+				else if (image.mainTexture.name == "UnityWhite")
+				{
+					image.color = enabled ? DarkModeReplayHeaderColor : OriginalReplayHeaderColor;
+				}
+			}
+		}
 
         public void ToggleDarkMode(MVCListView listView, bool enabled)
         {
