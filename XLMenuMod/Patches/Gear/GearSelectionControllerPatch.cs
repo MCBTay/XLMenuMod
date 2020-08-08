@@ -167,6 +167,9 @@ namespace XLMenuMod.Patches.Gear
 					{
 						CustomGearManager.Instance.CurrentFolder = selectedFolder.FolderInfo.Parent;
 						currentIndexPath.Value = __instance.listView.currentIndexPath.Up();
+
+						__instance.listView.UpdateList();
+						__instance.listView.SetHighlighted(Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value, true);
 					}
 					else
 					{
@@ -191,10 +194,10 @@ namespace XLMenuMod.Patches.Gear
 								currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomGearManager.Instance.NestedOfficialItems.IndexOf(CustomGearManager.Instance.CurrentFolder));
 							}
 						}
-					}
 
-					EventSystem.current.SetSelectedGameObject(null);
-					__instance.listView.UpdateList();
+						EventSystem.current.SetSelectedGameObject(null);
+						__instance.listView.UpdateList();
+					}
 
 					return false;
 				}
@@ -304,8 +307,8 @@ namespace XLMenuMod.Patches.Gear
 						CustomGearManager.Instance.CurrentFolder = CustomGearManager.Instance.CurrentFolder.Parent;
 						Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value = __instance.listView.currentIndexPath.Up();
 
-						EventSystem.current.SetSelectedGameObject(null);
 						__instance.listView.UpdateList();
+						__instance.listView.SetHighlighted(Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath").Value, true);
 
 						return false;
 					}

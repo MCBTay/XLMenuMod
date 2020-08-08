@@ -72,6 +72,9 @@ namespace XLMenuMod.Patches.Level
 					{
 						CustomLevelManager.Instance.CurrentFolder = selectedFolder.FolderInfo.Parent;
 						currentIndexPath.Value = __instance.listView.currentIndexPath.Up();
+
+						__instance.listView.UpdateList();
+						__instance.listView.SetHighlighted(currentIndexPath.Value, true);
 					}
 					else
 					{
@@ -85,10 +88,10 @@ namespace XLMenuMod.Patches.Level
 						{
 							currentIndexPath.Value = __instance.listView.currentIndexPath.Sub(CustomLevelManager.Instance.NestedItems.IndexOf(CustomLevelManager.Instance.CurrentFolder));
 						}
-					}
 
-					EventSystem.current.SetSelectedGameObject(null);
-					__instance.listView.UpdateList();
+						__instance.listView.UpdateList();
+						EventSystem.current.SetSelectedGameObject(null);
+					}
 
 					return false;
 				}

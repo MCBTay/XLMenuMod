@@ -1,12 +1,11 @@
 ﻿using GameManagement;
 using HarmonyLib;
 using Rewired;
-using UnityEngine.EventSystems;
 using XLMenuMod.Levels;
 
 namespace XLMenuMod.Patches.Level
 {
-    static class LevelSelectionStatePatch
+	static class LevelSelectionStatePatch
     {
         [HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnUpdate))]
         static class OnUpdatePatch
@@ -31,8 +30,13 @@ namespace XLMenuMod.Patches.Level
                 {
                     UISounds.Instance?.PlayOneShotSelectMajor();
                     CustomLevelManager.Instance.CurrentFolder = CustomLevelManager.Instance.CurrentFolder.Parent;
-                    EventSystem.current.SetSelectedGameObject(null);
+
+                    var currentIndexPath = Traverse.Create(levelSelection.listView).Property<IndexPath>("currentIndexPath");
+                    currentIndexPath.Value = levelSelection.listView.currentIndexPath.Up();
+
                     levelSelection.listView.UpdateList();
+                    levelSelection.listView.SetHighlighted(currentIndexPath.Value, true);
+
                     return false;
                 }
 
