@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
 using XLMenuMod.Interfaces;
@@ -24,6 +25,8 @@ namespace XLMenuMod.Levels
             foreach (var level in LevelManager.Instance.CustomLevels)
             {
 	            if (string.IsNullOrEmpty(level.path)) continue;
+
+                if (Path.GetExtension(level.path).ToLower() == ".zip" || Path.GetExtension(level.path).ToLower() == ".rar") continue;
 
 	            if (!level.isAssetBundle)
 	            {
