@@ -282,7 +282,7 @@ namespace XLMenuMod.UserInterface
         public void ToggleDarkMode(bool enabled)
         {
 			ToggleDarkMode(GameStateMachine.Instance.PauseObject, enabled);
-			ToggleDarkMode(GameStateMachine.Instance.SettingsObject, enabled);
+			GameStateMachine.Instance.SettingsObject.ToggleDarkMode(enabled);
 
 			ToggleDarkMode(GameStateMachine.Instance.TutorialMenuObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.FeetControlTutorialObject, enabled, true);
