@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Levels;
+using XLMenuMod.UserInterface;
 
 namespace XLMenuMod.Patches.Level
 {

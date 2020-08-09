@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.EventSystems;
 using XLMenuMod.Gear;
+using XLMenuMod.UserInterface;
 
 namespace XLMenuMod.Patches.Gear
 {

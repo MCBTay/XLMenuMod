@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace XLMenuMod
+namespace XLMenuMod.UserInterface
 {
 	public class UserInterfaceHelper
     {

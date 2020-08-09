@@ -7,6 +7,7 @@ using UnityEngine;
 using XLMenuMod.Gear;
 using XLMenuMod.Interfaces;
 using XLMenuMod.Levels;
+using XLMenuMod.UserInterface;
 
 namespace XLMenuMod
 {
@@ -84,7 +85,7 @@ namespace XLMenuMod
 	            }
 	            else return;
 
-                UserInterfaceHelper.Instance.LoadCustomFolderSprite(newFolder, path);
+                //UserInterfaceHelper.Instance.LoadCustomFolderSprite(newFolder, path);
 
 	            sourceList.Add(newFolder.FolderInfo);
                 parent = newFolder.FolderInfo;
