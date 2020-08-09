@@ -10,7 +10,7 @@ using XLMenuMod.Levels;
 
 namespace XLMenuMod
 {
-    public abstract class CustomManager : MonoBehaviour
+	public abstract class CustomManager : MonoBehaviour
     {
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }
@@ -72,19 +72,21 @@ namespace XLMenuMod
             var child = sourceList.FirstOrDefault(x => x.GetName().Equals(folderName, StringComparison.InvariantCultureIgnoreCase) && x is CustomFolderInfo) as CustomFolderInfo;
             if (child == null)
             {
-                ICustomFolderInfo newFolder;
+	            ICustomFolderInfo newFolder;
 
-                if (typeof(T) == typeof(CustomLevelFolderInfo))
-                {
-                    newFolder = new CustomLevelFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
-                }
-                else if (typeof(T) == typeof(CustomGearFolderInfo))
-                {
-                    newFolder = new CustomGearFolderInfo($"\\{folder}", path, parent);
-                }
-                else return;
+	            if (typeof(T) == typeof(CustomLevelFolderInfo))
+	            {
+		            newFolder = new CustomLevelFolderInfo($"\\{folder}", Path.GetDirectoryName(path), parent);
+	            }
+	            else if (typeof(T) == typeof(CustomGearFolderInfo))
+	            {
+		            newFolder = new CustomGearFolderInfo($"\\{folder}", path, parent);
+	            }
+	            else return;
 
-                sourceList.Add(newFolder.FolderInfo);
+                UserInterfaceHelper.Instance.LoadCustomFolderSprite(newFolder, path);
+
+	            sourceList.Add(newFolder.FolderInfo);
                 parent = newFolder.FolderInfo;
             }
             else
