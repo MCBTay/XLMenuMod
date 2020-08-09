@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
 using XLMenuMod.Interfaces;
+using XLMenuMod.UserInterface;
 
 namespace XLMenuMod.Gear
 {
