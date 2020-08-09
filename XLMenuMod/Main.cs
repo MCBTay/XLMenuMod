@@ -56,7 +56,9 @@ namespace XLMenuMod
             }
             else
             {
-	            Harmony.UnpatchAll(Harmony.Id);
+                UserInterfaceHelper.Instance.ToggleDarkMode(false);
+
+                Harmony.UnpatchAll(Harmony.Id);
 
                 Object.Destroy(CustomLevelManagerGameObject.GetComponent<CustomLevelManager>());
                 Object.Destroy(CustomGearManagerGameObject.GetComponent<CustomGearManager>());
