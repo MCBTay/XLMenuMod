@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using TMPro;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod
@@ -11,6 +12,8 @@ namespace XLMenuMod
     {
         [JsonIgnore]
         public List<ICustomInfo> Children { get; set; }
+
+        public TMP_Sprite CustomSprite { get; set; }
 
         public override DateTime GetModifiedDate() { return GetModifiedDate(true); }
         public override DateTime GetModifiedDate(bool ascending)
