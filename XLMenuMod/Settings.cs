@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityModManagerNet;
+using XLMenuMod.UserInterface;
 
 namespace XLMenuMod
 {

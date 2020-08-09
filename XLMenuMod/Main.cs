@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityModManagerNet;
 using XLMenuMod.Gear;
 using XLMenuMod.Levels;
+using XLMenuMod.UserInterface;
 using Object = UnityEngine.Object;
 
 namespace XLMenuMod
