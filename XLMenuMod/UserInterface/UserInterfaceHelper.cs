@@ -19,15 +19,18 @@ namespace XLMenuMod.UserInterface
 	    public AssetBundle BrandAssets { get; private set; }
 	    public TMP_SpriteAsset BrandSprites { get; private set; }
 
-		public Sprite OriginalBackground { get; private set; }
-	    public Sprite DarkModeBackground { get; private set; }
+		public static Sprite OriginalBackground { get; set; }
+	    public static Sprite DarkModeBackground { get; set; }
 
-		public Texture2D OriginalReplayBackground { get; private set; }
-		public Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
-		public Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
-		public Texture2D DarkModeReplayBackground { get; private set; }
+		public static Texture2D OriginalReplayBackground { get; set; }
+		public static Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
+		public static Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
+		public static Texture2D DarkModeReplayBackground { get; set; }
 		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
 		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
+
+		public static TMP_SpriteAsset DarkControllerIcons { get; set; }
+		public static TMP_SpriteAsset LightControllerIcons { get; set; }
 
 		private static UserInterfaceHelper _instance;
 	    public static UserInterfaceHelper Instance
@@ -58,8 +61,7 @@ namespace XLMenuMod.UserInterface
 			LightControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_White");
 		}
 
-		private static TMP_SpriteAsset DarkControllerIcons { get; set; }
-		private static TMP_SpriteAsset LightControllerIcons { get; set; }
+		
 
 		public TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
         {
