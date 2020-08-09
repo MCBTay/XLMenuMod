@@ -296,10 +296,10 @@ namespace XLMenuMod.UserInterface
 
 			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
-			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
-			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
-			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
-			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
+			GameStateMachine.Instance.ReplayMenuObject.ToggleDarkMode(enabled, true, true);
+			GameStateMachine.Instance.ReplayDeleteDialog.ToggleDarkMode(enabled, true);
+			ReplayEditorController.Instance.ReplayUI.ToggleDarkMode(enabled, true, true);
+			ReplayEditorController.Instance.SaveMenu.gameObject.ToggleDarkMode(enabled, true, true);
         }
 
         public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false, bool hasSubmeshes = false)
