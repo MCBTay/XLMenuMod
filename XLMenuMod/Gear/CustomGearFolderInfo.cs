@@ -31,14 +31,7 @@ namespace XLMenuMod.Gear
             }
         }
 
-        public override bool EqualPaths(GearInfo other)
-        {
-	        throw new System.NotImplementedException();
-        }
-
-        public override IEnumerable<MaterialChange> GetMaterialChanges()
-        {
-	        throw new System.NotImplementedException();
-        }
+        public override bool EqualPaths(GearInfo other) { throw new System.NotImplementedException(); }
+        public override IEnumerable<MaterialChange> GetMaterialChanges() { throw new System.NotImplementedException(); }
     }
 }
