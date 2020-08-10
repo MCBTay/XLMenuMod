@@ -79,14 +79,14 @@ namespace XLMenuMod.Patches.Gear
 						{
 							if (isCustom || index[1] == 1)
 							{
-								var newText = "<space=15px><sprite=10 tint=1>";
+								var newText = "<space=18px><sprite=10 tint=1>";
 
 								if (gearAtIndex is CustomGearFolderInfo folder)
 								{
 									if (folder.CustomSprite != null)
 									{
 										itemView.Label.spriteAsset = folder.CustomSprite;
-										newText = "<space=15px><sprite=0 tint=1>";
+										newText = "<space=18px><sprite=0 tint=1>";
 									}
 								}
 
@@ -99,7 +99,7 @@ namespace XLMenuMod.Patches.Gear
 						}
 						else if (gearAtIndex.name.Equals("..\\"))
 						{
-							itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=15px><sprite=9 tint=1>Go Back"), true);
+							itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=18px><sprite=9 tint=1>Go Back"), true);
 						}
 						else
 						{

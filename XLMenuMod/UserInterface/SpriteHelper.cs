@@ -2,6 +2,7 @@
 using System.IO;
 using TMPro;
 using UnityEngine;
+using UnityModManagerNet;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.UserInterface
@@ -15,8 +16,7 @@ namespace XLMenuMod.UserInterface
 			var folderIconPath = Path.Combine(path, "folder.png");
 
 			// Assign new Sprite Sheet texture to the Sprite Asset.
-			var texture = new Texture2D(2, 2);
-			texture.LoadImage(File.ReadAllBytes(folderIconPath));
+			var texture = LoadTexture(folderIconPath);
 
 			List<TMP_Sprite> spriteInfoList = new List<TMP_Sprite>();
 
@@ -38,22 +38,14 @@ namespace XLMenuMod.UserInterface
 
 			sprite.x = 0;
 			sprite.y = 0;
-			sprite.width = 256;
-			sprite.height = 256;
-			sprite.pivot = new Vector2(0, 0);
-			//sprite.x = importedSprites[i].frame.x;
-			//sprite.y = m_SpriteAtlas.height - (importedSprites[i].frame.y + importedSprites[i].frame.h);
-			//sprite.width = importedSprites[i].frame.w;
-			//sprite.height = importedSprites[i].frame.h;
+			sprite.width = texture.width;
+			sprite.height = texture.height;
+			sprite.pivot = new Vector2(0.5f, 0.5f);
 
-			////Calculate sprite pivot position
-			//sprite.pivot = importedSprites[i].pivot;
-
-			// Properties the can be modified
 			sprite.xAdvance = sprite.width;
 			sprite.scale = 1.0f;
 			sprite.xOffset = 0 - (sprite.width * sprite.pivot.x);
-			sprite.yOffset = sprite.height - (sprite.height * sprite.pivot.y);
+			sprite.yOffset = sprite.height;
 
 			spriteInfoList.Add(sprite);
 
@@ -61,8 +53,6 @@ namespace XLMenuMod.UserInterface
 			TMP_SpriteAsset spriteAsset = ScriptableObject.CreateInstance<TMP_SpriteAsset>();
 			// Compute the hash code for the sprite asset.
 			spriteAsset.hashCode = TMP_TextUtilities.GetSimpleHashCode(spriteAsset.name);
-
-			
 
 			spriteAsset.spriteSheet = texture;
 			spriteAsset.spriteInfoList = spriteInfoList;
@@ -78,7 +68,7 @@ namespace XLMenuMod.UserInterface
 		/// </summary>
 		/// <param name="FilePath"></param>
 		/// <returns>Null if load fails</returns>
-		public Texture2D LoadTexture(string FilePath)
+		public static Texture2D LoadTexture(string FilePath)
 		{
 			Texture2D texture;
 			byte[] data;
@@ -88,7 +78,16 @@ namespace XLMenuMod.UserInterface
 				data = File.ReadAllBytes(FilePath);
 				texture = new Texture2D(2, 2);
 				if (texture.LoadImage(data))
+				{
+					if (texture.width > 256 || texture.height > 256)
+					{
+						UnityModManager.Logger.Log($"XLMenuMod: {FilePath} is too large.  Max dimensions are 256x256.");
+						Object.Destroy(texture);
+						return null;
+					}
+
 					return texture;
+				}
 			}
 
 			return null;
