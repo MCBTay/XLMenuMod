@@ -85,7 +85,7 @@ namespace XLMenuMod
 	            }
 	            else return;
 
-                //UserInterfaceHelper.Instance.LoadCustomFolderSprite(newFolder, path);
+                SpriteHelper.LoadCustomFolderSprite(newFolder, path);
 
 	            sourceList.Add(newFolder.FolderInfo);
                 parent = newFolder.FolderInfo;

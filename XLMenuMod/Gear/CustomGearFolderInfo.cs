@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using XLMenuMod.Gear.Interfaces;
 using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
 {
-    public class CustomGearFolderInfo : GearInfo, ICustomGearInfo, ICustomFolderInfo
+	public class CustomGearFolderInfo : GearInfo, ICustomGearInfo, ICustomFolderInfo
     {
         [JsonIgnore]
         public ICustomInfo Info { get; set; }
@@ -16,6 +17,8 @@ namespace XLMenuMod.Gear
             get { return Info as CustomFolderInfo; }
             set { Info = value; }
         }
+
+        public TMP_SpriteAsset CustomSprite { get; set; }
 
         public string GetName() { return Info?.GetName(); }
         

@@ -79,7 +79,18 @@ namespace XLMenuMod.Patches.Gear
 						{
 							if (isCustom || index[1] == 1)
 							{
-								itemView.SetText(gearAtIndex.name.Replace("\\", "<space=15px><sprite=10 tint=1>"), true);
+								var newText = "<space=15px><sprite=10 tint=1>";
+
+								if (gearAtIndex is CustomGearFolderInfo folder)
+								{
+									if (folder.CustomSprite != null)
+									{
+										itemView.Label.spriteAsset = folder.CustomSprite;
+										newText = "<space=15px><sprite=0 tint=1>";
+									}
+								}
+
+								itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 							}
 							else
 							{
