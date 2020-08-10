@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Rewired;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
@@ -105,6 +107,99 @@ namespace XLMenuMod.UserInterface
 
 			spriteAsset.material = material;
 			material.hideFlags = HideFlags.HideInHierarchy;
+		}
+
+		public static int GetSpriteIndex_YButton_Gray()
+		{
+			ControllerIconSprite_Gray returnVal;
+
+			switch (Application.platform)
+			{
+				case RuntimePlatform.WindowsPlayer:
+				case RuntimePlatform.WindowsEditor:
+					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
+					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
+					{
+						returnVal = ControllerIconSprite_Gray.PS4_Triangle_Button;
+						break;
+					}
+					returnVal = ControllerIconSprite_Gray.XB1_Y;
+					break;
+				case RuntimePlatform.PS4:
+					returnVal = ControllerIconSprite_Gray.PS4_Triangle_Button;
+					break;
+				case RuntimePlatform.Switch:
+					returnVal = ControllerIconSprite_Gray.SWITCH_X;
+					break;
+				case RuntimePlatform.XboxOne:
+				default:
+					returnVal = ControllerIconSprite_Gray.XB1_Y;
+					break;
+			}
+
+			return (int)returnVal;
+		}
+
+		public static int GetSpriteIndex_YButton()
+		{
+			ControllerIconSprite returnVal;
+
+			switch (Application.platform)
+			{
+				case RuntimePlatform.WindowsPlayer:
+				case RuntimePlatform.WindowsEditor:
+					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
+					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
+					{
+						returnVal = ControllerIconSprite.PS4_Triangle_Button;
+						break;
+					}
+					returnVal = ControllerIconSprite.XB1_Y;
+					break;
+				case RuntimePlatform.PS4:
+					returnVal = ControllerIconSprite.PS4_Triangle_Button;
+					break;
+				case RuntimePlatform.Switch:
+					returnVal = ControllerIconSprite.SWITCH_X;
+					break;
+				case RuntimePlatform.XboxOne:
+				default:
+					returnVal = ControllerIconSprite.XB1_Y;
+					break;
+			}
+
+			return (int)returnVal;
+		}
+
+		public static int GetSpriteIndex_XButton()
+		{
+			ControllerIconSprite returnVal;
+
+			switch (Application.platform)
+			{
+				case RuntimePlatform.WindowsPlayer:
+				case RuntimePlatform.WindowsEditor:
+					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
+					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
+					{
+						returnVal = ControllerIconSprite.PS4_Square_Button;
+						break;
+					}
+					returnVal = ControllerIconSprite.XB1_X;
+					break;
+				case RuntimePlatform.PS4:
+					returnVal = ControllerIconSprite.PS4_Square_Button;
+					break;
+				case RuntimePlatform.Switch:
+					returnVal = ControllerIconSprite.SWITCH_X;
+					break;
+				case RuntimePlatform.XboxOne:
+				default:
+					returnVal = ControllerIconSprite.XB1_X;
+					break;
+			}
+
+			return (int)returnVal;
 		}
 	}
 }
