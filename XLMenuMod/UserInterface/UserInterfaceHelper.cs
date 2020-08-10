@@ -1,7 +1,6 @@
 ﻿using GameManagement;
 using HarmonyLib;
 using ReplayEditor;
-using Rewired;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -60,8 +59,6 @@ namespace XLMenuMod.UserInterface
 			DarkControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_Greyish");
 			LightControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_White");
 		}
-
-		
 
 		public TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
         {
