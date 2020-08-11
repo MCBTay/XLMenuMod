@@ -95,12 +95,9 @@ namespace XLMenuMod.Gear
 
 					var brand = nameSplit.FirstOrDefault();
 
-					if (brand.ToLower() == "old") brand = OfficialBrands.Old_Friends.ToString();
-					else if (brand.ToLower() == "the") brand = "The " + OfficialBrands.Nine_Club;
-					else if (brand.ToLower() == "tws") brand = OfficialBrands.Transworld.ToString();
-					else if (brand.ToLower() == "new") brand = OfficialBrands.New_Balance.ToString();
-					else if (brand.ToLower() == "santa") brand = OfficialBrands.Santa_Cruz.ToString();
-					else if (brand.ToLower() == "grimple") brand = OfficialBrands.Grimple_Stix.ToString();
+					if (brand == "Old" || brand == "New" || brand == "Santa" || brand == "Grimple") brand = $"{nameSplit[0]} {nameSplit[1]}";
+					else if (brand == "The") brand = $"{nameSplit[0]} {nameSplit[1]} {nameSplit[2]}"; 
+					else if (brand == "TWS") brand = "Transworld";
 
 					AddFolder<CustomGearFolderInfo>(brand, null, NestedOfficialItems, ref parent);
 					AddItem(gear, parent.Children, ref parent);
