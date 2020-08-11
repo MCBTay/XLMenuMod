@@ -74,12 +74,12 @@ namespace XLMenuMod.UserInterface
 				// Menu Background
 				if (image.name == "MenuPanelBackground")
 				{
-					if (UserInterfaceHelper.OriginalBackground == null)
+					if (SpriteHelper.OriginalBackground == null)
 					{
-						UserInterfaceHelper.OriginalBackground = image.sprite;
+						SpriteHelper.OriginalBackground = image.sprite;
 					}
 
-					image.sprite = enabled && UserInterfaceHelper.DarkModeBackground != null ? UserInterfaceHelper.DarkModeBackground : UserInterfaceHelper.OriginalBackground;
+					image.sprite = enabled && SpriteHelper.DarkModeBackground != null ? SpriteHelper.DarkModeBackground : SpriteHelper.OriginalBackground;
 				}
 				// Replay Editor background
 				else if (image.mainTexture.name == "PanelTransparent")
@@ -153,7 +153,7 @@ namespace XLMenuMod.UserInterface
 
 			if (label.text.Contains("<sprite") && label.spriteAsset.name.Contains("Controller"))
 			{
-				label.spriteAsset = enabled ? UserInterfaceHelper.LightControllerIcons : UserInterfaceHelper.DarkControllerIcons;
+				label.spriteAsset = enabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
 			}
 		}
 

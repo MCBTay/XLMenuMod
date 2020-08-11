@@ -28,15 +28,15 @@ namespace XLMenuMod.Patches.Gear
 
 					if (isCustom || index[1] == 1)
 					{
-						if (UserInterfaceHelper.Instance.Sprites != null)
+						if (SpriteHelper.MenuIcons != null)
 						{
-							itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
+							itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
 							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
 						}
 					}
 					else
 					{
-						SetBrandSprite(CustomGearManager.Instance.CurrentFolder.GetParentObject() as CustomGearFolderInfo, itemView);
+						itemView.SetBrandSprite(CustomGearManager.Instance.CurrentFolder.GetParentObject() as CustomGearFolderInfo);
 					}
 				}
 			}
@@ -57,8 +57,8 @@ namespace XLMenuMod.Patches.Gear
 
 				bool isCustom = index[1] >= gear[index[0]].Length;
 
-				if (UserInterfaceHelper.Instance.Sprites != null) 
-					itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
+				if (SpriteHelper.MenuIcons != null) 
+					itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
 
 				if (index.depth >= 3)
 				{
@@ -94,7 +94,7 @@ namespace XLMenuMod.Patches.Gear
 							}
 							else
 							{
-								SetBrandSprite(gearAtIndex, itemView);
+								itemView.SetBrandSprite(gearAtIndex);
 							}
 						}
 						else if (gearAtIndex.name.Equals("..\\"))
@@ -110,32 +110,6 @@ namespace XLMenuMod.Patches.Gear
 					}
 				}
 			}
-		}
-
-		static void SetBrandSprite(GearInfo gear, MVCListItemView itemView)
-		{
-			string spriteName = gear.name.TrimStart('\\').Replace(' ', '_').ToLower();
-
-			if (spriteName == "411") spriteName = "fouroneone";
-			else if (spriteName.ToLower() == "és") spriteName = "es";
-			else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
-
-			if (UserInterfaceHelper.Instance.BrandSprites != null) itemView.Label.spriteAsset = UserInterfaceHelper.Instance.BrandSprites;
-
-			itemView.SetText(gear.name.Replace("\\", $"<space=30px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
-		}
-
-		static void SetBrandSprite(GearInfo gear, MVCListHeaderView headerView)
-		{
-			string spriteName = gear.name.TrimStart('\\').Replace(' ', '_').ToLower();
-
-			if (spriteName == "411") spriteName = "fouroneone";
-			else if (spriteName.ToLower() == "és") spriteName = "es";
-			else if (spriteName.ToLower() == "the_nine_club") spriteName = "nine_club";
-
-			if (UserInterfaceHelper.Instance.BrandSprites != null) headerView.Label.spriteAsset = UserInterfaceHelper.Instance.BrandSprites;
-
-			headerView.SetText(gear.name.Replace("\\", $"<space=30px><size=150%><sprite name=\"{spriteName}\"><size=100%>"), true);
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.GetNumberOfItems))]

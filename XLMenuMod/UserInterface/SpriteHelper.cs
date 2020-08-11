@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Rewired;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
@@ -11,7 +10,46 @@ namespace XLMenuMod.UserInterface
 {
 	public class SpriteHelper
 	{
-		public static void LoadCustomFolderSprite(ICustomFolderInfo folder, string path)
+		public AssetBundle MenuIconAb { get; private set; }
+		public static TMP_SpriteAsset MenuIcons { get; private set; }
+
+		public AssetBundle BrandIconsAb { get; private set; }
+		public static TMP_SpriteAsset BrandIcons { get; private set; }
+
+		public static Sprite OriginalBackground { get; set; }
+		public static Sprite DarkModeBackground { get; set; }
+
+		public static TMP_SpriteAsset DarkControllerIcons { get; set; }
+		public static TMP_SpriteAsset LightControllerIcons { get; set; }
+
+		private static SpriteHelper _instance;
+		public static SpriteHelper Instance
+		{
+			get { return _instance ?? (_instance = new SpriteHelper()); }
+			private set { _instance = value; }
+		}
+
+		public SpriteHelper()
+		{
+			Instance = this;
+		}
+
+		public void LoadSprites()
+		{
+			MenuIconAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Assets.xlmenumod"));
+			MenuIcons = MenuIconAb.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
+			MenuIconAb.Unload(false);
+
+			BrandIconsAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
+			BrandIcons = BrandIconsAb.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
+			BrandIconsAb.Unload(false);
+
+			var spriteAssets = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>();
+			DarkControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_Greyish");
+			LightControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_White");
+		}
+
+		public void LoadCustomFolderSprite(ICustomFolderInfo folder, string path)
 		{
 			if (string.IsNullOrEmpty(path) || !File.Exists(Path.Combine(path, "folder.png"))) return;
 
@@ -70,7 +108,7 @@ namespace XLMenuMod.UserInterface
 		/// </summary>
 		/// <param name="FilePath"></param>
 		/// <returns>Null if load fails</returns>
-		public static Texture2D LoadTexture(string FilePath)
+		public Texture2D LoadTexture(string FilePath)
 		{
 			Texture2D texture;
 			byte[] data;
@@ -109,7 +147,7 @@ namespace XLMenuMod.UserInterface
 			material.hideFlags = HideFlags.HideInHierarchy;
 		}
 
-		public static int GetSpriteIndex_YButton_Gray()
+		public int GetSpriteIndex_YButton_Gray()
 		{
 			ControllerIconSprite_Gray returnVal;
 
@@ -140,7 +178,7 @@ namespace XLMenuMod.UserInterface
 			return (int)returnVal;
 		}
 
-		public static int GetSpriteIndex_YButton()
+		public int GetSpriteIndex_YButton()
 		{
 			ControllerIconSprite returnVal;
 
@@ -171,7 +209,7 @@ namespace XLMenuMod.UserInterface
 			return (int)returnVal;
 		}
 
-		public static int GetSpriteIndex_XButton()
+		public int GetSpriteIndex_XButton()
 		{
 			ControllerIconSprite returnVal;
 
@@ -201,5 +239,7 @@ namespace XLMenuMod.UserInterface
 
 			return (int)returnVal;
 		}
+
+		
 	}
 }

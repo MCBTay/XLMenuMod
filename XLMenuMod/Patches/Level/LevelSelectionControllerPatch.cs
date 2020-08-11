@@ -18,9 +18,9 @@ namespace XLMenuMod.Patches.Level
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 				UserInterfaceHelper.Instance.UpdateLabelColor(CustomLevelManager.Instance.SortLabel, Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
 
-				if (CustomLevelManager.Instance.CurrentFolder != null && UserInterfaceHelper.Instance.Sprites != null)
+				if (CustomLevelManager.Instance.CurrentFolder != null && SpriteHelper.MenuIcons != null)
 				{
-					header.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
+					header.Label.spriteAsset = SpriteHelper.MenuIcons;
 					int spriteIndex = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day") ? 8 : 10;
 					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}>"));
 				}
@@ -34,9 +34,9 @@ namespace XLMenuMod.Patches.Level
 			{
 				if (itemView.Label.text.StartsWith("\\"))
 				{
-					if (UserInterfaceHelper.Instance.Sprites != null)
+					if (SpriteHelper.MenuIcons != null)
 					{
-						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
+						itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
 
 						int spriteIndex = itemView.Label.text.Equals("\\Easy Day") ? 8 : 10;
 						itemView.Label.SetText(itemView.Label.text.Replace("\\", $"<space=10px><sprite={spriteIndex} tint=1>"));
@@ -44,9 +44,9 @@ namespace XLMenuMod.Patches.Level
 				}
 				else if (itemView.Label.text.Equals("..\\"))
 				{
-					if (UserInterfaceHelper.Instance.Sprites != null)
+					if (SpriteHelper.MenuIcons != null)
 					{
-						itemView.Label.spriteAsset = UserInterfaceHelper.Instance.Sprites;
+						itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
 						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint=1>Go Back"));
 					}
 				}

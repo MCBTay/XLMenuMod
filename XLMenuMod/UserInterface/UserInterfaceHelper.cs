@@ -12,14 +12,7 @@ namespace XLMenuMod.UserInterface
 {
 	public class UserInterfaceHelper
     {
-	    public AssetBundle Assets { get; private set; }
-	    public TMP_SpriteAsset Sprites { get; private set; }
-
-	    public AssetBundle BrandAssets { get; private set; }
-	    public TMP_SpriteAsset BrandSprites { get; private set; }
-
-		public static Sprite OriginalBackground { get; set; }
-	    public static Sprite DarkModeBackground { get; set; }
+	    
 
 		public static Texture2D OriginalReplayBackground { get; set; }
 		public static Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
@@ -28,8 +21,7 @@ namespace XLMenuMod.UserInterface
 		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
 		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
 
-		public static TMP_SpriteAsset DarkControllerIcons { get; set; }
-		public static TMP_SpriteAsset LightControllerIcons { get; set; }
+		
 
 		private static UserInterfaceHelper _instance;
 	    public static UserInterfaceHelper Instance
@@ -45,19 +37,9 @@ namespace XLMenuMod.UserInterface
 
 		public void LoadAssets()
 		{
-			Assets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.xlmenumod"));
-			Sprites = Assets.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
-			Assets.Unload(false);
-
-			BrandAssets = AssetBundle.LoadFromMemory(ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
-			BrandSprites = BrandAssets.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
-			BrandAssets.Unload(false);
+			SpriteHelper.Instance.LoadSprites();
 
 			LoadBackgroundTexture();
-
-			var spriteAssets = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>();
-			DarkControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_Greyish");
-			LightControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_White");
 		}
 
 		public TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
@@ -66,7 +48,7 @@ namespace XLMenuMod.UserInterface
             label.transform.localScale = new Vector3(1, 1, 1);
             
             UpdateLabelColor(label, Main.Settings.EnableDarkMode ? DarkModeText : DefaultText);
-            label.spriteAsset = Main.Settings.EnableDarkMode ? LightControllerIcons : DarkControllerIcons;
+            label.spriteAsset = Main.Settings.EnableDarkMode ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
 
             label.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
             label.gameObject.SetActive(false);
@@ -81,7 +63,7 @@ namespace XLMenuMod.UserInterface
 
         public void SetSortLabelText(ref TMP_Text label, string text)
         {
-            var sortLabelText = $"<size=80%><sprite={SpriteHelper.GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
+            var sortLabelText = $"<size=80%><sprite={SpriteHelper.Instance.GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
             //var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
 
             label?.SetText(sortLabelText); //+ defaultLabelText);
@@ -92,7 +74,7 @@ namespace XLMenuMod.UserInterface
 	        var menuBackground = new Texture2D(2, 2);
 	        if (!menuBackground.LoadImage(ExtractResource("XLMenuMod.Assets.darkmode.png"))) return;
 
-	        DarkModeBackground = Sprite.Create(menuBackground, new Rect(0, 0, menuBackground.width, menuBackground.height), new Vector2(0.5f, 0.5f));
+	        SpriteHelper.DarkModeBackground = Sprite.Create(menuBackground, new Rect(0, 0, menuBackground.width, menuBackground.height), new Vector2(0.5f, 0.5f));
 
 			DarkModeReplayBackground = new Texture2D(2, 2);
 	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Assets.PanelTransparent.png"))) return;
@@ -224,7 +206,7 @@ namespace XLMenuMod.UserInterface
 				        {
 					        if (label.spriteAsset.name.Contains("Controller"))
 					        {
-						        label.spriteAsset = enabled ? LightControllerIcons : DarkControllerIcons;
+						        label.spriteAsset = enabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
 					        }
 				        }
 					}
@@ -347,23 +329,23 @@ namespace XLMenuMod.UserInterface
 
 	        if (textures != null)
 	        {
-		        if (OriginalBackground == null)
+		        if (SpriteHelper.OriginalBackground == null)
 		        {
-			        OriginalBackground = textures.sprite;
+			        SpriteHelper.OriginalBackground = textures.sprite;
 		        }
 
-		        if (Main.Settings.EnableDarkMode && DarkModeBackground != null)
+		        if (Main.Settings.EnableDarkMode && SpriteHelper.DarkModeBackground != null)
 		        {
-			        textures.sprite = DarkModeBackground;
+			        textures.sprite = SpriteHelper.DarkModeBackground;
 		        }
 		        else
 		        {
-			        textures.sprite = OriginalBackground;
+			        textures.sprite = SpriteHelper.OriginalBackground;
 		        }
 	        }
         }
 
-        private byte[] ExtractResource(string filename)
+        public static byte[] ExtractResource(string filename)
         {
 	        Assembly a = Assembly.GetExecutingAssembly();
 	        using (var resFilestream = a.GetManifestResourceStream(filename))
