@@ -20,9 +20,10 @@ namespace XLMenuMod.Patches.Level
 
 				if (CustomLevelManager.Instance.CurrentFolder != null && SpriteHelper.MenuIcons != null)
 				{
-					header.Label.spriteAsset = SpriteHelper.MenuIcons;
-					int spriteIndex = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day") ? 8 : 10;
-					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={spriteIndex}>"));
+					var isEasyDay = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day");
+
+					header.Label.spriteAsset = isEasyDay ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
+					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={(isEasyDay ? 33 : 10)} tint>"));
 				}
 			}
 		}
@@ -36,10 +37,10 @@ namespace XLMenuMod.Patches.Level
 				{
 					if (SpriteHelper.MenuIcons != null)
 					{
-						itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
+						var isEasyDay = itemView.Label.text.Equals("\\Easy Day");
 
-						int spriteIndex = itemView.Label.text.Equals("\\Easy Day") ? 8 : 10;
-						itemView.Label.SetText(itemView.Label.text.Replace("\\", $"<space=10px><sprite={spriteIndex} tint=1>"));
+						itemView.Label.spriteAsset = isEasyDay ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
+						itemView.SetText(itemView.Label.text.Replace("\\", $"<sprite={(isEasyDay ? 33 : 10)} tint>"));
 					}
 				}
 				else if (itemView.Label.text.Equals("..\\"))
@@ -47,7 +48,7 @@ namespace XLMenuMod.Patches.Level
 					if (SpriteHelper.MenuIcons != null)
 					{
 						itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
-						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint=1>Go Back"));
+						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint>Go Back"));
 					}
 				}
 			}
