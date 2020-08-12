@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Interfaces;
 using XLMenuMod.UserInterface;
 
@@ -13,6 +15,7 @@ namespace XLMenuMod.Gear
 		public static CustomGearManager Instance => _instance ?? (_instance = new CustomGearManager());
 
 		public List<ICustomInfo> NestedOfficialItems { get; set; }
+		private GearInfo[] LastLoaded { get; set; }
 
 		public CustomGearManager()
 		{
@@ -109,11 +112,17 @@ namespace XLMenuMod.Gear
 
 		public override void LoadNestedItems(object[] objectsToLoad = null)
 		{
-			NestedItems.Clear();
-
 			var gearToLoad = (GearInfo[]) objectsToLoad;
 			if (gearToLoad == null) return;
-			
+
+			if (LastLoaded != null && LastLoaded == gearToLoad)
+			{
+				return;
+			}
+
+			LastLoaded = gearToLoad;
+			NestedItems.Clear();
+
 			foreach (var gear in gearToLoad)
 			{
 				GearInfo newGear = null;
