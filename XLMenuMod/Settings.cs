@@ -44,11 +44,4 @@ namespace XLMenuMod
             GUILayout.EndVertical();
         }
     }
-
-    public enum FontSizePreset
-    {
-        Normal = 0,
-        Small = 1,
-        Smaller = 2,
-    }
 }

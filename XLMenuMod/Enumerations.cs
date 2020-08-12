@@ -1,5 +1,12 @@
 ﻿namespace XLMenuMod
 {
+	public enum FontSizePreset
+	{
+		Normal = 0,
+		Small = 1,
+		Smaller = 2,
+	}
+
     /// <summary>
     /// Maps to the TMP_SpriteAsset ControllerIcons found within the game.
     /// </summary>
