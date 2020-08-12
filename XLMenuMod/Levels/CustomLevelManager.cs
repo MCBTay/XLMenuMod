@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Interfaces;
 using XLMenuMod.UserInterface;
@@ -123,7 +124,7 @@ namespace XLMenuMod.Levels
             base.OnPreviousSort<LevelSortMethod>();
 
             EventSystem.current.SetSelectedGameObject(null);
-            FindObjectOfType<LevelSelectionController>()?.listView?.UpdateList();
+            Object.FindObjectOfType<LevelSelectionController>()?.listView?.UpdateList();
         }
 
         public override void OnNextSort<T>()
@@ -131,7 +132,7 @@ namespace XLMenuMod.Levels
             base.OnNextSort<LevelSortMethod>();
 
             EventSystem.current.SetSelectedGameObject(null);
-            FindObjectOfType<LevelSelectionController>()?.listView?.UpdateList();
+            Object.FindObjectOfType<LevelSelectionController>()?.listView?.UpdateList();
         }
     }
 }

@@ -1,11 +1,7 @@
 ﻿using HarmonyLib;
 using System.Reflection;
-using UnityEngine;
 using UnityModManagerNet;
-using XLMenuMod.Gear;
-using XLMenuMod.Levels;
 using XLMenuMod.UserInterface;
-using Object = UnityEngine.Object;
 
 namespace XLMenuMod
 {
@@ -15,9 +11,6 @@ namespace XLMenuMod
 
         private static Harmony Harmony { get; set; }
         public static string ModPath { get; private set; }
-
-        public static GameObject CustomLevelManagerGameObject;
-        public static GameObject CustomGearManagerGameObject;
 
         public static Settings Settings { get; private set; }
 
@@ -44,14 +37,6 @@ namespace XLMenuMod
                 Harmony = new Harmony(modEntry.Info.Id);
                 Harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                CustomLevelManagerGameObject = new GameObject();
-                CustomLevelManagerGameObject.AddComponent<CustomLevelManager>();
-                Object.DontDestroyOnLoad(CustomLevelManagerGameObject);
-
-				CustomGearManagerGameObject = new GameObject();
-				CustomGearManagerGameObject.AddComponent<CustomGearManager>();
-				Object.DontDestroyOnLoad(CustomGearManagerGameObject);
-
                 UserInterfaceHelper.Instance.LoadAssets();
                 UserInterfaceHelper.Instance.ToggleDarkMode(Settings.EnableDarkMode);
             }
@@ -60,9 +45,6 @@ namespace XLMenuMod
                 UserInterfaceHelper.Instance.ToggleDarkMode(false);
 
                 Harmony.UnpatchAll(Harmony.Id);
-
-                Object.Destroy(CustomLevelManagerGameObject.GetComponent<CustomLevelManager>());
-                Object.Destroy(CustomGearManagerGameObject.GetComponent<CustomGearManager>());
             }
 
             return true;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
-using UnityEngine;
 using XLMenuMod.Gear;
 using XLMenuMod.Interfaces;
 using XLMenuMod.Levels;
@@ -11,7 +10,7 @@ using XLMenuMod.UserInterface;
 
 namespace XLMenuMod
 {
-	public abstract class CustomManager : MonoBehaviour
+	public abstract class CustomManager
     {
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }
