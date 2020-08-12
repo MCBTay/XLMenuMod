@@ -52,9 +52,21 @@ namespace XLMenuMod.UserInterface
 		//TODO: Currently this doesn't work on a folder that has no textures in it.
 		public void LoadCustomFolderSprite(ICustomFolderInfo folder, string path)
 		{
-			if (string.IsNullOrEmpty(path) || !File.Exists(Path.Combine(path, "folder.png"))) return;
+			if (string.IsNullOrEmpty(path)) return;
 
 			var folderIconPath = Path.Combine(path, "folder.png");
+
+			if (!File.Exists(folderIconPath))
+			{
+				folderIconPath = Path.Combine(path, "folder.jpg");
+			}
+
+			if (!File.Exists(folderIconPath))
+			{
+				folderIconPath = Path.Combine(path, "folder.jpeg");
+			}
+
+			if (!File.Exists(folderIconPath)) return;
 
 			// Assign new Sprite Sheet texture to the Sprite Asset.
 			var texture = LoadTexture(folderIconPath);
