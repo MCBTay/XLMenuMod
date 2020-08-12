@@ -49,6 +49,7 @@ namespace XLMenuMod.UserInterface
 			LightControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_White");
 		}
 
+		//TODO: Currently this doesn't work on a folder that has no textures in it.
 		public void LoadCustomFolderSprite(ICustomFolderInfo folder, string path)
 		{
 			if (string.IsNullOrEmpty(path) || !File.Exists(Path.Combine(path, "folder.png"))) return;
