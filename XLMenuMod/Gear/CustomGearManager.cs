@@ -166,6 +166,8 @@ namespace XLMenuMod.Gear
 				}
 
 				parent = null;
+				string folderPath = SaveManager.Instance.CustomGearDir;
+
 				foreach (var folder in folders)
 				{
 					if (IsImage(folder))
@@ -174,7 +176,8 @@ namespace XLMenuMod.Gear
 					}
 					else
 					{
-						AddFolder<CustomGearFolderInfo>(folder, Path.GetDirectoryName(texturePath), parent == null ? NestedItems : parent.Children, ref parent);
+						folderPath = Path.Combine(folderPath, folder);
+						AddFolder<CustomGearFolderInfo>(folder, folderPath, parent == null ? NestedItems : parent.Children, ref parent);
 					}
 				}
 			}

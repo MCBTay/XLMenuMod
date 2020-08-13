@@ -52,6 +52,8 @@ namespace XLMenuMod.Levels
 	            }
 
 	            parent = null;
+	            var folderPath = SaveManager.Instance.CustomLevelsDir;
+
 	            for (int i = 0; i < folders.Count; i++)
 	            {
 		            var folder = folders.ElementAt(i);
@@ -63,7 +65,8 @@ namespace XLMenuMod.Levels
 		            }
 		            else
 		            {
-			            AddFolder<CustomLevelFolderInfo>(folder, level.path, parent == null ? NestedItems : parent.Children, ref parent);
+			            folderPath = Path.Combine(folderPath, folder);
+			            AddFolder<CustomLevelFolderInfo>(folder, folderPath, parent == null ? NestedItems : parent.Children, ref parent);
 		            }
 	            }
             }
