@@ -15,7 +15,6 @@ namespace XLMenuMod.Levels
 
         public override void LoadNestedItems(object[] objectsToLoad = null)
         {
-            var levelsToRemove = new List<LevelInfo>();
             CustomFolderInfo parent = null;
 
             AddFolder<CustomLevelFolderInfo>("Easy Day", null, NestedItems, ref parent);

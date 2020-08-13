@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using UnityModManagerNet;
 using XLMenuMod.Gear;
 using XLMenuMod.Levels;
 

@@ -4,7 +4,7 @@ using XLMenuMod.Interfaces;
 
 namespace XLMenuMod.Gear
 {
-    public class CustomCharacterGearInfo : CharacterGearInfo, ICustomGearInfo
+	public class CustomCharacterGearInfo : CharacterGearInfo, ICustomGearInfo
     {
         public ICustomInfo Info { get; set; }
 
