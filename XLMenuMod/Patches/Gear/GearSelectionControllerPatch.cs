@@ -52,10 +52,8 @@ namespace XLMenuMod.Patches.Gear
 				if (index[1] < 0) return;
 
 				itemView.Label.richText = true;
-
-				var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-
-				bool isCustom = index[1] >= gear[index[0]].Length;
+				
+				bool isCustom = index[1] >= Enum.GetValues(typeof(GearCategory)).Length;
 
 				if (SpriteHelper.MenuIcons != null) 
 					itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
@@ -64,7 +62,7 @@ namespace XLMenuMod.Patches.Gear
 				{
 					GearInfo gearAtIndex = GearDatabase.Instance.GetGearAtIndex(index, out bool _);
 
-					if (gearAtIndex == (GearInfo)null)
+					if (gearAtIndex == null)
 					{
 						itemView.SetText("NOT FOUND", false);
 						Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, false).GetValue();

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
 using XLMenuMod.Gear;
@@ -18,33 +19,20 @@ namespace XLMenuMod.Patches.Gear
 
 				if (index[1] < gear[index[0]].Length)
 				{
-					// Hair
-					if (index[1] == 1)
-					{
-						CustomGearManager.Instance.LoadNestedHairItems(gear[index[0]][index[1]]);
+					var gearToLoad = gear[index[0]][index[1]];
 
-						if (CustomGearManager.Instance.CurrentFolder.HasChildren())
-						{
-							sourceList = CustomGearManager.Instance.CurrentFolder.Children;
-						}
-						else
-						{
-							sourceList = CustomGearManager.Instance.NestedOfficialItems;
-						}
+					if (index[1] == (int)GearCategory.Hair)
+					{
+						CustomGearManager.Instance.LoadNestedHairItems(gearToLoad);
 					}
-					// Ignore Skin Tone (0)
-					else if (index[1] != 0)
+					else if (index[1] != (int)GearCategory.SkinTone)
 					{
-						CustomGearManager.Instance.LoadNestedOfficialItems(gear[index[0]][index[1]]);
+						CustomGearManager.Instance.LoadNestedOfficialItems(gearToLoad);
+					}
 
-						if (CustomGearManager.Instance.CurrentFolder.HasChildren())
-						{
-							sourceList = CustomGearManager.Instance.CurrentFolder.Children;
-						}
-						else
-						{
-							sourceList = CustomGearManager.Instance.NestedOfficialItems;
-						}
+					if (index[1] != (int)GearCategory.SkinTone)
+					{
+						sourceList = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children : CustomGearManager.Instance.NestedOfficialItems;
 					}
 				}
 				else
@@ -58,14 +46,7 @@ namespace XLMenuMod.Patches.Gear
 						CustomGearManager.Instance.LoadNestedItems(customGear[index[0]][tempIndex]);
 					}
 
-					if (CustomGearManager.Instance.CurrentFolder.HasChildren())
-					{
-						sourceList = CustomGearManager.Instance.CurrentFolder.Children;
-					}
-					else
-					{
-						sourceList = CustomGearManager.Instance.NestedItems;
-					}
+					sourceList = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children : CustomGearManager.Instance.NestedItems;
 				}
 
 				if (sourceList == null) return;
@@ -89,12 +70,11 @@ namespace XLMenuMod.Patches.Gear
 					}
 					else
 					{
-						if (index[1] < 10 && index[1] != 0)
+						if (index[1] < Enum.GetValues(typeof(GearCategory)).Length && index[1] != (int)GearCategory.SkinTone)
 						{
 							sourceList = CustomGearManager.Instance.NestedOfficialItems;
 						}
-						else
-						if (index[1] >= 10)
+						else if (index[1] >= Enum.GetValues(typeof(GearCategory)).Length)
 						{
 							sourceList = CustomGearManager.Instance.NestedItems;
 						}
@@ -102,19 +82,14 @@ namespace XLMenuMod.Patches.Gear
 
 					if (sourceList == null) return;
 
-					if (index.LastIndex >= 0 && index.LastIndex < sourceList.Count)
-					{
-						var customInfo = sourceList.ElementAt(index.LastIndex);
+					if (index.LastIndex < 0 || index.LastIndex >= sourceList.Count) return;
 
-						if (customInfo.GetParentObject() is CustomBoardGearInfo)
-							__result = customInfo.GetParentObject() as CustomBoardGearInfo;
-						else if (customInfo.GetParentObject() is CustomCharacterGearInfo)
-							__result = customInfo.GetParentObject() as CustomCharacterGearInfo;
-						else if (customInfo.GetParentObject() is CustomCharacterBodyInfo)
-							__result = customInfo.GetParentObject() as CustomCharacterBodyInfo;
-						else if (customInfo.GetParentObject() is CustomGearFolderInfo)
-							__result = customInfo.GetParentObject() as CustomGearFolderInfo;
-					}
+					var customInfo = sourceList.ElementAt(index.LastIndex);
+
+					if (customInfo.GetParentObject() is CustomBoardGearInfo customBoardGearInfo) __result = customBoardGearInfo;
+					else if (customInfo.GetParentObject() is CustomCharacterGearInfo customCharacterGearInfo) __result = customCharacterGearInfo;
+					else if (customInfo.GetParentObject() is CustomCharacterBodyInfo customCharacterBodyInfo) __result = customCharacterBodyInfo;
+					else if (customInfo.GetParentObject() is CustomGearFolderInfo customGearFolderInfo) __result = customGearFolderInfo;
 				}
 			}
 		}

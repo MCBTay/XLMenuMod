@@ -20,7 +20,7 @@ namespace XLMenuMod.Gear
 			NestedOfficialItems = new List<ICustomInfo>();
 		}
 
-		public void LoadNestedHairItems(object[] objectsToLoad = null)
+		public void LoadNestedHairItems(GearInfo[] objectsToLoad = null)
 		{
 			NestedOfficialItems.Clear();
 
@@ -47,11 +47,10 @@ namespace XLMenuMod.Gear
 			NestedOfficialItems = SortList(NestedOfficialItems);
 		}
 
-		public void LoadNestedOfficialItems(object[] objectsToLoad = null)
+		public void LoadNestedOfficialItems(GearInfo[] gearToLoad = null)
 		{
 			NestedOfficialItems.Clear();
 
-			var gearToLoad = (GearInfo[])objectsToLoad;
 			if (gearToLoad == null) return;
 
 			List<string> unbrandedItems = new List<string>
