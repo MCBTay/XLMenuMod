@@ -2,8 +2,9 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
-using XLMenuMod.Gear;
-using XLMenuMod.Interfaces;
+using XLMenuMod.Utilities;
+using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
@@ -43,7 +44,8 @@ namespace XLMenuMod.Patches.Gear
 
 						var tempIndex = index[1] - customGear[index[0]].Length;
 
-						CustomGearManager.Instance.LoadNestedItems(customGear[index[0]][tempIndex]);
+						if (tempIndex < customGear[index[0]].Length)
+							CustomGearManager.Instance.LoadNestedItems(customGear[index[0]][tempIndex]);
 					}
 
 					sourceList = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children : CustomGearManager.Instance.NestedItems;

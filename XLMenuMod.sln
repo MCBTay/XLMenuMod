@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLMenuMod", "XLMenuMod\XLMenuMod.csproj", "{ABE4DD6D-DF2F-49C2-B8BE-D7EBFB42CBF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLMenuMod.Utilities", "XLMenuMod.Utilities\XLMenuMod.Utilities.csproj", "{99908601-4D46-43D1-A4FD-40D66B369722}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{ABE4DD6D-DF2F-49C2-B8BE-D7EBFB42CBF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABE4DD6D-DF2F-49C2-B8BE-D7EBFB42CBF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABE4DD6D-DF2F-49C2-B8BE-D7EBFB42CBF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99908601-4D46-43D1-A4FD-40D66B369722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99908601-4D46-43D1-A4FD-40D66B369722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99908601-4D46-43D1-A4FD-40D66B369722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99908601-4D46-43D1-A4FD-40D66B369722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

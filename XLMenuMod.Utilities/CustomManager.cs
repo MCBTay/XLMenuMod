@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
-using XLMenuMod.Gear;
-using XLMenuMod.Interfaces;
-using XLMenuMod.Levels;
-using XLMenuMod.UserInterface;
+using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.Interfaces;
+using XLMenuMod.Utilities.Levels;
+using XLMenuMod.Utilities.UserInterface;
 
-namespace XLMenuMod
+namespace XLMenuMod.Utilities
 {
 	public abstract class CustomManager
     {

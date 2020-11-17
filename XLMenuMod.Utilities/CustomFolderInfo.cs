@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
-using XLMenuMod.Interfaces;
+using XLMenuMod.Utilities.Interfaces;
 
-namespace XLMenuMod
+namespace XLMenuMod.Utilities
 {
     public class CustomFolderInfo : CustomInfo
     {

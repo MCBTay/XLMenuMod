@@ -3,8 +3,9 @@ using HarmonyLib;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using XLMenuMod.Levels;
-using XLMenuMod.UserInterface;
+using XLMenuMod.Utilities;
+using XLMenuMod.Utilities.Levels;
+using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Level
 {
@@ -201,7 +202,7 @@ namespace XLMenuMod.Patches.Level
         {
             static void Postfix(LevelSelectionController __instance)
             {
-                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
+                CustomLevelManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(Main.Settings.EnableDarkMode, __instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((LevelSortMethod)CustomLevelManager.Instance.CurrentSort).ToString());
             }
         }
     }

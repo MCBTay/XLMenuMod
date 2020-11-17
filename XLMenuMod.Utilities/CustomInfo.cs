@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using XLMenuMod.Interfaces;
+using XLMenuMod.Utilities.Interfaces;
 
-namespace XLMenuMod
+namespace XLMenuMod.Utilities
 {
     public class CustomInfo : ICustomInfo
     {

@@ -55,6 +55,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>References\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime">
+      <HintPath>References\Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>References\Unity.TextMeshPro.dll</HintPath>
     </Reference>
@@ -88,22 +94,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomFolderInfo.cs" />
-    <Compile Include="CustomInfo.cs" />
-    <Compile Include="CustomManager.cs" />
-    <Compile Include="Enumerations.cs" />
-    <Compile Include="Gear\CustomBoardGearInfo.cs" />
-    <Compile Include="Gear\CustomCharacterBodyInfo.cs" />
-    <Compile Include="Gear\CustomCharacterGearInfo.cs" />
-    <Compile Include="Gear\CustomGearFolderInfo.cs" />
-    <Compile Include="Gear\CustomGearManager.cs" />
-    <Compile Include="Gear\Interfaces\ICustomGearInfo.cs" />
-    <Compile Include="Interfaces\ICustomFolderInfo.cs" />
-    <Compile Include="Interfaces\ICustomInfo.cs" />
-    <Compile Include="Levels\CustomLevelFolderInfo.cs" />
-    <Compile Include="Levels\CustomLevelInfo.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Levels\CustomLevelManager.cs" />
     <Compile Include="Patches\Challenges\ChallengeTrickListControllerPatch.cs" />
     <Compile Include="Patches\Gear\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\Gear\GearDatabasePatch.cs" />
@@ -114,10 +105,6 @@
     <Compile Include="Patches\MVCListViewPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="UserInterface\SpriteExtensions.cs" />
-    <Compile Include="UserInterface\SpriteHelper.cs" />
-    <Compile Include="UserInterface\ToggleDarkModeExtensions.cs" />
-    <Compile Include="UserInterface\UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\xlmenumod" />
@@ -133,14 +120,19 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\PanelTransparent.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\XLMenuMod.Utilities\XLMenuMod.Utilities.csproj">
+      <Project>{99908601-4d46-43d1-a4fd-40d66b369722}</Project>
+      <Name>XLMenuMod.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
-del /Q /F "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\"
-copy /Y "$(TargetDir)XLMenuMod.dll" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.dll"
-copy /Y "$(TargetDir)XLMenuMod.pdb" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.pdb"
-copy /Y "$(TargetDir)Info.json" "C:\Program Files (x86)\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\Info.json"
+del /Q /F "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\"
+copy /Y "$(TargetDir)XLMenuMod.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.dll"
+copy /Y "$(TargetDir)XLMenuMod.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.pdb"
+copy /Y "$(TargetDir)Info.json" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\Info.json"
 )
 
 if "$(ConfigurationName)"=="Release" (

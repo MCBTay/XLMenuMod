@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace XLMenuMod.Levels
+namespace XLMenuMod.Utilities.Levels
 {
     public class CustomLevelInfo : LevelInfo
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XLMenuMod.Interfaces
+namespace XLMenuMod.Utilities.Interfaces
 {
     public interface ICustomInfo
     {

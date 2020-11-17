@@ -1,8 +1,7 @@
 ﻿using HarmonyLib;
 using System.Reflection;
-using UnityEngine;
 using UnityModManagerNet;
-using XLMenuMod.UserInterface;
+using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod
 {

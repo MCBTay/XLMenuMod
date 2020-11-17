@@ -4,9 +4,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityModManagerNet;
-using XLMenuMod.Interfaces;
+using XLMenuMod.Utilities.Interfaces;
 
-namespace XLMenuMod.UserInterface
+namespace XLMenuMod.Utilities.UserInterface
 {
 	public class SpriteHelper
 	{

@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.Linq;
 using TMPro;
-using XLMenuMod.Interfaces;
+using XLMenuMod.Utilities.Interfaces;
 
-namespace XLMenuMod.Levels
+namespace XLMenuMod.Utilities.Levels
 {
 	public class CustomLevelFolderInfo : LevelInfo, ICustomFolderInfo
     {

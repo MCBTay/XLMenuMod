@@ -1,7 +1,7 @@
 ﻿using GameManagement;
 using HarmonyLib;
 using Rewired;
-using XLMenuMod.Levels;
+using XLMenuMod.Utilities.Levels;
 
 namespace XLMenuMod.Patches.Level
 {

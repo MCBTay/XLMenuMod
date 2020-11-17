@@ -8,20 +8,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace XLMenuMod.UserInterface
+namespace XLMenuMod.Utilities.UserInterface
 {
 	public class UserInterfaceHelper
     {
-	    
-
-		public static Texture2D OriginalReplayBackground { get; set; }
+	    public static Texture2D OriginalReplayBackground { get; set; }
 		public static Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
+
 		public static Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
 		public static Texture2D DarkModeReplayBackground { get; set; }
+
 		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
 		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
-
-		
 
 		private static UserInterfaceHelper _instance;
 	    public static UserInterfaceHelper Instance
@@ -42,13 +40,13 @@ namespace XLMenuMod.UserInterface
 			LoadBackgroundTexture();
 		}
 
-		public TMP_Text CreateSortLabel(TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
+		public TMP_Text CreateSortLabel(bool darkModeEnabled, TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
         {
             TMP_Text label = GameObject.Instantiate(sourceText, parent);
             label.transform.localScale = new Vector3(1, 1, 1);
             
-            UpdateLabelColor(label, Main.Settings.EnableDarkMode ? DarkModeText : DefaultText);
-            label.spriteAsset = Main.Settings.EnableDarkMode ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
+            UpdateLabelColor(label, darkModeEnabled ? DarkModeText : DefaultText);
+            label.spriteAsset = darkModeEnabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
 
             label.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
             label.gameObject.SetActive(false);
@@ -107,7 +105,7 @@ namespace XLMenuMod.UserInterface
 		public static ColorBlock DefaultText = new ColorBlock
 		{
 			colorMultiplier = 1,
-			disabledColor = new Color(0.784f, 0.784f, 0.784f, 1.000f),
+			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
 			fadeDuration = 0,
 			highlightedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f),
 			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
@@ -148,27 +146,28 @@ namespace XLMenuMod.UserInterface
 			label.color = color.normalColor;
 		}
 
+		//TODO: Come back to this!!
         public void UpdateFontSize(TMP_Text label)
         {
-	        switch (Main.Settings.FontSize)
-	        {
-		        case FontSizePreset.Small:
-			        label.fontSize = 30;
-			        break;
-		        case FontSizePreset.Smaller:
-			        label.fontSize = 24;
-			        break;
-		        case FontSizePreset.Normal:
-		        default:
-			        label.fontSize = 36;
-			        break;
-	        }
+	        //switch (Main.Settings.FontSize)
+	        //{
+		       // case FontSizePreset.Small:
+			      //  label.fontSize = 30;
+			      //  break;
+		       // case FontSizePreset.Smaller:
+			      //  label.fontSize = 24;
+			      //  break;
+		       // case FontSizePreset.Normal:
+		       // default:
+			      //  label.fontSize = 36;
+			      //  break;
+	        //}
         }
 
         public void ToggleDarkMode(bool enabled)
         {
-			GameStateMachine.Instance.PauseObject.ToggleDarkMode(enabled);
-			GameStateMachine.Instance.SettingsObject.ToggleDarkMode(enabled);
+			ToggleDarkMode(GameStateMachine.Instance.PauseObject, enabled);
+			ToggleDarkMode(GameStateMachine.Instance.SettingsObject, enabled);
 
 			ToggleDarkMode(GameStateMachine.Instance.TutorialMenuObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.FeetControlTutorialObject, enabled, true);
@@ -179,19 +178,19 @@ namespace XLMenuMod.UserInterface
 			ToggleDarkMode(GameStateMachine.Instance.ChallengePlayObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.SpotSelectionObject, enabled);
 
-			GameStateMachine.Instance.LevelSelectionObject.ToggleDarkMode(enabled);
+			ToggleDarkMode(GameStateMachine.Instance.LevelSelectionObject, enabled);
 
-			GameStateMachine.Instance.ReplayMenuObject.ToggleDarkMode(enabled, true, true);
-			GameStateMachine.Instance.ReplayDeleteDialog.ToggleDarkMode(enabled, true);
-			ReplayEditorController.Instance.ReplayUI.ToggleDarkMode(enabled, true, true);
-			ReplayEditorController.Instance.SaveMenu.gameObject.ToggleDarkMode(enabled, true, true);
+			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
+			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
+			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
+			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
         }
 
         public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false, bool hasSubmeshes = false)
         {
 	        if (gameObject == null) return;
 
-	        SetBackgroundTexture(gameObject);
+	        SetBackgroundTexture(gameObject, enabled);
 
 	        if (hasStaticText)
 	        {
@@ -321,7 +320,7 @@ namespace XLMenuMod.UserInterface
 	        }
 		}
 
-        private void SetBackgroundTexture(GameObject gameObject)
+        private void SetBackgroundTexture(GameObject gameObject, bool darkModeEnabled)
         {
 	        if (gameObject == null) return;
 
@@ -334,7 +333,7 @@ namespace XLMenuMod.UserInterface
 			        SpriteHelper.OriginalBackground = textures.sprite;
 		        }
 
-		        if (Main.Settings.EnableDarkMode && SpriteHelper.DarkModeBackground != null)
+		        if (darkModeEnabled && SpriteHelper.DarkModeBackground != null)
 		        {
 			        textures.sprite = SpriteHelper.DarkModeBackground;
 		        }

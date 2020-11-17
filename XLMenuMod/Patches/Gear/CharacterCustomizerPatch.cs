@@ -1,7 +1,8 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
-using XLMenuMod.Gear;
-using XLMenuMod.Gear.Interfaces;
+using XLMenuMod.Utilities;
+using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.Gear.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {

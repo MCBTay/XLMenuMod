@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.EventSystems;
-using XLMenuMod.Gear;
-using XLMenuMod.UserInterface;
+using XLMenuMod.Utilities;
+using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Gear
 {
@@ -260,7 +261,7 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearSelectionController __instance)
 			{
-				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(__instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
+				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(Main.Settings.EnableDarkMode, __instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
 				UserInterfaceHelper.Instance.ToggleDarkMode(__instance.gameObject, Main.Settings.EnableDarkMode);
 			}
 		}

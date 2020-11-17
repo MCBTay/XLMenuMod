@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace XLMenuMod.UserInterface
+namespace XLMenuMod.Utilities.UserInterface
 {
 	public static class ToggleDarkModeExtensions
 	{

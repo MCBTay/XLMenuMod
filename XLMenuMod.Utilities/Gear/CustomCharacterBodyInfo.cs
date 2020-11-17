@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using XLMenuMod.Gear.Interfaces;
-using XLMenuMod.Interfaces;
+using XLMenuMod.Utilities.Gear.Interfaces;
+using XLMenuMod.Utilities.Interfaces;
 
-namespace XLMenuMod.Gear
+namespace XLMenuMod.Utilities.Gear
 {
 	public class CustomCharacterBodyInfo : CharacterBodyInfo, ICustomGearInfo
 	{

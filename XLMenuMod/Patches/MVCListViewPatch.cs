@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
-using XLMenuMod.Gear;
-using XLMenuMod.Levels;
+using XLMenuMod.Utilities.Gear;
+using XLMenuMod.Utilities.Levels;
 
 namespace XLMenuMod.Patches
 {

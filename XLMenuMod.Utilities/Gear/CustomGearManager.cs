@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
-using XLMenuMod.Interfaces;
-using XLMenuMod.UserInterface;
+using XLMenuMod.Utilities.Interfaces;
+using XLMenuMod.Utilities.UserInterface;
 
-namespace XLMenuMod.Gear
+namespace XLMenuMod.Utilities.Gear
 {
 	public class CustomGearManager : CustomManager
 	{

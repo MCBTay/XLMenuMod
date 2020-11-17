@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using XLMenuMod.Interfaces;
-using XLMenuMod.UserInterface;
+using XLMenuMod.Utilities.Interfaces;
+using XLMenuMod.Utilities.UserInterface;
 
-namespace XLMenuMod.Levels
+namespace XLMenuMod.Utilities.Levels
 {
 	public class CustomLevelManager : CustomManager
     {

@@ -1,4 +1,4 @@
-﻿namespace XLMenuMod.UserInterface
+﻿namespace XLMenuMod.Utilities.UserInterface
 {
 	public static class SpriteExtensions
 	{
