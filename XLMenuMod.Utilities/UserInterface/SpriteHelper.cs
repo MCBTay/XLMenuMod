@@ -36,11 +36,11 @@ namespace XLMenuMod.Utilities.UserInterface
 
 		public void LoadSprites()
 		{
-			MenuIconAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Assets.xlmenumod"));
+			MenuIconAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Utilities.Assets.xlmenumod"));
 			MenuIcons = MenuIconAb.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
 			MenuIconAb.Unload(false);
 
-			BrandIconsAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Assets.spritesheets_brands"));
+			BrandIconsAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Utilities.Assets.spritesheets_brands"));
 			BrandIcons = BrandIconsAb.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
 			BrandIconsAb.Unload(false);
 

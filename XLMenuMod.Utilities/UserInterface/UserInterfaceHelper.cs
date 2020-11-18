@@ -70,12 +70,12 @@ namespace XLMenuMod.Utilities.UserInterface
         private void LoadBackgroundTexture()
         {
 	        var menuBackground = new Texture2D(2, 2);
-	        if (!menuBackground.LoadImage(ExtractResource("XLMenuMod.Assets.darkmode.png"))) return;
+	        if (!menuBackground.LoadImage(ExtractResource("XLMenuMod.Utilities.Assets.darkmode.png"))) return;
 
 	        SpriteHelper.DarkModeBackground = Sprite.Create(menuBackground, new Rect(0, 0, menuBackground.width, menuBackground.height), new Vector2(0.5f, 0.5f));
 
 			DarkModeReplayBackground = new Texture2D(2, 2);
-	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Assets.PanelTransparent.png"))) return;
+	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Utilities.Assets.PanelTransparent.png"))) return;
 	        DarkModeReplayBackground.name = "PanelTransparent";
         }
 

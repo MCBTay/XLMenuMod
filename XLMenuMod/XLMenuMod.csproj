@@ -107,18 +107,10 @@
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\xlmenumod" />
-    <EmbeddedResource Include="Assets\spritesheets_brands" />
     <None Include="Info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\darkmode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\PanelTransparent.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XLMenuMod.Utilities\XLMenuMod.Utilities.csproj">
@@ -132,12 +124,15 @@
 del /Q /F "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\"
 copy /Y "$(TargetDir)XLMenuMod.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.dll"
 copy /Y "$(TargetDir)XLMenuMod.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.pdb"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.dll"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.pdb"
 copy /Y "$(TargetDir)Info.json" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\Info.json"
 )
 
 if "$(ConfigurationName)"=="Release" (
 mkdir $(TargetDir)XLMenuMod
 copy /Y "$(TargetDir)XLMenuMod.dll" "$(TargetDir)XLMenuMod\XLMenuMod.dll"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "$(TargetDir)XLMenuMod\XLMenuMod.Utilities.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLMenuMod\Info.json"
 
 powershell Compress-Archive -Path '$(TargetDir)XLMenuMod' -DestinationPath '$(TargetDir)XLMenuMod-2-1-0.zip' -Force

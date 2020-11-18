@@ -96,7 +96,15 @@
     <Compile Include="UserInterface\UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\spritesheets_brands" />
+    <EmbeddedResource Include="Assets\xlmenumod" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\darkmode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\PanelTransparent.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
