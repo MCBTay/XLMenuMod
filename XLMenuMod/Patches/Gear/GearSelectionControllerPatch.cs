@@ -17,15 +17,19 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(GearSelectionController __instance, IndexPath index, MVCListHeaderView itemView)
 			{
+				if (index.depth < 2) return;
+
 				CustomGearManager.Instance.SortLabel.gameObject.SetActive(__instance.listView.currentIndexPath[1] >= 10);
 				UserInterfaceHelper.Instance.UpdateLabelColor(CustomGearManager.Instance.SortLabel, Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
 
+				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				// return out if it's not one of the tabs XLMenuMod is aware of.
+				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
+
 				if (CustomGearManager.Instance.CurrentFolder != null)
 				{
-					var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-
 					if (index[0] < 0) return;
-					bool isCustom = index[1] >= gear[index[0]].Length;
+					bool isCustom = index[1] >= officialGear[index[0]].Length;
 
 					if (isCustom || index[1] == 1)
 					{
@@ -53,7 +57,11 @@ namespace XLMenuMod.Patches.Gear
 				if (index[1] < 0) return;
 
 				itemView.Label.richText = true;
-				
+
+				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				// return out if it's not one of the tabs XLMenuMod is aware of.
+				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
+
 				bool isCustom = index[1] >= Enum.GetValues(typeof(GearCategory)).Length;
 
 				if (SpriteHelper.MenuIcons != null) 
@@ -116,10 +124,14 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static void Postfix(ref int __result, IndexPath index)
 			{
-				var gear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 
 				if (index[0] < 0) return;
-				bool isCustom = index[0] < gear.Length && index[1] >= gear[index[0]].Length;
+
+				// return out if it's not one of the tabs XLMenuMod is aware of.
+				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
+
+				bool isCustom = index[0] < officialGear.Length && index[1] >= officialGear[index[0]].Length;
 
 				if (isCustom && index.depth >= 3)
 				{
@@ -140,6 +152,12 @@ namespace XLMenuMod.Patches.Gear
 		{
 			static bool Prefix(GearSelectionController __instance, IndexPath index)
 			{
+				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				if (index[0] < 0) return true;
+
+				// return out if it's not one of the tabs XLMenuMod is aware of.
+				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return true;
+
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
 
 				if (gear is CustomGearFolderInfo selectedFolder)
@@ -189,7 +207,7 @@ namespace XLMenuMod.Patches.Gear
 
 				if (index.depth >= 3)
 				{
-					if (__instance.previewCustomizer.HasEquipped((ICharacterCustomizationItem)gear))
+					if (__instance.previewCustomizer.HasEquipped(gear))
 						return false;
 					try
 					{
@@ -221,6 +239,12 @@ namespace XLMenuMod.Patches.Gear
 			/// <param name="index"></param>
 			static void Postfix(GearSelectionController __instance, IndexPath index)
 			{
+				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
+				if (index[0] < 0) return;
+
+				// return out if it's not one of the tabs XLMenuMod is aware of.
+				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
+
 				if (index.depth == 2 || index[1] == 1)
 				{
 					//GearInfo gearAtIndex = GearDatabase.Instance
