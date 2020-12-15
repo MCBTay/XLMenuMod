@@ -22,9 +22,10 @@ namespace XLMenuMod.Patches.Level
 				if (CustomLevelManager.Instance.CurrentFolder != null && SpriteHelper.MenuIcons != null)
 				{
 					var isEasyDay = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day");
+					var isModIo = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\mod.io");
 
-					header.Label.spriteAsset = isEasyDay ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
-					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite={(isEasyDay ? 33 : 10)} tint>"));
+					header.Label.spriteAsset = isEasyDay || isModIo ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
+					header.SetText(CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", $"<sprite name=\"{(isEasyDay || isModIo ? CustomLevelManager.Instance.CurrentFolder.GetName().Replace("\\", string.Empty).ToLower() : "folder_outline")}\" tint>"));
 				}
 			}
 		}
@@ -39,9 +40,10 @@ namespace XLMenuMod.Patches.Level
 					if (SpriteHelper.MenuIcons != null)
 					{
 						var isEasyDay = itemView.Label.text.Equals("\\Easy Day");
+						var isModIo = itemView.Label.text.Equals("\\mod.io");
 
-						itemView.Label.spriteAsset = isEasyDay ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
-						itemView.SetText(itemView.Label.text.Replace("\\", $"<sprite={(isEasyDay ? 33 : 10)} tint>"));
+						itemView.Label.spriteAsset = isEasyDay || isModIo ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
+						itemView.SetText(itemView.Label.text.Replace("\\", $"<sprite name=\"{(isEasyDay || isModIo ? itemView.Label.text.Replace("\\", string.Empty).ToLower() : "folder_outline")}\" tint>"));
 					}
 				}
 				else if (itemView.Label.text.Equals("..\\"))
@@ -49,7 +51,7 @@ namespace XLMenuMod.Patches.Level
 					if (SpriteHelper.MenuIcons != null)
 					{
 						itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
-						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite=9 tint>Go Back"));
+						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite name=\"folder\" tint>Go Back"));
 					}
 				}
 			}
