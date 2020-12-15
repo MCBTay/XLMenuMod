@@ -89,7 +89,7 @@ namespace XLMenuMod.Utilities.UserInterface
 						UserInterfaceHelper.OriginalReplayBackground = image.mainTexture as Texture2D;
 					}
 
-					var texture = enabled ? UserInterfaceHelper.DarkModeReplayBackground : UserInterfaceHelper.OriginalReplayBackground;
+					var texture = enabled ? SpriteHelper.DarkModeReplayBackground : UserInterfaceHelper.OriginalReplayBackground;
 					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
 					image.sprite = newSprite;
 				}

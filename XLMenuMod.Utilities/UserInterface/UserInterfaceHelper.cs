@@ -16,7 +16,6 @@ namespace XLMenuMod.Utilities.UserInterface
 		public static Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
 
 		public static Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
-		public static Texture2D DarkModeReplayBackground { get; set; }
 
 		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
 		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
@@ -36,8 +35,6 @@ namespace XLMenuMod.Utilities.UserInterface
 		public void LoadAssets()
 		{
 			SpriteHelper.Instance.LoadSprites();
-
-			LoadBackgroundTexture();
 		}
 
 		public TMP_Text CreateSortLabel(bool darkModeEnabled, TMP_Text sourceText, Transform parent, string sort, int yOffset = -50)
@@ -65,18 +62,6 @@ namespace XLMenuMod.Utilities.UserInterface
             //var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
 
             label?.SetText(sortLabelText); //+ defaultLabelText);
-        }
-
-        private void LoadBackgroundTexture()
-        {
-	        var menuBackground = new Texture2D(2, 2);
-	        if (!menuBackground.LoadImage(ExtractResource("XLMenuMod.Utilities.Assets.darkmode.png"))) return;
-
-	        SpriteHelper.DarkModeBackground = Sprite.Create(menuBackground, new Rect(0, 0, menuBackground.width, menuBackground.height), new Vector2(0.5f, 0.5f));
-
-			DarkModeReplayBackground = new Texture2D(2, 2);
-	        if (!DarkModeReplayBackground.LoadImage(ExtractResource("XLMenuMod.Utilities.Assets.PanelTransparent.png"))) return;
-	        DarkModeReplayBackground.name = "PanelTransparent";
         }
 
         public static ColorBlock DarkModeText = new ColorBlock
@@ -262,7 +247,7 @@ namespace XLMenuMod.Utilities.UserInterface
 						OriginalReplayBackground = image.mainTexture as Texture2D;
 					}
 
-					var texture = enabled ? DarkModeReplayBackground : OriginalReplayBackground;
+					var texture = enabled ? SpriteHelper.DarkModeReplayBackground : OriginalReplayBackground;
 					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
 					image.sprite = newSprite;
 				}

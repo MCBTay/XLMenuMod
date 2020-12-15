@@ -10,17 +10,16 @@ namespace XLMenuMod.Utilities.UserInterface
 {
 	public class SpriteHelper
 	{
-		public AssetBundle MenuIconAb { get; private set; }
-		public static TMP_SpriteAsset MenuIcons { get; private set; }
+		public AssetBundle XLMenuModAB;
 
-		public AssetBundle BrandIconsAb { get; private set; }
-		public static TMP_SpriteAsset BrandIcons { get; private set; }
+		public static TMP_SpriteAsset MenuIcons;
+		public static TMP_SpriteAsset BrandIcons;
+		public static Sprite OriginalBackground;
+		public static Sprite DarkModeBackground;
+		public static Texture2D DarkModeReplayBackground;
 
-		public static Sprite OriginalBackground { get; set; }
-		public static Sprite DarkModeBackground { get; set; }
-
-		public static TMP_SpriteAsset DarkControllerIcons { get; set; }
-		public static TMP_SpriteAsset LightControllerIcons { get; set; }
+		public static TMP_SpriteAsset DarkControllerIcons;
+		public static TMP_SpriteAsset LightControllerIcons;
 
 		private static SpriteHelper _instance;
 		public static SpriteHelper Instance
@@ -36,13 +35,12 @@ namespace XLMenuMod.Utilities.UserInterface
 
 		public void LoadSprites()
 		{
-			MenuIconAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Utilities.Assets.xlmenumod"));
-			MenuIcons = MenuIconAb.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
-			MenuIconAb.Unload(false);
-
-			BrandIconsAb = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Utilities.Assets.spritesheets_brands"));
-			BrandIcons = BrandIconsAb.LoadAllAssets<TMP_SpriteAsset>()?.FirstOrDefault();
-			BrandIconsAb.Unload(false);
+			XLMenuModAB = AssetBundle.LoadFromMemory(UserInterfaceHelper.ExtractResource("XLMenuMod.Utilities.Assets.xlmenumod"));
+			MenuIcons = XLMenuModAB.LoadAsset<TMP_SpriteAsset>("UISpriteSheet_White");
+			BrandIcons = XLMenuModAB.LoadAsset<TMP_SpriteAsset>("BrandsSpriteSheet_White");
+			DarkModeBackground = XLMenuModAB.LoadAsset<Sprite>("DarkModeBackground");
+			DarkModeReplayBackground = XLMenuModAB.LoadAsset<Texture2D>("DarkModeReplayBackground");
+			XLMenuModAB.Unload(false);
 
 			var spriteAssets = Resources.FindObjectsOfTypeAll<TMP_SpriteAsset>();
 			DarkControllerIcons = spriteAssets.FirstOrDefault(x => x.name == "ControllerIcons_ReversedOut_Greyish");
