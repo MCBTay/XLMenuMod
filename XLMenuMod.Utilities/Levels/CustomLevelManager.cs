@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ModIO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Utilities.Interfaces;
@@ -18,26 +19,33 @@ namespace XLMenuMod.Utilities.Levels
             CustomFolderInfo parent = null;
 
             AddFolder<CustomLevelFolderInfo>("Easy Day", null, NestedItems, ref parent);
+            CustomFolderInfo easyDayFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\Easy Day" && x.GetPath() == null) as CustomFolderInfo;
 
             parent = null;
 
-            var easyDayFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\Easy Day" && x.GetPath() == null) as CustomFolderInfo;
+            CustomFolderInfo modIoFolder = null;
+            var modIoMaps = LevelManager.Instance.ModLevels.Any(x => x.path.StartsWith(PluginSettings.INSTALLATION_DIRECTORY));
+            if (modIoMaps)
+            {
+	            AddFolder<CustomLevelFolderInfo>("mod.io", null, NestedItems, ref parent);
+	            modIoFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\mod.io" && x.GetPath() == null) as CustomFolderInfo;
+            }
 
             foreach (var level in LevelManager.Instance.ModLevels)
             {
-	            AddLevel(level, easyDayFolder, ref parent);
+	            AddLevel(level, easyDayFolder, modIoFolder, ref parent);
             }
 
             parent = null;
             foreach (var level in LevelManager.Instance.CommunityLevels)
             {
-                AddLevel(level, easyDayFolder, ref parent);
+                AddLevel(level, easyDayFolder, modIoFolder, ref parent);
             }
 
             NestedItems = SortList(NestedItems);
         }
 
-        private void AddLevel(LevelInfo level, CustomFolderInfo easyDayFolder, ref CustomFolderInfo parent)
+        private void AddLevel(LevelInfo level, CustomFolderInfo easyDayFolder, CustomFolderInfo modIoFolder, ref CustomFolderInfo parent)
         {
 	        if (string.IsNullOrEmpty(level.path)) return;
 
@@ -49,9 +57,14 @@ namespace XLMenuMod.Utilities.Levels
 		        AddItem(level, easyDayFolder.Children, ref easyDayFolder);
 		        return;
 	        }
+            
+	        if (level.path.StartsWith(PluginSettings.INSTALLATION_DIRECTORY))
+	        {
+                AddItem(level, modIoFolder.Children, ref modIoFolder);
+                return;
+	        }
 
-	        var levelSubPath = level.path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
-
+	        string levelSubPath = level.path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
 	        if (string.IsNullOrEmpty(levelSubPath)) return;
 
             var folders = levelSubPath.Split('\\').ToList();
