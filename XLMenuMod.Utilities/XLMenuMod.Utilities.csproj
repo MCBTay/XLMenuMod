@@ -37,6 +37,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\XLMenuMod\References\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="modio.UnityPlugin">
+      <HintPath>..\XLMenuMod\References\modio.UnityPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -96,15 +99,11 @@
     <Compile Include="UserInterface\UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\spritesheets_brands" />
-    <EmbeddedResource Include="Assets\xlmenumod" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Assets\darkmode.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\PanelTransparent.png" />
+    <EmbeddedResource Include="Assets\xlmenumod" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
