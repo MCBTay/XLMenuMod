@@ -114,11 +114,6 @@ namespace XLMenuMod.Utilities.UserInterface
 	        button.colors = color;
         }
 
-		public void UpdateLabelColor(MVCListHeaderView header, ColorBlock color)
-		{
-			header.Label.color = color.normalColor;
-		}
-
 		public void UpdateLabelColor(TMP_Text label, ColorBlock color)
 		{
 			var blue = new Color(0.007843138f, 0.4509804f, 1.000f, 1.000f);
