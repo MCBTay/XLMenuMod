@@ -1,0 +1,1088 @@
+fileFormatVersion: 2
+guid: 705a9eb6e3b7f884dbe18a5e01607aac
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7657896258561969588
+    second: BrandsSpriteSheet_White_0
+  - first:
+      213: 123584511912142872
+    second: BrandsSpriteSheet_White_1
+  - first:
+      213: 8444398068826298620
+    second: BrandsSpriteSheet_White_2
+  - first:
+      213: 224974751302692234
+    second: BrandsSpriteSheet_White_3
+  - first:
+      213: 1218050047189581774
+    second: BrandsSpriteSheet_White_4
+  - first:
+      213: 3012263042799290797
+    second: BrandsSpriteSheet_White_5
+  - first:
+      213: -8032441364625912097
+    second: BrandsSpriteSheet_White_6
+  - first:
+      213: -9066421091523405578
+    second: BrandsSpriteSheet_White_7
+  - first:
+      213: 39948965516405639
+    second: BrandsSpriteSheet_White_8
+  - first:
+      213: -6964013307914164346
+    second: BrandsSpriteSheet_White_9
+  - first:
+      213: -7236231155506125534
+    second: BrandsSpriteSheet_White_10
+  - first:
+      213: -7576510931053678389
+    second: BrandsSpriteSheet_White_11
+  - first:
+      213: 7921289353345236897
+    second: BrandsSpriteSheet_White_12
+  - first:
+      213: 2900783499490848394
+    second: BrandsSpriteSheet_White_13
+  - first:
+      213: -7677958291592491659
+    second: BrandsSpriteSheet_White_14
+  - first:
+      213: -7508190551234459982
+    second: BrandsSpriteSheet_White_15
+  - first:
+      213: 5280016941637173650
+    second: BrandsSpriteSheet_White_16
+  - first:
+      213: 6028152362440111042
+    second: BrandsSpriteSheet_White_17
+  - first:
+      213: -8669844103472141599
+    second: BrandsSpriteSheet_White_18
+  - first:
+      213: -4497454633418599152
+    second: BrandsSpriteSheet_White_19
+  - first:
+      213: 4622235930671387473
+    second: BrandsSpriteSheet_White_20
+  - first:
+      213: -6979435538143215103
+    second: BrandsSpriteSheet_White_21
+  - first:
+      213: -4063481006053339280
+    second: BrandsSpriteSheet_White_22
+  - first:
+      213: -5554245696043158574
+    second: BrandsSpriteSheet_White_23
+  - first:
+      213: 6765385665944195013
+    second: BrandsSpriteSheet_White_24
+  - first:
+      213: 5619941978907610114
+    second: BrandsSpriteSheet_White_25
+  - first:
+      213: -5670093783472708746
+    second: BrandsSpriteSheet_White_26
+  - first:
+      213: 5195317073892035173
+    second: BrandsSpriteSheet_White_27
+  - first:
+      213: -4508388349162794994
+    second: BrandsSpriteSheet_White_28
+  - first:
+      213: 4590737155287254091
+    second: BrandsSpriteSheet_White_29
+  - first:
+      213: 6415541415459508117
+    second: BrandsSpriteSheet_White_30
+  - first:
+      213: -4173231037750142817
+    second: BrandsSpriteSheet_White_31
+  - first:
+      213: 815746696701343670
+    second: BrandsSpriteSheet_White_32
+  - first:
+      213: 804946600994952051
+    second: BrandsSpriteSheet_White_33
+  - first:
+      213: -7820338377487395212
+    second: BrandsSpriteSheet_White_34
+  - first:
+      213: -3213194698774063845
+    second: BrandsSpriteSheet_White_35
+  - first:
+      213: -1166806443603179559
+    second: BrandsSpriteSheet_White_36
+  - first:
+      213: 7099277457003001650
+    second: BrandsSpriteSheet_White_37
+  - first:
+      213: 3470447015254870574
+    second: BrandsSpriteSheet_White_38
+  - first:
+      213: -4571494353503820960
+    second: BrandsSpriteSheet_White_39
+  - first:
+      213: 4845412865540973719
+    second: BrandsSpriteSheet_White_40
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2049.4285
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c42fe951defa9b590800000000000000
+      internalID: -7657896258561969588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_1
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 2049.4285
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8186344757f07b100800000000000000
+      internalID: 123584511912142872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_2
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 2049.4285
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf8d262ad47803570800000000000000
+      internalID: 8444398068826298620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_3
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 2049.4285
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8d24d628554f1300800000000000000
+      internalID: 224974751302692234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_4
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 2049.4285
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecff16d701267e010800000000000000
+      internalID: 1218050047189581774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_5
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 2049.4285
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da9c61c1745bdc920800000000000000
+      internalID: 3012263042799290797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1708.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fde8156f229078090800000000000000
+      internalID: -8032441364625912097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_7
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 1708.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f853af9d0a9d2280800000000000000
+      internalID: -9066421091523405578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_8
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 1708.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78befba5f5ded8000800000000000000
+      internalID: 39948965516405639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_9
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 1708.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 687eeaa1bcada5f90800000000000000
+      internalID: -6964013307914164346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_10
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 1708.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 225617f6a1eb39b90800000000000000
+      internalID: -7236231155506125534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_11
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 1708.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc07ea54373dad690800000000000000
+      internalID: -7576510931053678389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1367.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1aff935b2b21eed60800000000000000
+      internalID: 7921289353345236897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_13
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 1367.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8e67794937a14820800000000000000
+      internalID: 2900783499490848394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_14
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 1367.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57d4d550d99627590800000000000000
+      internalID: -7677958291592491659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_15
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 1367.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b6c9b7497c8dc790800000000000000
+      internalID: -7508190551234459982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_16
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 1367.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29104560f63664940800000000000000
+      internalID: 5280016941637173650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_17
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 1367.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c3bc2792ac48a350800000000000000
+      internalID: 6028152362440111042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1026.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ea278209b68ea780800000000000000
+      internalID: -8669844103472141599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_19
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 1026.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01556a5e6d4d591c0800000000000000
+      internalID: -4497454633418599152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_20
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 1026.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15317bbd61b752040800000000000000
+      internalID: 4622235930671387473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_21
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 1026.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1028c305b50142f90800000000000000
+      internalID: -6979435538143215103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_22
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 1026.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07fc4a2ed8d9b97c0800000000000000
+      internalID: -4063481006053339280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_23
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 1026.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d3fa1497fa5be2b0800000000000000
+      internalID: -5554245696043158574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 685.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cf8f1b2b6a73ed50800000000000000
+      internalID: 6765385665944195013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_25
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 685.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20c081f347b0efd40800000000000000
+      internalID: 5619941978907610114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_26
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 685.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67365f0deb7cf41b0800000000000000
+      internalID: -5670093783472708746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_27
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 685.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56a4bdc4a59791840800000000000000
+      internalID: 5195317073892035173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_28
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 685.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0054a2deacfe61c0800000000000000
+      internalID: -4508388349162794994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_29
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 685.4286
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b448516be1395bf30800000000000000
+      internalID: 4590737155287254091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 344.42856
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59f45462de4980950800000000000000
+      internalID: 6415541415459508117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_31
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 344.42856
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f98944d5b74b516c0800000000000000
+      internalID: -4173231037750142817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_32
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 344.42856
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b7f4937c4d125b00800000000000000
+      internalID: 815746696701343670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_33
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 344.42856
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37356773baebb2b00800000000000000
+      internalID: 804946600994952051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_34
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 344.42856
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 476528afda3987390800000000000000
+      internalID: -7820338377487395212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_35
+      rect:
+        serializedVersion: 2
+        x: 1705
+        y: 344.42856
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b15576912707863d0800000000000000
+      internalID: -3213194698774063845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3.4285583
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d74567b8bbaecfe0800000000000000
+      internalID: -1166806443603179559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_37
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 3.4285583
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2373a9acb33b58260800000000000000
+      internalID: 7099277457003001650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_38
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 3.4285583
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2ac4145c21892030800000000000000
+      internalID: 3470447015254870574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_39
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 3.4285583
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06363b63b1ace80c0800000000000000
+      internalID: -4571494353503820960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BrandsSpriteSheet_White_40
+      rect:
+        serializedVersion: 2
+        x: 1364
+        y: 3.4285583
+        width: 341.5
+        height: 341.57144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7946da0445d5e3340800000000000000
+      internalID: 4845412865540973719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 814c79513cbefca42b156d3fc42df909
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
