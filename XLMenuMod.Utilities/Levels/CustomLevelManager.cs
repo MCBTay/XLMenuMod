@@ -23,54 +23,66 @@ namespace XLMenuMod.Utilities.Levels
 
             var easyDayFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\Easy Day" && x.GetPath() == null) as CustomFolderInfo;
 
-            foreach (var level in LevelManager.Instance.CustomLevels)
+            foreach (var level in LevelManager.Instance.ModLevels)
             {
-	            if (string.IsNullOrEmpty(level.path)) continue;
+	            AddLevel(level, easyDayFolder, ref parent);
+            }
 
-                if (Path.GetExtension(level.path).ToLower() == ".zip" || Path.GetExtension(level.path).ToLower() == ".rar") continue;
-
-	            if (!level.isAssetBundle)
-	            {
-		            AddItem(level, easyDayFolder.Children, ref easyDayFolder);
-		            continue;
-	            }
-
-	            var levelSubPath = level.path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
-
-	            if (string.IsNullOrEmpty(levelSubPath)) continue;
-
-	            var folders = levelSubPath.Split('\\').ToList();
-	            if (folders == null || !folders.Any()) continue;
-
-	            parent = null;
-	            if (folders.Count == 1)
-	            {
-		            // This level is at the root
-		            AddItem(LevelManager.Instance.LevelInfoForPath(level.path), NestedItems, ref parent);
-		            continue;
-	            }
-
-	            parent = null;
-	            var folderPath = SaveManager.Instance.CustomLevelsDir;
-
-	            for (int i = 0; i < folders.Count; i++)
-	            {
-		            var folder = folders.ElementAt(i);
-		            if (folder == null) continue;
-
-		            if (folder == folders.Last())
-		            {
-			            AddItem(LevelManager.Instance.LevelInfoForPath(level.path), parent == null ? NestedItems : parent.Children, ref parent);
-		            }
-		            else
-		            {
-			            folderPath = Path.Combine(folderPath, folder);
-			            AddFolder<CustomLevelFolderInfo>(folder, folderPath, parent == null ? NestedItems : parent.Children, ref parent);
-		            }
-	            }
+            parent = null;
+            foreach (var level in LevelManager.Instance.CommunityLevels)
+            {
+                AddLevel(level, easyDayFolder, ref parent);
             }
 
             NestedItems = SortList(NestedItems);
+        }
+
+        private void AddLevel(LevelInfo level, CustomFolderInfo easyDayFolder, ref CustomFolderInfo parent)
+        {
+	        if (string.IsNullOrEmpty(level.path)) return;
+
+	        var extension = Path.GetExtension(level.path).ToLower();
+	        if (extension == ".zip" || extension == ".rar" || extension == ".json") return;
+
+	        if (!level.isAssetBundle)
+	        {
+		        AddItem(level, easyDayFolder.Children, ref easyDayFolder);
+		        return;
+	        }
+
+	        var levelSubPath = level.path.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
+
+	        if (string.IsNullOrEmpty(levelSubPath)) return;
+
+            var folders = levelSubPath.Split('\\').ToList();
+	        if (!folders.Any()) return;
+
+	        parent = null;
+	        if (folders.Count == 1)
+	        {
+		        // This level is at the root
+		        AddItem(LevelManager.Instance.LevelInfoForPath(level.path), NestedItems, ref parent);
+		        return;
+	        }
+
+	        parent = null;
+	        var folderPath = SaveManager.Instance.CustomLevelsDir;
+
+	        for (int i = 0; i < folders.Count; i++)
+	        {
+		        var folder = folders.ElementAt(i);
+		        if (folder == null) continue;
+
+		        if (folder == folders.Last())
+		        {
+			        AddItem(LevelManager.Instance.LevelInfoForPath(level.path), parent == null ? NestedItems : parent.Children, ref parent);
+		        }
+		        else
+		        {
+			        folderPath = Path.Combine(folderPath, folder);
+			        AddFolder<CustomLevelFolderInfo>(folder, folderPath, parent == null ? NestedItems : parent.Children, ref parent);
+		        }
+	        }
         }
 
         public override List<ICustomInfo> SortList(List<ICustomInfo> levels)
