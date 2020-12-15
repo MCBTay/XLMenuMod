@@ -147,8 +147,14 @@ namespace XLMenuMod.Utilities
 	            {
 		            Size = GetDirectorySize(path);
                 }
-                
-                Children.Add(new CustomFolderInfo("..\\", Parent == null ? string.Empty : System.IO.Path.GetDirectoryName(Parent.GetPath()), Parent));
+
+	            var childPath = 
+		            Parent == null ? 
+						string.Empty : 
+						string.IsNullOrEmpty(Parent.GetPath()) ? 
+							string.Empty :
+							System.IO.Path.GetDirectoryName(Parent.GetPath());
+                Children.Add(new CustomFolderInfo("..\\", childPath, Parent));
             }
         }
 
