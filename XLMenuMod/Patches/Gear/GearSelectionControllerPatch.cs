@@ -36,7 +36,15 @@ namespace XLMenuMod.Patches.Gear
 						if (SpriteHelper.MenuIcons != null)
 						{
 							itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
-							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", "<sprite=10> "));
+
+							string newText = "<sprite name=\"folder_outline\">";
+
+							if (CustomGearManager.Instance.CurrentFolder.GetName().Equals("\\mod.io"))
+							{
+								itemView.Label.spriteAsset = SpriteHelper.BrandIcons;
+								newText = "<sprite name=\"mod.io\">";
+							}
+							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", newText));
 						}
 					}
 					else
@@ -86,7 +94,7 @@ namespace XLMenuMod.Patches.Gear
 						{
 							if (isCustom || index[1] == 1)
 							{
-								var newText = "<space=18px><sprite=10 tint=1>";
+								var newText = "<space=18px><sprite name=\"folder_outline\" tint=1>";
 
 								if (gearAtIndex is CustomGearFolderInfo folder)
 								{
@@ -97,6 +105,12 @@ namespace XLMenuMod.Patches.Gear
 									}
 								}
 
+								if (gearAtIndex.name.Equals("\\mod.io"))
+								{
+									itemView.Label.spriteAsset = SpriteHelper.BrandIcons;
+									newText = "<space=18px><sprite name=\"mod.io\" tint=1>";
+								}
+								
 								itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
 							}
 							else
@@ -106,7 +120,7 @@ namespace XLMenuMod.Patches.Gear
 						}
 						else if (gearAtIndex.name.Equals("..\\"))
 						{
-							itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=18px><sprite=9 tint=1>Go Back"), true);
+							itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=18px><sprite name=\"folder\" tint=1>Go Back"), true);
 						}
 						else
 						{

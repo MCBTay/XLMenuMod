@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ModIO;
 using UnityEngine.EventSystems;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
@@ -128,6 +129,8 @@ namespace XLMenuMod.Utilities.Gear
 			LastLoaded = gearToLoad;
 			NestedItems.Clear();
 
+			CustomFolderInfo modIoFolder = null;
+
 			foreach (var gear in gearToLoad)
 			{
 				GearInfo newGear = null;
@@ -144,17 +147,53 @@ namespace XLMenuMod.Utilities.Gear
 					textureChange = materialChange?.textureChanges?.FirstOrDefault();
 					newGear = characterBodyInfo;
 				}
+				
+				if (textureChange == null || string.IsNullOrEmpty(textureChange.texturePath)) continue;
 
-				if (textureChange == null) continue;
-				if (string.IsNullOrEmpty(textureChange.texturePath) || !textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir)) continue;
-				var texturePath = textureChange.texturePath;
-				var textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomGearDir + '\\', string.Empty);
-				if (string.IsNullOrEmpty(textureSubPath)) continue;
+				//TODO: Uncomment this bullshit when i have a build with the fixed version
+				//var gearFolder = textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir);
+				var isGearFolder = textureChange.texturePath.StartsWith(SaveManager.Instance.CustomLevelsDir);
+				var isModIo = textureChange.texturePath.StartsWith(PluginSettings.INSTALLATION_DIRECTORY);
+				
+				CustomFolderInfo parent = null;
+				if (isModIo)
+				{
+					AddFolder<CustomGearFolderInfo>("mod.io", null, NestedItems, ref parent);
+					modIoFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\mod.io" && x.GetPath() == null) as CustomFolderInfo;
+					
+					AddItem(newGear, modIoFolder.Children, ref modIoFolder);
+					
+					continue;
+				}
+
+				if (!isGearFolder && !isModIo) continue;
+
+				string textureSubPath = string.Empty;
+				string folderPath = string.Empty;
+
+				//TODO: Uncomment this bullshit when i have a build with the fixed version
+				//if (gearFolder)
+				//{
+				//    textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomGearDir + '\\', string.Empty);
+				//    folderPath = SaveManager.Instance.CustomGearDir;
+				//}
+				if (isGearFolder)
+				{
+					textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
+					folderPath = SaveManager.Instance.CustomLevelsDir;
+				}
+				else if (isModIo) 
+				{
+					textureSubPath = textureChange.texturePath.Replace(PluginSettings.INSTALLATION_DIRECTORY + '\\', string.Empty);
+					folderPath = PluginSettings.INSTALLATION_DIRECTORY;
+				}
+				
+				if (string.IsNullOrEmpty(textureSubPath) || string.IsNullOrEmpty(folderPath)) continue;
 
 				var folders = textureSubPath.Split('\\').ToList();
 				if (!folders.Any()) continue;
 
-				CustomFolderInfo parent = null;
+				parent = null;
 				if (folders.Count == 1 || IsImage(folders.First()))
 				{
 					// This gear item is at the root.
@@ -163,7 +202,6 @@ namespace XLMenuMod.Utilities.Gear
 				}
 
 				parent = null;
-				string folderPath = SaveManager.Instance.CustomGearDir;
 
 				foreach (var folder in folders)
 				{
