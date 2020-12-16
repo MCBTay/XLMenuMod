@@ -47,7 +47,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
             label.gameObject.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 300);
             label.gameObject.SetActive(false);
-
+			   
             SetSortLabelText(ref label, sort.Replace('_', ' '));
 
             label.transform.localPosition = Vector3.zero;
@@ -58,7 +58,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
         public void SetSortLabelText(ref TMP_Text label, string text)
         {
-            var sortLabelText = $"<size=80%><sprite={SpriteHelper.Instance.GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
+			var sortLabelText = $"<size=80%><sprite={SpriteHelper.Instance.GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
             //var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
 
             label?.SetText(sortLabelText); //+ defaultLabelText);
@@ -70,7 +70,6 @@ namespace XLMenuMod.Utilities.UserInterface
 			disabledColor = DarkModeTextColor,
 			fadeDuration = 0,
 			highlightedColor = DarkModeTextColor,
-			//highlightedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f),
 			normalColor = DarkModeTextColor,
 			pressedColor = DarkModeTextColor,
 			selectedColor = DarkModeTextColor
@@ -90,7 +89,7 @@ namespace XLMenuMod.Utilities.UserInterface
 		public static ColorBlock DefaultText = new ColorBlock
 		{
 			colorMultiplier = 1,
-			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
+			disabledColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
 			fadeDuration = 0,
 			highlightedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f),
 			normalColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
@@ -146,7 +145,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
         public void ToggleDarkMode(bool enabled)
         {
-			ToggleDarkMode(GameStateMachine.Instance.PauseObject, enabled);
+	        ToggleDarkMode(GameStateMachine.Instance.PauseObject, enabled);
 			ToggleDarkMode(GameStateMachine.Instance.SettingsObject, enabled);
 
 			ToggleDarkMode(GameStateMachine.Instance.TutorialMenuObject, enabled);
@@ -230,7 +229,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
 			var listView = gameObject.GetComponentInChildren<MVCListView>();
 			ToggleDarkMode(listView, enabled);
-			
+
 			// This is for the replay editor UIs
 			var images = gameObject.GetComponentsInChildren<Image>(true);
 			foreach (var image in images)
