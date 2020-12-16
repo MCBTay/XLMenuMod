@@ -13,18 +13,16 @@ namespace XLMenuMod.Patches.Gear
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
 		public static class GetGearListAtIndexPatch
 		{
-			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo[] __result)
+			static void Postfix(GearDatabase __instance, IndexPath index, GearInfo[][][] ___gearListSource, GearInfo[][][] ___customGearListSource, ref GearInfo[] __result)
 			{
-				var officialGear = Traverse.Create(__instance).Field("gearListSource").GetValue<GearInfo[][][]>();
-
 				// return out if it's not one of the tabs XLMenuMod is aware of.
-				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
+				if (index[1] < 0 || index[1] > (___gearListSource[index[0]].Length * 2) - 1) return;
 
 				List<ICustomInfo> sourceList = null;
 
-				if (index[1] < officialGear[index[0]].Length)
+				if (index[1] < ___gearListSource[index[0]].Length)
 				{
-					var gearToLoad = officialGear[index[0]][index[1]];
+					var gearToLoad = ___gearListSource[index[0]][index[1]];
 
 					if (index[1] == (int)GearCategory.Hair)
 					{
@@ -42,14 +40,12 @@ namespace XLMenuMod.Patches.Gear
 				}
 				else
 				{
-					if (index[1] >= officialGear[index[0]].Length)
+					if (index[1] >= ___gearListSource[index[0]].Length)
 					{
-						var customGear = Traverse.Create(__instance).Field("customGearListSource").GetValue<GearInfo[][][]>();
+						var tempIndex = index[1] - ___customGearListSource[index[0]].Length;
 
-						var tempIndex = index[1] - customGear[index[0]].Length;
-
-						if (tempIndex < customGear[index[0]].Length)
-							CustomGearManager.Instance.LoadNestedItems(customGear[index[0]][tempIndex]);
+						if (tempIndex < ___customGearListSource[index[0]].Length)
+							CustomGearManager.Instance.LoadNestedItems(___customGearListSource[index[0]][tempIndex]);
 					}
 
 					sourceList = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children : CustomGearManager.Instance.NestedItems;
@@ -64,13 +60,12 @@ namespace XLMenuMod.Patches.Gear
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new [] { ArgumentType.Normal, ArgumentType.Out})]
 		public static class GetGearAtIndexPatch
 		{
-			static void Postfix(GearDatabase __instance, IndexPath index, ref GearInfo __result)
+			static void Postfix(GearDatabase __instance, IndexPath index, GearInfo[][][] ___gearListSource, ref GearInfo __result)
 			{
 				if (index.depth < 3) return;
 
-				var officialGear = Traverse.Create(__instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 				// return out if it's not one of the tabs XLMenuMod is aware of.
-				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
+				if (index[1] < 0 || index[1] > (___gearListSource[index[0]].Length * 2) - 1) return;
 
 				List<ICustomInfo> sourceList = null;
 
