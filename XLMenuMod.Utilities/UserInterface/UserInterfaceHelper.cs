@@ -179,6 +179,7 @@ namespace XLMenuMod.Utilities.UserInterface
 			        foreach (var label in labels)
 			        {
 				        if (label.transform.parent.parent.name == "ListViewHeader") continue;
+						if (label.transform.parent.gameObject.GetComponent<MenuButton>() != null) continue;
 
 				        UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
 
