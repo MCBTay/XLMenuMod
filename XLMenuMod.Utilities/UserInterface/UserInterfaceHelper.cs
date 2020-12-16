@@ -178,6 +178,8 @@ namespace XLMenuMod.Utilities.UserInterface
 		        {
 			        foreach (var label in labels)
 			        {
+				        if (label.transform.parent.parent.name == "ListViewHeader") continue;
+
 				        UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
 
 				        if (label.text.Contains("<sprite"))
@@ -198,6 +200,7 @@ namespace XLMenuMod.Utilities.UserInterface
 		        {
 			        foreach (var controllerButton in submeshes)
 			        {
+
 				        if (controllerButton?.spriteAsset != null && controllerButton?.material != null)
 				        {
 					        controllerButton.material.color = enabled ? DarkModeText.normalColor : DefaultText.normalColor;
