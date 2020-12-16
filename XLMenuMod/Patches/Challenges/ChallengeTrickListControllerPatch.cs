@@ -12,6 +12,8 @@ namespace XLMenuMod.Patches.Challenges
 		{
 			public static void Postfix(ChallengeTrickListController __instance)
 			{
+				if (__instance.gameObject.transform.parent.gameObject.name != "Panel") return;
+
 				var items = Traverse.Create(__instance).Field("ItemViews").GetValue<List<ChallengeTrickItemView>>();
 				if (items != null && items.Any())
 				{
