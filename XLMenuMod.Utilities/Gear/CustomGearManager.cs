@@ -150,9 +150,7 @@ namespace XLMenuMod.Utilities.Gear
 				
 				if (textureChange == null || string.IsNullOrEmpty(textureChange.texturePath)) continue;
 
-				//TODO: Uncomment this bullshit when i have a build with the fixed version
-				//var gearFolder = textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir);
-				var isGearFolder = textureChange.texturePath.StartsWith(SaveManager.Instance.CustomLevelsDir);
+				var isGearFolder = textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir);
 				var isModIo = textureChange.texturePath.StartsWith(PluginSettings.INSTALLATION_DIRECTORY);
 				
 				CustomFolderInfo parent = null;
@@ -171,16 +169,10 @@ namespace XLMenuMod.Utilities.Gear
 				string textureSubPath = string.Empty;
 				string folderPath = string.Empty;
 
-				//TODO: Uncomment this bullshit when i have a build with the fixed version
-				//if (gearFolder)
-				//{
-				//    textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomGearDir + '\\', string.Empty);
-				//    folderPath = SaveManager.Instance.CustomGearDir;
-				//}
 				if (isGearFolder)
 				{
-					textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomLevelsDir + '\\', string.Empty);
-					folderPath = SaveManager.Instance.CustomLevelsDir;
+					textureSubPath = textureChange.texturePath.Replace(SaveManager.Instance.CustomGearDir + '\\', string.Empty);
+					folderPath = SaveManager.Instance.CustomGearDir;
 				}
 				else if (isModIo) 
 				{
