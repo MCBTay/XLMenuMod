@@ -82,7 +82,14 @@ namespace XLMenuMod.Utilities.Gear
 
 			CustomFolderInfo parent = null;
 
-			AddFolder<CustomGearFolderInfo>("Easy Day", null, NestedOfficialItems, ref parent);
+			var easyDayItemsExist = gearToLoad.Any(x =>
+				x.name.StartsWith("Blank") ||
+				x.name.StartsWith("Unbranded") ||
+				x.name.StartsWith("Denim") ||
+				unbrandedItems.Contains(x.name));
+
+			if (easyDayItemsExist)
+				AddFolder<CustomGearFolderInfo>("Easy Day", null, NestedOfficialItems, ref parent);
 
 			parent = null;
 
@@ -92,7 +99,7 @@ namespace XLMenuMod.Utilities.Gear
 			{
 				parent = null;
 
-				if (gear.name.StartsWith("Blank") || gear.name.StartsWith("Unbranded") || unbrandedItems.Contains(gear.name))
+				if (gear.name.StartsWith("Blank") || gear.name.StartsWith("Unbranded") || gear.name.StartsWith("Denim") || unbrandedItems.Contains(gear.name))
 				{
 					AddItem(gear, easyDayFolder.Children, ref easyDayFolder);
 				}
