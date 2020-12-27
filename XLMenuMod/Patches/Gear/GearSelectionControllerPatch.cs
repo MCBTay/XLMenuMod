@@ -31,7 +31,7 @@ namespace XLMenuMod.Patches.Gear
 					if (index[0] < 0) return;
 					bool isCustom = index[1] >= officialGear[index[0]].Length;
 
-					if (isCustom || index[1] == 1)
+					if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
 					{
 						if (SpriteHelper.MenuIcons != null)
 						{
@@ -92,7 +92,7 @@ namespace XLMenuMod.Patches.Gear
 
 						if (gearAtIndex.name.StartsWith("\\"))
 						{
-							if (isCustom || index[1] == 1)
+							if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
 							{
 								var newText = "<space=18px><sprite name=\"folder_outline\" tint=1>";
 
@@ -258,11 +258,6 @@ namespace XLMenuMod.Patches.Gear
 
 				// return out if it's not one of the tabs XLMenuMod is aware of.
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
-
-				if (index.depth == 2 || index[1] == 1)
-				{
-					//GearInfo gearAtIndex = GearDatabase.Instance
-				}
 
 				if (index.depth >= 3)
 				{
