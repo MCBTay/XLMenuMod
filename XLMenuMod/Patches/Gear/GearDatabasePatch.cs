@@ -1,5 +1,5 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using XLMenuMod.Utilities;
@@ -24,16 +24,16 @@ namespace XLMenuMod.Patches.Gear
 				{
 					var gearToLoad = ___gearListSource[index[0]][index[1]];
 
-					if (index[1] == (int)GearCategory.Hair)
+					if (CategoryHelper.IsTypeOf(index, GearCategory.Hair))
 					{
 						CustomGearManager.Instance.LoadNestedHairItems(gearToLoad);
 					}
-					else if (index[1] != (int)GearCategory.SkinTone)
+					else if (!CategoryHelper.IsTypeOf(index, GearCategory.SkinTone))
 					{
 						CustomGearManager.Instance.LoadNestedOfficialItems(gearToLoad);
 					}
 
-					if (index[1] != (int)GearCategory.SkinTone)
+					if (!CategoryHelper.IsTypeOf(index, GearCategory.SkinTone))
 					{
 						sourceList = CustomGearManager.Instance.CurrentFolder.HasChildren() ? CustomGearManager.Instance.CurrentFolder.Children : CustomGearManager.Instance.NestedOfficialItems;
 					}
@@ -75,7 +75,7 @@ namespace XLMenuMod.Patches.Gear
 				}
 				else
 				{
-					if (index[1] < Enum.GetValues(typeof(GearCategory)).Length && index[1] != (int)GearCategory.SkinTone)
+					if (index[1] < Enum.GetValues(typeof(GearCategory)).Length && !CategoryHelper.IsTypeOf(index, GearCategory.SkinTone))
 					{
 						sourceList = CustomGearManager.Instance.NestedOfficialItems;
 					}

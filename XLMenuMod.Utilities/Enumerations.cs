@@ -176,6 +176,16 @@
 	    Venture,
     }
 
+    public enum Skater
+    {
+	    MaleStandard = 0,
+	    FemaleStandard = 1,
+	    EvanSmith = 2,
+	    TomAsta = 3,
+	    BrandonWestgate = 4,
+	    TiagoLemos = 5
+    }
+
     public enum GearCategory
     {
         SkinTone = 0,
@@ -188,5 +198,50 @@
         Griptape = 7,
         Trucks = 8,
         Wheels = 9
+    }
+
+    public enum EvanSmithGearCategory
+    {
+	    Top = 0,
+	    Bottom = 1,
+	    Shoes = 2,
+	    Deck = 3,
+	    Griptape = 4,
+	    Trucks = 5,
+	    Wheels = 6
+    }
+
+    public enum TomAstaGearCategory
+    {
+	    Headwear = 0,
+	    Top = 1,
+	    Bottom = 2,
+	    Shoes = 3,
+	    Deck = 4,
+	    Griptape = 5,
+	    Trucks = 6,
+	    Wheels = 7
+    }
+
+    public enum BrandonWestgateGearCategory
+    {
+	    Top = 0,
+	    Bottom = 1,
+	    Shoes = 2,
+	    Deck = 3,
+	    Griptape = 4,
+	    Trucks = 5,
+	    Wheels = 6
+    }
+
+    public enum TiagoLemosGearCategory
+    {
+	    Top = 0,
+	    Bottom = 1,
+	    Shoes = 2,
+	    Deck = 3,
+	    Griptape = 4,
+	    Trucks = 5,
+	    Wheels = 6
     }
 }
