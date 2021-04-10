@@ -2,6 +2,7 @@
 using Rewired;
 using System;
 using System.Collections.Generic;
+using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using XLMenuMod.Utilities;
