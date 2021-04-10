@@ -1,4 +1,6 @@
-﻿namespace XLMenuMod.Utilities.UserInterface
+﻿using SkaterXL.Data;
+
+namespace XLMenuMod.Utilities.UserInterface
 {
 	public static class SpriteExtensions
 	{

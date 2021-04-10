@@ -46,6 +46,9 @@
     <Reference Include="Rewired_Core">
       <HintPath>..\XLMenuMod\References\Rewired_Core.dll</HintPath>
     </Reference>
+    <Reference Include="SkaterXL.Data">
+      <HintPath>..\XLMenuMod\References\SkaterXL.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
