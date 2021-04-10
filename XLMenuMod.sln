@@ -7,11 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLMenuMod", "XLMenuMod\XLMe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLMenuMod.Utilities", "XLMenuMod.Utilities\XLMenuMod.Utilities.csproj", "{99908601-4D46-43D1-A4FD-40D66B369722}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflow", "workflow", "{49DB215F-288B-4CD0-825C-FB73AAAECCB0}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\msbuild.yml = .github\workflows\msbuild.yml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
