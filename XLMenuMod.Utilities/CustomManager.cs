@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkaterXL.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Utilities
 {
-	public abstract class CustomManager
+    public abstract class CustomManager
     {
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }

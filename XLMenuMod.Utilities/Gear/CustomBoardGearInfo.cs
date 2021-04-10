@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using SkaterXL.Data;
+using System.Linq;
 using XLMenuMod.Utilities.Gear.Interfaces;
 using XLMenuMod.Utilities.Interfaces;
 
 namespace XLMenuMod.Utilities.Gear
 {
-    public class CustomBoardGearInfo : BoardGearInfo, ICustomGearInfo
+	public class CustomBoardGearInfo : BoardGearInfo, ICustomGearInfo
     {
         public ICustomInfo Info { get; set; }
 

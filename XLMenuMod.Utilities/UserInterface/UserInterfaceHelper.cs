@@ -162,7 +162,11 @@ namespace XLMenuMod.Utilities.UserInterface
 			ToggleDarkMode(GameStateMachine.Instance.ReplayMenuObject, enabled, true, true);
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
-			ToggleDarkMode(ReplayEditorController.Instance.SaveMenu.gameObject, enabled, true, true);
+			ToggleDarkMode(ReplayEditorController.Instance.Menu.SaveMenu.gameObject, enabled, true, true);
+
+			ToggleDarkMode(GameStateMachine.Instance.WeblinksMenu, enabled, true);
+
+			ToggleDarkMode(GameStateMachine.Instance.MultiplayerMenuObject, enabled, true);
         }
 
         public void ToggleDarkMode(GameObject gameObject, bool enabled, bool hasStaticText = false, bool hasSubmeshes = false)
@@ -233,7 +237,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
 			var listView = gameObject.GetComponentInChildren<MVCListView>();
 			ToggleDarkMode(listView, enabled);
-
+			
 			// This is for the replay editor UIs
 			var images = gameObject.GetComponentsInChildren<Image>(true);
 			foreach (var image in images)
