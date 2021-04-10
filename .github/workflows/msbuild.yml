@@ -32,13 +32,13 @@ jobs:
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
       
     - name: Upload XLMenuMod installable zip
-      uses: actions/upload-artifact@v2.2.2
+      uses: actions/upload-artifact@v2.3.0
       with:
         name: XLMenuMod
         path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip 
           
     - name: Upload XLMenuMod.Utilities.dll
-      uses: actions/upload-artifact@v2.2.2
+      uses: actions/upload-artifact@v2.3.0
       with:
         name: XLMenuMod.Utilities.dll
         path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
