@@ -147,7 +147,7 @@ copy /Y "$(TargetDir)XLMenuMod.dll" "$(TargetDir)XLMenuMod\XLMenuMod.dll"
 copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "$(TargetDir)XLMenuMod\XLMenuMod.Utilities.dll"
 copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLMenuMod\Info.json"
 
-powershell Compress-Archive -Path '$(TargetDir)XLMenuMod' -DestinationPath '$(TargetDir)XLMenuMod-2-3-0.zip' -Force
+powershell Compress-Archive -Path '$(TargetDir)XLMenuMod' -DestinationPath '$(TargetDir)XLMenuMod-2-3-1.zip' -Force
 )</PostBuildEvent>
   </PropertyGroup>
 </Project>
