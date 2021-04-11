@@ -1,4 +1,5 @@
-﻿using SkaterXL.Data;
+﻿using Newtonsoft.Json;
+using SkaterXL.Data;
 using System.Linq;
 using XLMenuMod.Utilities.Gear.Interfaces;
 using XLMenuMod.Utilities.Interfaces;
@@ -7,6 +8,7 @@ namespace XLMenuMod.Utilities.Gear
 {
 	public class CustomBoardGearInfo : BoardGearInfo, ICustomGearInfo
     {
+	    [JsonIgnore]
         public ICustomInfo Info { get; set; }
 
         public CustomBoardGearInfo(string name, string type, bool isCustom, TextureChange[] textureChanges, string[] tags) : base(name, type, isCustom, textureChanges, tags)
