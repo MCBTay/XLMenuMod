@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine.EventSystems;
+using XLMenuMod.Utilities.Extensions;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
 
@@ -158,8 +159,8 @@ namespace XLMenuMod.Utilities.Gear
 				
 				if (textureChange == null || string.IsNullOrEmpty(textureChange.texturePath)) continue;
 
-				var isGearFolder = textureChange.texturePath.StartsWith(SaveManager.Instance.CustomGearDir);
-				var isModIo = textureChange.texturePath.StartsWith(PluginSettings.INSTALLATION_DIRECTORY);
+				var isGearFolder = textureChange.texturePath.IsSubPathOf(SaveManager.Instance.CustomGearDir);
+				var isModIo = textureChange.texturePath.IsSubPathOf(PluginSettings.INSTALLATION_DIRECTORY);
 				
 				CustomFolderInfo parent = null;
 				if (isModIo)
