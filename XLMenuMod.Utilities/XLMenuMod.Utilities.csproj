@@ -87,6 +87,7 @@
     <Compile Include="CustomInfo.cs" />
     <Compile Include="CustomManager.cs" />
     <Compile Include="Enumerations.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Gear\CategoryHelper.cs" />
     <Compile Include="Gear\CustomBoardGearInfo.cs" />
     <Compile Include="Gear\CustomCharacterBodyInfo.cs" />
