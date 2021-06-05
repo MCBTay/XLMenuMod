@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ModIO;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ModIO;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using XLMenuMod.Utilities.Extensions;
 using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.UserInterface;
 
@@ -24,7 +25,7 @@ namespace XLMenuMod.Utilities.Levels
             parent = null;
 
             CustomFolderInfo modIoFolder = null;
-            var modIoMaps = LevelManager.Instance.ModLevels.Any(x => x.path.StartsWith(PluginSettings.INSTALLATION_DIRECTORY));
+            var modIoMaps = LevelManager.Instance.ModLevels.Any(x => x.path.IsSubPathOf(PluginSettings.INSTALLATION_DIRECTORY));
             if (modIoMaps)
             {
 	            AddFolder<CustomLevelFolderInfo>("mod.io", null, NestedItems, ref parent);
@@ -58,7 +59,7 @@ namespace XLMenuMod.Utilities.Levels
 		        return;
 	        }
             
-	        if (level.path.StartsWith(PluginSettings.INSTALLATION_DIRECTORY))
+	        if (level.path.IsSubPathOf(PluginSettings.INSTALLATION_DIRECTORY))
 	        {
                 AddItem(level, modIoFolder.Children, ref modIoFolder);
                 return;

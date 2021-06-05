@@ -1,8 +1,9 @@
 ﻿using HarmonyLib;
+using ModIO;
 using Rewired;
+using SkaterXL.Data;
 using System;
 using System.Collections.Generic;
-using SkaterXL.Data;
 using TMPro;
 using UnityEngine.EventSystems;
 using XLMenuMod.Utilities;
@@ -297,6 +298,17 @@ namespace XLMenuMod.Patches.Gear
 			{
 				CustomGearManager.Instance.SortLabel = UserInterfaceHelper.Instance.CreateSortLabel(Main.Settings.EnableDarkMode, __instance.listView.HeaderView.Label, __instance.listView.HeaderView.transform, ((GearSortMethod)CustomGearManager.Instance.CurrentSort).ToString(), -60);
 				UserInterfaceHelper.Instance.ToggleDarkMode(__instance.gameObject, Main.Settings.EnableDarkMode);
+
+				ModManager.QueryInstalledMods(null, x =>
+				{
+					foreach (var kvp in x)
+					{
+						ModManager.GetModProfile(kvp.Key.modId, y =>
+						{
+							CustomGearManager.Instance.InstalledGearMods.Add(new KeyValuePair<string, string>(kvp.Value, y.name));
+						}, null);
+					}
+				});
 			}
 		}
 
