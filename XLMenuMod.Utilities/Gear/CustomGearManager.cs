@@ -18,9 +18,12 @@ namespace XLMenuMod.Utilities.Gear
 		public List<ICustomInfo> NestedOfficialItems { get; set; }
 		private GearInfo[] LastLoaded { get; set; }
 
+		public IList<KeyValuePair<string, string>> InstalledGearMods;
+
 		public CustomGearManager()
 		{
 			NestedOfficialItems = new List<ICustomInfo>();
+			InstalledGearMods = new List<KeyValuePair<string, string>>();
 		}
 
 		public void LoadNestedHairItems(GearInfo[] objectsToLoad = null)
@@ -167,12 +170,15 @@ namespace XLMenuMod.Utilities.Gear
 				{
 					AddFolder<CustomGearFolderInfo>("mod.io", null, NestedItems, ref parent);
 					modIoFolder = NestedItems.FirstOrDefault(x => x.GetName() == "\\mod.io" && x.GetPath() == null) as CustomFolderInfo;
-					
-					AddItem(newGear, modIoFolder.Children, ref modIoFolder);
-					
+
+					var mod = InstalledGearMods.FirstOrDefault(x => textureChange.texturePath.IsSubPathOf(x.Key));
+
+					AddFolder<CustomGearFolderInfo>(mod.Value, null, modIoFolder.Children, ref parent);
+					AddItem(newGear, parent.Children, ref modIoFolder);
+
 					continue;
 				}
-
+				 
 				if (!isGearFolder && !isModIo) continue;
 
 				string textureSubPath = string.Empty;
