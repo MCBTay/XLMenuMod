@@ -41,6 +41,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>References\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="BFSUtilities">
+      <HintPath>References\BFSUtilities.dll</HintPath>
+    </Reference>
     <Reference Include="modio.UnityPlugin">
       <HintPath>References\modio.UnityPlugin.dll</HintPath>
     </Reference>
