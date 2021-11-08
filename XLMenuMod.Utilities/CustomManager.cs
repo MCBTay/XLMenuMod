@@ -11,13 +11,19 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Utilities
 {
-    public abstract class CustomManager
+	public abstract class CustomManager
     {
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }
         public float LastSelectedTime { get; set; }
-        public TMP_Text SortLabel { get; set; }
         public int CurrentSort { get; set; }
+
+        protected TMP_Text _sortLabel;
+        public TMP_Text SortLabel
+        {
+	        get => _sortLabel;
+	        set => _sortLabel = value;
+        }
 
         public CustomManager()
         {

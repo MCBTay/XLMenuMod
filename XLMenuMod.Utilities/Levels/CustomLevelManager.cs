@@ -101,7 +101,7 @@ namespace XLMenuMod.Utilities.Levels
 
         public override List<ICustomInfo> SortList(List<ICustomInfo> levels)
         {
-            UserInterfaceHelper.Instance.SetSortLabelText(ref SortLabel, ((LevelSortMethod)CurrentSort).ToString());
+            UserInterfaceHelper.Instance.SetSortLabelText(ref _sortLabel, ((LevelSortMethod)CurrentSort).ToString());
 
             List<ICustomInfo> sorted;
 
