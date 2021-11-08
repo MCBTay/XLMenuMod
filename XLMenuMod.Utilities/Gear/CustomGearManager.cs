@@ -18,7 +18,7 @@ namespace XLMenuMod.Utilities.Gear
 		public List<ICustomInfo> NestedOfficialItems { get; set; }
 		private GearInfo[] LastLoaded { get; set; }
 
-		public IList<KeyValuePair<string, string>> InstalledGearMods;
+		public IList<KeyValuePair<string, string>> InstalledGearMods { get; set; }
 
 		public CustomGearManager()
 		{
