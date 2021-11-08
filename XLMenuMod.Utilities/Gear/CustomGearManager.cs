@@ -30,10 +30,9 @@ namespace XLMenuMod.Utilities.Gear
 		{
 			NestedOfficialItems.Clear();
 
-			var gearToLoad = (GearInfo[])objectsToLoad;
-			if (gearToLoad == null) return;
+			if (objectsToLoad == null) return;
 
-			foreach (var gear in gearToLoad)
+			foreach (var gear in objectsToLoad)
 			{
 				CustomFolderInfo parent = null;
 
