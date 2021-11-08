@@ -65,7 +65,7 @@
     /// <summary>
     /// Maps to the TMP_SpriteAsset ControllerIcons_ReversedOut_Grayish found within the game.
     /// </summary>
-    public enum ControllerIconSprite_Gray
+    public enum ControllerIconSpriteGray
     {
 	    PS4_Circle,
 	    PS4_L1,
