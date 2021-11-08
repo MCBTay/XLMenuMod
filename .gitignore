@@ -3,16 +3,25 @@
 ################################################################################
 
 /.vs
-/XLMenuMod/bin
-/XLMenuMod/obj
 /XLMenuMod/References
 /packages
 /XLMenuMod/Assets/UISpriteSheet.png
-/XLMenuMod.Utilities/bin/Debug
-/XLMenuMod.Utilities/obj/Debug
 /XLMenuMod.Utilities/Assets/UISpriteSheet.png
 /XLMenuMod.Unity/Library
 /XLMenuMod.Unity/Logs
 /XLMenuMod.Unity/Temp
-/XLMenuMod.Utilities/bin/Release
-/XLMenuMod.Utilities/obj/Release
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
