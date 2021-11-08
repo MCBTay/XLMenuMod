@@ -18,7 +18,7 @@ namespace XLMenuMod.Utilities.Gear
 		public List<ICustomInfo> NestedOfficialItems { get; set; }
 		private GearInfo[] LastLoaded { get; set; }
 
-		public IList<KeyValuePair<string, string>> InstalledGearMods;
+		public IList<KeyValuePair<string, string>> InstalledGearMods { get; set; }
 
 		public CustomGearManager()
 		{
@@ -30,10 +30,9 @@ namespace XLMenuMod.Utilities.Gear
 		{
 			NestedOfficialItems.Clear();
 
-			var gearToLoad = (GearInfo[])objectsToLoad;
-			if (gearToLoad == null) return;
+			if (objectsToLoad == null) return;
 
-			foreach (var gear in gearToLoad)
+			foreach (var gear in objectsToLoad)
 			{
 				CustomFolderInfo parent = null;
 
@@ -241,7 +240,7 @@ namespace XLMenuMod.Utilities.Gear
 
 		public override List<ICustomInfo> SortList(List<ICustomInfo> gear)
 		{
-			UserInterfaceHelper.Instance.SetSortLabelText(ref SortLabel, ((GearSortMethod)CurrentSort).ToString());
+			UserInterfaceHelper.Instance.SetSortLabelText(ref _sortLabel, ((GearSortMethod)CurrentSort).ToString());
 
 			List<ICustomInfo> sorted;
 
@@ -256,7 +255,6 @@ namespace XLMenuMod.Utilities.Gear
 				case (int)GearSortMethod.Name_ASC:
 					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
 					break;
-				case (int)GearSortMethod.Name_DESC:
 				default:
 					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
 					break;

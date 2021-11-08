@@ -23,8 +23,6 @@ namespace XLMenuMod.Utilities.Gear
 				case (int)Skater.TiagoLemos:
 					if (!Enum.TryParse(category.ToString(), out TiagoLemosGearCategory tlCategory)) return false;
 					return index[1] == (int)tlCategory;
-				case (int)Skater.MaleStandard:
-				case (int)Skater.FemaleStandard:
 				default:
 					if (!Enum.TryParse(category.ToString(), out GearCategory gearCategory)) return false;
 					return index[1] == (int)gearCategory;

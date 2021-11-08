@@ -160,7 +160,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
 		public int GetSpriteIndex_YButton_Gray()
 		{
-			ControllerIconSprite_Gray returnVal;
+			ControllerIconSpriteGray returnVal;
 
 			switch (Application.platform)
 			{
@@ -169,20 +169,20 @@ namespace XLMenuMod.Utilities.UserInterface
 					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
 					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
 					{
-						returnVal = ControllerIconSprite_Gray.PS4_Triangle_Button;
+						returnVal = ControllerIconSpriteGray.PS4_Triangle_Button;
 						break;
 					}
-					returnVal = ControllerIconSprite_Gray.XB1_Y;
+					returnVal = ControllerIconSpriteGray.XB1_Y;
 					break;
 				case RuntimePlatform.PS4:
-					returnVal = ControllerIconSprite_Gray.PS4_Triangle_Button;
+					returnVal = ControllerIconSpriteGray.PS4_Triangle_Button;
 					break;
 				case RuntimePlatform.Switch:
-					returnVal = ControllerIconSprite_Gray.SWITCH_X;
+					returnVal = ControllerIconSpriteGray.SWITCH_X;
 					break;
 				case RuntimePlatform.XboxOne:
 				default:
-					returnVal = ControllerIconSprite_Gray.XB1_Y;
+					returnVal = ControllerIconSpriteGray.XB1_Y;
 					break;
 			}
 
