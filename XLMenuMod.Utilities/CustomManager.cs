@@ -16,7 +16,7 @@ namespace XLMenuMod.Utilities
         public CustomFolderInfo CurrentFolder { get; set; }
         public List<ICustomInfo> NestedItems { get; set; }
         public float LastSelectedTime { get; set; }
-        public TMP_Text SortLabel;
+        public TMP_Text SortLabel { get; set; }
         public int CurrentSort { get; set; }
 
         public CustomManager()
