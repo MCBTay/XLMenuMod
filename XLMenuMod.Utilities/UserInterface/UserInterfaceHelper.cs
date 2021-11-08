@@ -163,6 +163,10 @@ namespace XLMenuMod.Utilities.UserInterface
 			ToggleDarkMode(GameStateMachine.Instance.ReplayDeleteDialog, enabled, true);
 			ToggleDarkMode(ReplayEditorController.Instance.ReplayUI, enabled, true, true);
 			ToggleDarkMode(ReplayEditorController.Instance.Menu.SaveMenu.gameObject, enabled, true, true);
+			ToggleDarkMode(ReplayEditorController.Instance.Menu.MainMenuPanel.gameObject, enabled, true, true);
+			ToggleDarkMode(ReplayEditorController.Instance.Menu.SettingsMenu.gameObject, enabled, true, true);
+
+			ToggleDarkMode(GameStateMachine.Instance.ModBrowserObject, enabled, true, true);
 
 			ToggleDarkMode(GameStateMachine.Instance.WeblinksMenu, enabled, true);
 
