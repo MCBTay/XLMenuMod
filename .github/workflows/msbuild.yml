@@ -79,7 +79,7 @@ jobs:
         
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: dotnet test --no-build --verbosity normal --settings coverlet.runsettings --logger:trx
+      run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
         
     - name: Stop SonarScanner Analysis
       env:
