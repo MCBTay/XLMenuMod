@@ -59,9 +59,7 @@ namespace XLMenuMod.Utilities.UserInterface
         public void SetSortLabelText(ref TMP_Text label, string text)
         {
 			var sortLabelText = $"<size=80%><sprite={SpriteHelper.Instance.GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
-            //var defaultLabelText = $"<size=60%><voffset=0.25em><sprite={GetSpriteIndex_XButton()}></voffset> <b>Set Default</b>";
-
-            label?.SetText(sortLabelText); //+ defaultLabelText);
+            label?.SetText(sortLabelText);
         }
 
         public static ColorBlock DarkModeText = new ColorBlock
@@ -191,12 +189,9 @@ namespace XLMenuMod.Utilities.UserInterface
 
 				        UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
 
-				        if (label.text.Contains("<sprite"))
+				        if (label.text.Contains("<sprite") && label.spriteAsset.name.Contains("Controller"))
 				        {
-					        if (label.spriteAsset.name.Contains("Controller"))
-					        {
-						        label.spriteAsset = enabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
-					        }
+					        label.spriteAsset = enabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
 				        }
 					}
 		        }
