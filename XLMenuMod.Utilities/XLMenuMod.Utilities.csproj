@@ -37,6 +37,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\XLMenuMod\References\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="BFSUtilities">
+      <HintPath>..\XLMenuMod\References\BFSUtilities.dll</HintPath>
+    </Reference>
     <Reference Include="modio.UnityPlugin">
       <HintPath>..\XLMenuMod\References\modio.UnityPlugin.dll</HintPath>
     </Reference>
