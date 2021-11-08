@@ -1,4 +1,4 @@
-name: Build and Upload XLMenuMod
+name: Build, Test, & Analyze
 
 on:
   push:
