@@ -335,7 +335,7 @@ namespace XLMenuMod.Utilities.UserInterface
 	        Assembly a = Assembly.GetExecutingAssembly();
 	        using (var resFilestream = a.GetManifestResourceStream(filename))
 	        {
-		        if (resFilestream == null) return null;
+		        if (resFilestream == null) return new byte[0];
 		        byte[] ba = new byte[resFilestream.Length];
 		        resFilestream.Read(ba, 0, ba.Length);
 		        return ba;
