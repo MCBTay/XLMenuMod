@@ -22,6 +22,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Setup .NET 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
       
@@ -66,11 +71,14 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"MCBTay_XLMenuMod" /o:"mcbtay" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
         
-    - name: Build and analyze
+    - name: MSBuild
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: powershell
       run: |
         msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+        
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --settings coverlet.runsettings --logger:trx
         
     - name: Stop SonarScanner Analysis
       env:
