@@ -255,7 +255,6 @@ namespace XLMenuMod.Utilities.Gear
 				case (int)GearSortMethod.Name_ASC:
 					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
 					break;
-				case (int)GearSortMethod.Name_DESC:
 				default:
 					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
 					break;
