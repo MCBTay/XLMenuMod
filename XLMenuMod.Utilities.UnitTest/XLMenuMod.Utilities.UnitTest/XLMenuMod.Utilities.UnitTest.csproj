@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\XLMenuMod.Utilities\XLMenuMod.Utilities.csproj" />
+  </ItemGroup>
+
 </Project>
