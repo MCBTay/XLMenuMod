@@ -98,13 +98,10 @@ namespace XLMenuMod.Patches.Gear
 							{
 								var newText = "<space=18px><sprite name=\"folder_outline\" tint=1>";
 
-								if (gearAtIndex is CustomGearFolderInfo folder)
+								if (gearAtIndex is CustomGearFolderInfo folder && folder.CustomSprite != null)
 								{
-									if (folder.CustomSprite != null)
-									{
-										itemView.Label.spriteAsset = folder.CustomSprite;
-										newText = "<space=18px><sprite=0 tint=1>";
-									}
+									itemView.Label.spriteAsset = folder.CustomSprite;
+									newText = "<space=18px><sprite=0 tint=1>";
 								}
 
 								if (gearAtIndex.name.Equals("\\mod.io"))
