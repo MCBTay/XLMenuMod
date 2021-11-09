@@ -61,7 +61,7 @@ namespace XLMenuMod.Patches.Gear
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new [] { ArgumentType.Normal, ArgumentType.Out})]
 		public static class GetGearAtIndexPatch
 		{
-			static void Postfix(GearDatabase __instance, IndexPath index, GearInfo[][][] ___gearListSource, ref GearInfo __result)
+			static void Postfix(IndexPath index, GearInfo[][][] ___gearListSource, ref GearInfo __result)
 			{
 				if (index.depth < 3) return;
 
