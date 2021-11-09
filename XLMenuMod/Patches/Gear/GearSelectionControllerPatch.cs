@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityModManagerNet;
 using XLMenuMod.Utilities;
 using XLMenuMod.Utilities.Gear;
 using XLMenuMod.Utilities.UserInterface;
@@ -230,6 +231,7 @@ namespace XLMenuMod.Patches.Gear
 					}
 					catch (Exception ex)
 					{
+						UnityModManager.Logger.LogException("XLMenuMod", ex);
 					}
 					__instance.Save();
 					__instance.listView.UpdateList();
