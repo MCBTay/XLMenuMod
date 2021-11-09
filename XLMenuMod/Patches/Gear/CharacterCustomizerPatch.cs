@@ -29,7 +29,7 @@ namespace XLMenuMod.Patches.Gear
         [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.PreviewItem))]
         static class PreviewItemPatch
         {
-	        static bool Prefix(GearInfo preview, List<GearInfo> toBeCachedGear)
+	        static bool Prefix(GearInfo preview)
 	        {
 		        if (preview is CustomGearFolderInfo highlightedFolder) return false;
 		        return true;
