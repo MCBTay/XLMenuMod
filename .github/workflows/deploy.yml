@@ -35,6 +35,19 @@ jobs:
       run: |
         msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
         
+    - name: Dump context
+      uses: crazy-max/ghaction-dump-context@v1.2.0
+      
+    - name: Get Release Tag
+      id: release_tag
+      run: |
+        $TAG_NAME = ${{ github.event.release.tag_name }}
+        echo "::set-output name=release_tag::$TAG_NAME"
+        
+    - name: Get Latest Tag
+      if: $ {{ steps.release_tag.outputs.release_tag == null }}
+      uses: WyriHaximus/github-action-get-previous-tag@v1
+        
     - name: Determine Archive Name
       id: filename
       run: |
