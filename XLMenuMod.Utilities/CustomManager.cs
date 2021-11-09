@@ -25,7 +25,7 @@ namespace XLMenuMod.Utilities
 	        set => _sortLabel = value;
         }
 
-        public CustomManager()
+        protected CustomManager()
         {
             CurrentFolder = null;
             NestedItems = new List<ICustomInfo>();

@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace XLMenuMod.Patches.Level
 {
-	public class LevelManagerPatch
+	public static class LevelManagerPatch
     {
         /// <summary>
         /// Some levels have custom script assemblies that go with them.  Find if an assembly exists that matches the maps file name, and load it if soo.
