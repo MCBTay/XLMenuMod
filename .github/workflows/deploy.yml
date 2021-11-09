@@ -22,8 +22,9 @@ jobs:
       with:
         dotnet-version: 5.0.x
       
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
       
     - name: Build
       run: dotnet build --no-restore
