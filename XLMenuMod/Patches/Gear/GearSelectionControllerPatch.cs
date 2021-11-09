@@ -12,7 +12,7 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Gear
 {
-	public class GearSelectionControllerPatch
+	public static class GearSelectionControllerPatch
 	{
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
