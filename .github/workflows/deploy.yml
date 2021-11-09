@@ -17,11 +17,16 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       
+    - name: Setup .NET 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+      
     - name: Restore dependencies
       run: dotnet restore
       
     - name: Build
-      run: dotnet build
+      run: dotnet build --no-restore
         
     - name: Determine Archive Name
       id: filename
