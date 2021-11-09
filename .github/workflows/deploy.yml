@@ -39,8 +39,9 @@ jobs:
       id: filename
       run: |
         $TAG_NAME_REPLACED="${${{ github.event.release.tag_name }}//./-}"
-        echo $TAG_NAME_REPLACED
+        echo "$TAG_NAME_REPLACED"
         $ARCHIVE_NAME="XLMenuMod-${TAG_NAME_REPLACED}.zip"
+        echo "$ARCHIVE_NAME"
         echo "::set-output name=archive_name::$ARCHIVE_NAME"
       
     - name: Zip Release
