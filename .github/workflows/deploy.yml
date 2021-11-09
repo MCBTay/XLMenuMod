@@ -45,7 +45,7 @@ jobs:
         echo "::set-output name=release_tag::$TAG_NAME"
         
     - name: Get Latest Tag
-      if: $ {{ steps.release_tag.outputs.release_tag == null }}
+      #if: $ {{ steps.release_tag.outputs.release_tag == null }}
       uses: WyriHaximus/github-action-get-previous-tag@v1
         
     - name: Determine Archive Name
