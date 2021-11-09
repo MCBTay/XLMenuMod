@@ -9,7 +9,7 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Level
 {
-	public class LevelSelectionControllerPatch
+	public static class LevelSelectionControllerPatch
 	{
 		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
