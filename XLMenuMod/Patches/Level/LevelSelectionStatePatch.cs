@@ -10,7 +10,7 @@ namespace XLMenuMod.Patches.Level
         [HarmonyPatch(typeof(LevelSelectionState), nameof(LevelSelectionState.OnUpdate))]
         static class OnUpdatePatch
         {
-            static bool Prefix(LevelSelectionState __instance)
+            static bool Prefix()
             {
 	            Player player = PlayerController.Instance.inputController.player;
 	            var levelSelection = UnityEngine.Object.FindObjectOfType<LevelSelectionController>();
