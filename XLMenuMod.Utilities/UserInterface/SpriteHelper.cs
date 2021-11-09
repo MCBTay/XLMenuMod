@@ -10,16 +10,16 @@ namespace XLMenuMod.Utilities.UserInterface
 {
 	public class SpriteHelper
 	{
-		public AssetBundle XLMenuModAB;
+		public AssetBundle XLMenuModAB { get; set; }
 
-		public static TMP_SpriteAsset MenuIcons;
-		public static TMP_SpriteAsset BrandIcons;
-		public static Sprite OriginalBackground;
-		public static Sprite DarkModeBackground;
-		public static Texture2D DarkModeReplayBackground;
+		public static TMP_SpriteAsset MenuIcons { get; private set; }
+		public static TMP_SpriteAsset BrandIcons { get; private set; }
+		public static Sprite OriginalBackground { get; set; }
+		public static Sprite DarkModeBackground { get; private set; }
+		public static Texture2D DarkModeReplayBackground { get; private set; }
 
-		public static TMP_SpriteAsset DarkControllerIcons;
-		public static TMP_SpriteAsset LightControllerIcons;
+		public static TMP_SpriteAsset DarkControllerIcons { get; private set; }
+		public static TMP_SpriteAsset LightControllerIcons { get; private set; }
 
 		private static SpriteHelper _instance;
 		public static SpriteHelper Instance
