@@ -7,7 +7,7 @@ using XLMenuMod.Utilities.Gear.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
-	public class CharacterCustomizerPatch
+	public static class CharacterCustomizerPatch
     {
         [HarmonyPatch(typeof(CharacterCustomizer), nameof(CharacterCustomizer.HasEquipped), new[] { typeof(ICharacterCustomizationItem) })]
         static class HasEquippedPatch
