@@ -1,4 +1,4 @@
-name: Compress and Deploy
+name: Deploy to mod.io
 
 on:
   release:
@@ -6,12 +6,7 @@ on:
   workflow_dispatch:
         
 env:
-  # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: .
-
-  # Configuration type to build.
-  # You can convert this to a build matrix if you need coverage of multiple configuration types.
-  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
   
 jobs:
@@ -29,17 +24,42 @@ jobs:
       run: |
         dotnet build --no-restore
         
-    - name: Upload XLMenuMod installable zip
-      uses: actions/upload-artifact@v2.2.2
+    - name: Determine Archive Name
+      id: filename
+      run: |
+        TAG_NAME=${{ github.event.release.tag_name }}
+        TAG_NAME_REPLACED = "${tagName//./-}"
+        ARCHIVE_NAME XLMenuMod-TAG_NAME_REPLACED.zip
+        echo "::set-output name=archive_name::ARCHIVE_NAME"
+      
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@0.6.0
       with:
-        name: XLMenuMod
-        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip
+        filename: ${{ steps.filename.outputs.archive_name }}
+        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release
         
     - name: Create XLMenuMod.Utilities Nuget Package
-      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build
-          
-    - name: Upload XLMenuMod.Utilities.dll
-      uses: actions/upload-artifact@v2.2.2
+      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+      
+    - uses: nickelc/upload-to-modio@v1.0.1
       with:
-        name: XLMenuMod.Utilities.dll
-        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
+        token: ${{ secrets.MODIO_TOKEN }}
+        game: 629 # skaterxl
+        mod: 135638 # xlmenumod
+        path: modfile.zip
+        version: ${{ github.event.release.tag_name }}
+        changelog: ${{ github.event.release.description_html }}
+        
+    #- name: Upload XLMenuMod installable zip
+      #uses: actions/upload-artifact@v2.2.2
+      #with:
+        #name: XLMenuMod
+        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip
+        
+    
+          
+    #- name: Upload XLMenuMod.Utilities.dll
+      #uses: actions/upload-artifact@v2.2.2
+      #with:
+        #name: XLMenuMod.Utilities.dll
+        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
