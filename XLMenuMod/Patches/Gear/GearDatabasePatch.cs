@@ -9,7 +9,7 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
-	public class GearDatabasePatch
+	public static class GearDatabasePatch
 	{
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
 		public static class GetGearListAtIndexPatch
