@@ -13,12 +13,12 @@ namespace XLMenuMod.Utilities.UserInterface
 	public class UserInterfaceHelper
     {
 	    public static Texture2D OriginalReplayBackground { get; set; }
-		public static Color OriginalReplayHeaderColor = new Color(0.973f, 0.973f, 0.973f, 0.600f);
+		public static Color OriginalReplayHeaderColor => new Color(0.973f, 0.973f, 0.973f, 0.600f);
 
-		public static Color DarkModeReplayHeaderColor = new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
+		public static Color DarkModeReplayHeaderColor => new Color(63f / 255f, 63f / 255f, 63f / 255f, 0.8f);
 
-		public static Color32 DarkModeTextColor = new Color32(244, 245, 245, 255);
-		public static Color32 BlueAccentColor = new Color(0.204f, 0.541f, 0.961f, 1.000f);
+		public static Color32 DarkModeTextColor => new Color32(244, 245, 245, 255);
+		public static Color32 BlueAccentColor => new Color(0.204f, 0.541f, 0.961f, 1.000f);
 
 		private static UserInterfaceHelper _instance;
 	    public static UserInterfaceHelper Instance
@@ -62,7 +62,7 @@ namespace XLMenuMod.Utilities.UserInterface
             label?.SetText(sortLabelText);
         }
 
-        public static ColorBlock DarkModeText = new ColorBlock
+        public static ColorBlock DarkModeText => new ColorBlock
 		{
 			colorMultiplier = 1,
 			disabledColor = DarkModeTextColor,
@@ -73,7 +73,7 @@ namespace XLMenuMod.Utilities.UserInterface
 			selectedColor = DarkModeTextColor
 		};
 
-		public static ColorBlock DarkModeSliderText = new ColorBlock
+		public static ColorBlock DarkModeSliderText => new ColorBlock
 		{
 			colorMultiplier = 1,
 			disabledColor = DarkModeTextColor,
@@ -84,7 +84,7 @@ namespace XLMenuMod.Utilities.UserInterface
 			selectedColor = BlueAccentColor
 		};
 
-		public static ColorBlock DefaultText = new ColorBlock
+		public static ColorBlock DefaultText => new ColorBlock
 		{
 			colorMultiplier = 1,
 			disabledColor = new Color(0.267f, 0.267f, 0.267f, 1.000f),
@@ -95,7 +95,7 @@ namespace XLMenuMod.Utilities.UserInterface
 			selectedColor = new Color(0.973f, 0.973f, 0.973f, 1.000f)
 		};
 
-		public static ColorBlock DefaultSliderText = new ColorBlock
+		public static ColorBlock DefaultSliderText => new ColorBlock
 		{
 			colorMultiplier = 1,
 			disabledColor = new Color(0.784f, 0.784f, 0.784f, .502f),
