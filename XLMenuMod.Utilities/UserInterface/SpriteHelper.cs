@@ -180,7 +180,6 @@ namespace XLMenuMod.Utilities.UserInterface
 				case RuntimePlatform.Switch:
 					returnVal = ControllerIconSpriteGray.SWITCH_X;
 					break;
-				case RuntimePlatform.XboxOne:
 				default:
 					returnVal = ControllerIconSpriteGray.XB1_Y;
 					break;
@@ -211,7 +210,6 @@ namespace XLMenuMod.Utilities.UserInterface
 				case RuntimePlatform.Switch:
 					returnVal = ControllerIconSprite.SWITCH_X;
 					break;
-				case RuntimePlatform.XboxOne:
 				default:
 					returnVal = ControllerIconSprite.XB1_Y;
 					break;
@@ -242,7 +240,6 @@ namespace XLMenuMod.Utilities.UserInterface
 				case RuntimePlatform.Switch:
 					returnVal = ControllerIconSprite.SWITCH_X;
 					break;
-				case RuntimePlatform.XboxOne:
 				default:
 					returnVal = ControllerIconSprite.XB1_X;
 					break;

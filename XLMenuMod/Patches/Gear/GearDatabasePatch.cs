@@ -9,12 +9,12 @@ using XLMenuMod.Utilities.Interfaces;
 
 namespace XLMenuMod.Patches.Gear
 {
-	public class GearDatabasePatch
+	public static class GearDatabasePatch
 	{
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearListAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new[] { ArgumentType.Normal, ArgumentType.Out })]
 		public static class GetGearListAtIndexPatch
 		{
-			static void Postfix(GearDatabase __instance, IndexPath index, GearInfo[][][] ___gearListSource, GearInfo[][][] ___customGearListSource, ref GearInfo[] __result)
+			static void Postfix(IndexPath index, GearInfo[][][] ___gearListSource, GearInfo[][][] ___customGearListSource, ref GearInfo[] __result)
 			{
 				// return out if it's not one of the tabs XLMenuMod is aware of.
 				if (index[1] < 0 || index[1] > (___gearListSource[index[0]].Length * 2) - 1) return;
@@ -61,7 +61,7 @@ namespace XLMenuMod.Patches.Gear
 		[HarmonyPatch(typeof(GearDatabase), nameof(GearDatabase.GetGearAtIndex), new[] { typeof(IndexPath), typeof(bool) }, new [] { ArgumentType.Normal, ArgumentType.Out})]
 		public static class GetGearAtIndexPatch
 		{
-			static void Postfix(GearDatabase __instance, IndexPath index, GearInfo[][][] ___gearListSource, ref GearInfo __result)
+			static void Postfix(IndexPath index, GearInfo[][][] ___gearListSource, ref GearInfo __result)
 			{
 				if (index.depth < 3) return;
 

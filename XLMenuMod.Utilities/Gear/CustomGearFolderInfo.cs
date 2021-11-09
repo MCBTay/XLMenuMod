@@ -21,7 +21,7 @@ namespace XLMenuMod.Utilities.Gear
 
         public TMP_SpriteAsset CustomSprite { get; set; }
 
-        public string GetName() { return Info?.GetName(); }
+        public new string GetName() { return Info?.GetName(); }
         
 
         public CustomGearFolderInfo(string name, string path, CustomFolderInfo parent) : base(name, "Folder", true, new string[]{})

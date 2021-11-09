@@ -1,6 +1,19 @@
 # XLMenuMod
 The mod allows you to customize your menu and use subfolders within your Maps and Gear directories for SkaterXL!
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=bugs)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=coverage)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=MCBTay_XLMenuMod&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=MCBTay_XLMenuMod)
+
 ## Features
 ### Maps
 * This mod allows you to place your custom maps in any subdirectory structure you want (within Windows path limits), and will render that directory structure in the game's UI.

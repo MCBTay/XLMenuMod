@@ -227,14 +227,6 @@ namespace XLMenuMod.Utilities.UserInterface
 				itemViews.ToggleDarkMode(enabled);
 			}
 		}
-
-		//public static void ToggleDarkMode(this List<ChallengeTrickItemView> trickList, bool enabled)
-		//{
-		//	foreach (var trick in trickList)
-		//	{
-		//		trick.label.ToggleDarkMode(enabled);
-		//	}
-		//}
 		#endregion
 	}
 }

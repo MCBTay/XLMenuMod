@@ -1,0 +1,92 @@
+name: Deploy to mod.io
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+        
+env:
+  SOLUTION_FILE_PATH: .
+  BUILD_CONFIGURATION: Release
+  
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+      
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+      
+    - name: MSBuild
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: powershell
+      run: |
+        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+        
+    - name: Dump context
+      uses: crazy-max/ghaction-dump-context@v1.2.0
+      
+    - name: Get Release Tag
+      id: release_tag
+      run: |
+        $TAG_NAME = ${{ github.event.release.tag_name }}
+        echo "::set-output name=release_tag::$TAG_NAME"
+        
+    - name: Get Latest Tag
+      if: $ {{ steps.release_tag.outputs.release_tag == null }}
+      uses: WyriHaximus/github-action-get-previous-tag@v1
+        
+    - name: Determine Archive Name
+      id: filename
+      run: |
+        $TAG_NAME = ${{ github.event.release.tag_name }}
+        echo "Tag Name: " + "$TAG_NAME"
+        $TAG_NAME_REPLACED="${$TAG_NAME//./-}"
+        echo "$TAG_NAME_REPLACED"
+        $ARCHIVE_NAME="XLMenuMod-${TAG_NAME_REPLACED}.zip"
+        echo "$ARCHIVE_NAME"
+        echo "::set-output name=archive_name::$ARCHIVE_NAME"
+      
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@0.6.0
+      with:
+        filename: ${{ steps.filename.outputs.archive_name }}
+        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release
+        
+    - name: Create XLMenuMod.Utilities Nuget Package
+      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+      
+    - uses: nickelc/upload-to-modio@v1.0.1
+      with:
+        token: ${{ secrets.MODIO_TOKEN }}
+        game: 629 # skaterxl
+        mod: 135638 # xlmenumod
+        path: modfile.zip
+        version: ${{ github.event.release.tag_name }}
+        changelog: ${{ github.event.release.description_html }}
+        
+    #- name: Upload XLMenuMod installable zip
+      #uses: actions/upload-artifact@v2.2.2
+      #with:
+        #name: XLMenuMod
+        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip
+        
+    
+          
+    #- name: Upload XLMenuMod.Utilities.dll
+      #uses: actions/upload-artifact@v2.2.2
+      #with:
+        #name: XLMenuMod.Utilities.dll
+        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
