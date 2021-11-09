@@ -37,22 +37,18 @@ namespace XLMenuMod.Patches.Level
 			{
 				if (itemView.Label.text.StartsWith("\\"))
 				{
-					if (SpriteHelper.MenuIcons != null)
-					{
-						var isEasyDay = itemView.Label.text.Equals("\\Easy Day");
-						var isModIo = itemView.Label.text.Equals("\\mod.io");
+					if (SpriteHelper.MenuIcons == null) return;
 
-						itemView.Label.spriteAsset = isEasyDay || isModIo ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
-						itemView.SetText(itemView.Label.text.Replace("\\", $"<sprite name=\"{(isEasyDay || isModIo ? itemView.Label.text.Replace("\\", string.Empty).ToLower() : "folder_outline")}\" tint>"));
-					}
+					var isEasyDay = itemView.Label.text.Equals("\\Easy Day");
+					var isModIo = itemView.Label.text.Equals("\\mod.io");
+
+					itemView.Label.spriteAsset = isEasyDay || isModIo ? SpriteHelper.BrandIcons : SpriteHelper.MenuIcons;
+					itemView.SetText(itemView.Label.text.Replace("\\", $"<sprite name=\"{(isEasyDay || isModIo ? itemView.Label.text.Replace("\\", string.Empty).ToLower() : "folder_outline")}\" tint>"));
 				}
-				else if (itemView.Label.text.Equals("..\\"))
+				else if (itemView.Label.text.Equals("..\\") && SpriteHelper.MenuIcons != null)
 				{
-					if (SpriteHelper.MenuIcons != null)
-					{
-						itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
-						itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite name=\"folder\" tint>Go Back"));
-					}
+					itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
+					itemView.Label.SetText(itemView.Label.text.Replace("..\\", "<space=10px><sprite name=\"folder\" tint>Go Back"));
 				}
 			}
 		}
