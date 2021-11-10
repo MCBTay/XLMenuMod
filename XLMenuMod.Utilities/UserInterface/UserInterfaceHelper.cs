@@ -342,15 +342,4 @@ namespace XLMenuMod.Utilities.UserInterface
 	        }
         }
 	}
-
-	public static class Extensions
-	{
-		public static void ToggleDarkMode(this List<ChallengeTrickItemView> trickList, bool enabled)
-		{
-			foreach (var trick in trickList)
-			{
-				UserInterfaceHelper.Instance.UpdateLabelColor(trick.label, enabled ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
-			}
-		}
-	}
 }
