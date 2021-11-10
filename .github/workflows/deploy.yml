@@ -41,8 +41,7 @@ jobs:
     - name: Get Release Tag
       id: release_tag
       run: |
-        $TAG_NAME="${{ github.event.release.tag_name }}"
-        echo "::set-output name=release_tag::$TAG_NAME"
+        echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
         
     #- name: Get Latest Tag
       #if: $ {{ steps.release_tag.outputs.release_tag == null }}
@@ -51,7 +50,8 @@ jobs:
     - name: Determine Archive Name
       id: filename
       run: |
-        $TAG_NAME=${{ github.event.release.tag_name }}
+        echo ${{ steps.release_tag.outputs.release_tag }}
+        $TAG_NAME=${{ steps.release_tag.outputs.release_tag }}
         echo "Tag Name: " + "$TAG_NAME"
         $TAG_NAME_REPLACED="${$TAG_NAME//./-}"
         echo "$TAG_NAME_REPLACED"
