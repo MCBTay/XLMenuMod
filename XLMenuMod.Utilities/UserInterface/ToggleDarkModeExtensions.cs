@@ -70,38 +70,54 @@ namespace XLMenuMod.Utilities.UserInterface
 			if (images == null || !images.Any()) return;
 
 			foreach (var image in images)
-			{
-				// Menu Background
-				if (image.name == "MenuPanelBackground")
-				{
-					if (SpriteHelper.OriginalBackground == null)
-					{
-						SpriteHelper.OriginalBackground = image.sprite;
-					}
-
-					image.sprite = enabled && SpriteHelper.DarkModeBackground != null ? SpriteHelper.DarkModeBackground : SpriteHelper.OriginalBackground;
-				}
-				// Replay Editor background
-				else if (image.mainTexture.name == "PanelTransparent")
-				{
-					if (UserInterfaceHelper.OriginalReplayBackground == null)
-					{
-						UserInterfaceHelper.OriginalReplayBackground = image.mainTexture as Texture2D;
-					}
-
-					var texture = enabled ? SpriteHelper.DarkModeReplayBackground : UserInterfaceHelper.OriginalReplayBackground;
-					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
-					image.sprite = newSprite;
-				}
-				// Replay editor "header" background
-				else if (image.mainTexture.name == "UnityWhite")
-				{
-					image.color = enabled ? UserInterfaceHelper.DarkModeReplayHeaderColor : UserInterfaceHelper.OriginalReplayHeaderColor;
-				}
-			}
+            {
+                image.UpdateMenuPanelBackgroundSprite(enabled);
+				image.UpdateReplayEditorBackgroundSprite(enabled);
+                image.UpdateReplayEditorHeaderBackgroundSprite(enabled);
+            }
 		}
 
-		public static void ToggleDarkMode(this Selectable button, bool enabled)
+		/// <summary>
+		/// For the menu background sprite
+		/// </summary>
+        private static void UpdateMenuPanelBackgroundSprite(this Image image, bool enabled)
+        {
+            if (image.name != "MenuPanelBackground") return;
+
+            SpriteHelper.OriginalBackground ??= image.sprite;
+
+            image.sprite = enabled && SpriteHelper.DarkModeBackground != null ? SpriteHelper.DarkModeBackground : SpriteHelper.OriginalBackground;
+        }
+
+        /// <summary>
+        /// For the replay editor background sprite
+        /// </summary>
+		private static void UpdateReplayEditorBackgroundSprite(this Image image, bool enabled)
+        {
+            if (image.mainTexture.name != "PanelTransparent") return;
+
+            UserInterfaceHelper.OriginalReplayBackground ??= image.mainTexture as Texture2D;
+
+            var texture = enabled ? SpriteHelper.DarkModeReplayBackground : UserInterfaceHelper.OriginalReplayBackground;
+            if (texture == null) return;
+
+            var rectangle = new Rect(0, 0, texture.width, texture.height);
+            var pivot = new Vector2(72f, 72f);
+            var border = new Vector4(30f, 34f, 29f, 27f);
+
+            image.sprite = Sprite.Create(texture, rectangle, pivot, 300, 0, SpriteMeshType.Tight, border);
+		}
+
+		/// <summary>
+		/// For the replay editor "header" background
+		/// </summary>
+		private static void UpdateReplayEditorHeaderBackgroundSprite(this Image image, bool enabled)
+        {
+            image.color = enabled ? UserInterfaceHelper.DarkModeReplayHeaderColor : UserInterfaceHelper.OriginalReplayHeaderColor;
+		}
+
+
+        public static void ToggleDarkMode(this Selectable button, bool enabled)
 		{
 			if (button == null) return;
 
