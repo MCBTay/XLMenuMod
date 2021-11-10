@@ -1,9 +1,11 @@
-﻿using GameManagement;
+﻿using System.Collections.Generic;
+using GameManagement;
 using HarmonyLib;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using XLMenuMod.Utilities;
+using XLMenuMod.Utilities.Interfaces;
 using XLMenuMod.Utilities.Levels;
 using XLMenuMod.Utilities.UserInterface;
 
@@ -65,6 +67,7 @@ namespace XLMenuMod.Patches.Level
 
 				if (level is CustomLevelFolderInfo selectedFolder)
 				{
+					
 					selectedFolder.FolderInfo.Children = CustomLevelManager.Instance.SortList(selectedFolder.FolderInfo.Children);
 
 					var currentIndexPath = Traverse.Create(__instance.listView).Property<IndexPath>("currentIndexPath");
@@ -133,36 +136,32 @@ namespace XLMenuMod.Patches.Level
         public static class GetLevelForIndexPatch
         {
 	        static void Postfix(ref LevelInfo __result, IndexPath index)
-	        {
-				// Ensuring you're on the right game state such that multiplayer mod doesn't execute this code when it doesn't want to.
-		        if (GameStateMachine.Instance.CurrentState.GetType() == typeof(LevelSelectionState) && index[0] == 1)
-		        {
-			        if (CustomLevelManager.Instance.CurrentFolder.HasChildren())
-			        {
-				        if (index.LastIndex < CustomLevelManager.Instance.CurrentFolder.Children.Count)
-				        {
-					        var customInfo = CustomLevelManager.Instance.CurrentFolder.Children.ElementAt(index.LastIndex);
+            {
+                // Ensuring you're on the right game state such that multiplayer mod doesn't execute this code when it doesn't want to.
+				// Is this still relevant now that multiplayer mod is no longer a thing?
+                if (GameStateMachine.Instance.CurrentState.GetType() != typeof(LevelSelectionState) || index[0] != 1) return;
 
-					        if (customInfo.GetParentObject() is CustomLevelInfo)
-						        __result = customInfo.GetParentObject() as CustomLevelInfo;
-					        else if (customInfo.GetParentObject() is CustomLevelFolderInfo)
-						        __result = customInfo.GetParentObject() as CustomLevelFolderInfo;
-				        }
-					}
-			        else
-			        {
-						if (index.LastIndex < CustomLevelManager.Instance.NestedItems.Count)
-						{
-							var customInfo = CustomLevelManager.Instance.NestedItems.ElementAt(index.LastIndex);
+                if (CustomLevelManager.Instance.CurrentFolder.HasChildren())
+                {
+                    UpdateResult(ref __result, index, CustomLevelManager.Instance.CurrentFolder.Children);
+                }
+                else
+                {
+                    UpdateResult(ref __result, index, CustomLevelManager.Instance.NestedItems);
+                }
+            }
 
-							if (customInfo.GetParentObject() is CustomLevelInfo)
-								__result = customInfo.GetParentObject() as CustomLevelInfo;
-							else if (customInfo.GetParentObject() is CustomLevelFolderInfo)
-								__result = customInfo.GetParentObject() as CustomLevelFolderInfo;
-						}
-					}
-		        }
-	        }
+            private static void UpdateResult(ref LevelInfo __result, IndexPath index, IList<ICustomInfo> levels)
+            {
+                if (index.LastIndex >= levels.Count) return;
+
+				var customInfo = levels.ElementAt(index.LastIndex);
+
+                if (customInfo.GetParentObject() is CustomLevelInfo)
+                    __result = customInfo.GetParentObject() as CustomLevelInfo;
+                else if (customInfo.GetParentObject() is CustomLevelFolderInfo)
+                    __result = customInfo.GetParentObject() as CustomLevelFolderInfo;
+			}
         }
 
         [HarmonyPatch(typeof(LevelSelectionController), "GetIndexForLevel")]
