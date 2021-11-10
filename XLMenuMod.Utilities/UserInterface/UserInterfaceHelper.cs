@@ -1,7 +1,5 @@
 ﻿using GameManagement;
-using HarmonyLib;
 using ReplayEditor;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -10,7 +8,7 @@ using UnityEngine.UI;
 
 namespace XLMenuMod.Utilities.UserInterface
 {
-	public class UserInterfaceHelper
+    public class UserInterfaceHelper
     {
 	    public static Texture2D OriginalReplayBackground { get; set; }
 		public static Color OriginalReplayHeaderColor => new Color(0.973f, 0.973f, 0.973f, 0.600f);
@@ -177,134 +175,55 @@ namespace XLMenuMod.Utilities.UserInterface
 
 	        SetBackgroundTexture(gameObject, enabled);
 
-	        if (hasStaticText)
-	        {
-		        var labels = gameObject.GetComponentsInChildren<TMP_Text>(true);
-		        if (labels != null)
-		        {
-			        foreach (var label in labels)
-			        {
-				        if (label.transform.parent.parent.name == "ListViewHeader") continue;
-						if (label.transform.parent.gameObject.GetComponent<MenuButton>() != null) continue;
+	        ToggleDarkModeForStaticText(gameObject, hasStaticText, enabled);
+            ToggleDarkModeForSubmeshes(gameObject, hasSubmeshes, enabled);
 
-				        UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
+            gameObject.GetComponentsInChildren<MenuButton>(true).ToggleDarkMode(enabled);
+            gameObject.GetComponentsInChildren<MenuSlider>(true).ToggleDarkMode(enabled);
+            gameObject.GetComponentsInChildren<MenuToggle>(true).ToggleDarkMode(enabled);
 
-				        if (label.text.Contains("<sprite") && label.spriteAsset.name.Contains("Controller"))
-				        {
-					        label.spriteAsset = enabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
-				        }
-					}
-		        }
-	        }
+			gameObject.GetComponentInChildren<ChallengeSummaryController>(true).ToggleDarkMode(enabled);
+            gameObject.GetComponentInChildren<ChallengeTrickListController>(true).ToggleDarkMode(enabled);
+			gameObject.GetComponentInChildren<MVCListView>(true).ToggleDarkMode(enabled);
+            gameObject.GetComponentsInChildren<Image>(true).ToggleDarkMode(enabled);
+        }
 
-	        if (hasSubmeshes)
-	        {
-		        var submeshes = gameObject.GetComponentsInChildren<TMP_SubMeshUI>(true);
-		        if (submeshes != null)
-		        {
-			        foreach (var controllerButton in submeshes)
-			        {
-
-				        if (controllerButton?.spriteAsset != null && controllerButton?.material != null)
-				        {
-					        controllerButton.material.color = enabled ? DarkModeText.normalColor : DefaultText.normalColor;
-				        }
-			        }
-		        }
-			}
-
-	        ToggleDarkMode<MenuButton>(gameObject, enabled);
-			ToggleDarkMode<MenuSlider>(gameObject, enabled);
-			ToggleDarkMode<MenuToggle>(gameObject, enabled);
-
-			var comps = GameStateMachine.Instance.ChallengeSummaryObject.GetComponentInChildren<ChallengeSummaryController>();
-			if (comps != null)
-			{
-				var text = comps.FailureHeader.GetComponentInChildren<TMP_Text>();
-				UpdateLabelColor(text, enabled ? DarkModeText : DefaultText);
-			}
-
-			var trickList = gameObject.GetComponentInChildren<ChallengeTrickListController>();
-			if (trickList != null)
-			{
-				var trickListItemViews = Traverse.Create<ChallengeTrickListController>().Field<List<ChallengeTrickItemView>>("ItemViews").Value;
-				if (trickListItemViews != null && trickListItemViews.Any())
-				{
-					trickListItemViews.ToggleDarkMode(enabled);
-				}
-			}
-
-			var listView = gameObject.GetComponentInChildren<MVCListView>();
-			ToggleDarkMode(listView, enabled);
-			
-			// This is for the replay editor UIs
-			var images = gameObject.GetComponentsInChildren<Image>(true);
-			foreach (var image in images)
-			{
-				if (image.mainTexture.name == "PanelTransparent")
-				{
-					if (OriginalReplayBackground == null)
-					{
-						OriginalReplayBackground = image.mainTexture as Texture2D;
-					}
-
-					var texture = enabled ? SpriteHelper.DarkModeReplayBackground : OriginalReplayBackground;
-					var newSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(72f, 72f), 300, 0, SpriteMeshType.Tight, new Vector4(30f, 34f, 29f, 27f));
-					image.sprite = newSprite;
-				}
-				else if (image.mainTexture.name == "UnityWhite")
-				{
-					image.color = enabled ? DarkModeReplayHeaderColor : OriginalReplayHeaderColor;
-				}
-			}
-		}
-
-        public void ToggleDarkMode(MVCListView listView, bool enabled)
+        private void ToggleDarkModeForStaticText(GameObject gameObject, bool hasStaticText, bool enabled)
         {
-	        if (listView == null) return;
+            if (!hasStaticText) return;
 
-	        UpdateFontSize(listView.ItemPrefab.Label);
+            var labels = gameObject.GetComponentsInChildren<TMP_Text>(true);
+            if (labels == null) return;
 
-	        ToggleDarkMode(listView.ItemPrefab, enabled);
-	        UpdateLabelColor(listView.HeaderView, enabled ? DarkModeText : DefaultText);
-	        foreach (var item in listView.ItemViews)
-	        {
-		        ToggleDarkMode(item, enabled);
-	        }
-		}
+            foreach (var label in labels)
+            {
+                if (label.transform.parent.parent.name == "ListViewHeader") continue;
+                if (label.transform.parent.gameObject.GetComponent<MenuButton>() != null) continue;
 
-        public void ToggleDarkMode(MVCListItemView listItemView, bool enabled)
+                UpdateLabelColor(label, enabled ? DarkModeText : DefaultText);
+
+                if (label.text.Contains("<sprite") && label.spriteAsset.name.Contains("Controller"))
+                {
+                    label.spriteAsset = enabled ? SpriteHelper.LightControllerIcons : SpriteHelper.DarkControllerIcons;
+                }
+            }
+        }
+
+        private void ToggleDarkModeForSubmeshes(GameObject gameObject, bool hasSubmeshes, bool enabled)
         {
-	        var textColor = enabled ? DarkModeText : DefaultText;
+            if (!hasSubmeshes) return;
 
-	        UpdateFontSize(listItemView.Label);
-	        UpdateLabelColor(listItemView, textColor);
-		}
+            var submeshes = gameObject.GetComponentsInChildren<TMP_SubMeshUI>(true);
+            if (submeshes == null) return;
 
-        private void ToggleDarkMode<T>(GameObject gameObject, bool enabled) where T : Selectable
-        {
-	        if (gameObject == null) return;
+            foreach (var controllerButton in submeshes)
+            {
+                if (controllerButton?.spriteAsset == null) continue;
+				if (controllerButton?.material == null) continue;
 
-	        var controls = gameObject.GetComponentsInChildren<T>(true);
-	        foreach (var control in controls)
-	        {
-		        if (control is MenuSlider menuSlider)
-		        {
-			        if (menuSlider.selectionIndicator == null)
-			        {
-				        UpdateLabelColor(menuSlider, enabled ? DarkModeSliderText : DefaultSliderText);
-					}
-			        else
-			        {
-						UpdateLabelColor(menuSlider, enabled ? DarkModeText : DefaultText);
-					}
-		        }
-		        else
-		        {
-					UpdateLabelColor(control, enabled ? DarkModeText : DefaultText);
-				}
-	        }
-		}
+				controllerButton.material.color = enabled ? DarkModeText.normalColor : DefaultText.normalColor;
+			}
+        }
 
         private void SetBackgroundTexture(GameObject gameObject, bool darkModeEnabled)
         {

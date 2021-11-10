@@ -238,11 +238,10 @@ namespace XLMenuMod.Utilities.UserInterface
 			if (controller == null) return;
 
 			var itemViews = Traverse.Create(controller).Field<List<ChallengeTrickItemView>>("ItemViews").Value;
-			if (itemViews != null && itemViews.Any())
-			{
-				itemViews.ToggleDarkMode(enabled);
-			}
-		}
+            if (itemViews == null || !itemViews.Any()) return;
+            
+            itemViews.ToggleDarkMode(enabled);
+        }
 
         public static void ToggleDarkMode(this List<ChallengeTrickItemView> trickList, bool enabled)
         {
