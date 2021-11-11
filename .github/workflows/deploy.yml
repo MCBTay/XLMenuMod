@@ -32,39 +32,11 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: powershell
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-      
-    - name: Cache Build
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-xlmenumod
-      with:
-        # npm cache files are stored in `~/.npm` on Linux/macOS
-        path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ github.event.release.tag_name }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
-      
-  test:
-    needs: build
-    runs-on: windows-latest
-    steps:
-    - name: Retrieve Build from Cache
-      id: cache
-      uses: actions/cache@v2
-      with:
-        path: .
-        key: ${{ runner.os }}-primes
     
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
       
-  package:
-    needs: test
-    runs-on: windows-latest
-    steps:
     - name: Get Release Tag
       id: release_tag
       run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
@@ -91,11 +63,6 @@ jobs:
         
     - name: Create XLMenuMod.Utilities Nuget Package
       run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
-  
-  deploy:
-    needs: package
-    runs-on: windows-latest
-    steps:
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
