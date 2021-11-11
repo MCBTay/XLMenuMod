@@ -67,9 +67,16 @@ jobs:
       with:
         filename: ${{ steps.filename.outputs.archive_name }}
         path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release
-        
-    - name: Create XLMenuMod.Utilities Nuget Package
-      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+    
+    - name: Upload to Release Action
+      uses: Shopify/upload-to-release@v1.0.1
+      with:
+        name: ${{ steps.filename.outputs.archive_name }}
+        path: .
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    #- name: Create XLMenuMod.Utilities Nuget Package
+      #run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
@@ -80,11 +87,6 @@ jobs:
         version: ${{ github.event.release.tag_name }}
         changelog: ${{ github.event.release.description_html }}
     
-    - name: Upload to Release Action
-      uses: Shopify/upload-to-release@v1.0.1
-      with:
-        name: ${{ steps.filename.outputs.archive_name }}
-        path: .
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
         
     # upload files to release
