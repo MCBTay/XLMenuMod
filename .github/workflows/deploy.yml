@@ -50,17 +50,17 @@ jobs:
       shell: powershell
       run: |
         $tag = ${{ github.event.release.tag_name}} -replace '.', '-'
-        $tag
+        echo ${tag}
         $archiveName = "XLMenuMod-$tag.zip"
         Compress-Archive -Path XLMenuMod/bin/Release/XLMenuMod -DestinationPath $archiveName -CompressionLevel Optimal
-        echo "archive_name=$archiveName" >> $GITHUB_ENV
+        echo "archive_name=$archiveName" >> $Env:GITHUB_ENV
         
     - name: Upload XLMenuMod.zip to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: $env:archive_name
-        asset_name: $env:archive_name
+        file: ${env:archive_name}
+        asset_name: ${env:archive_name}
         tag: ${{ github.event.release.tag_name }}
     
     #- name: Create XLMenuMod.Utilities Nuget Package
