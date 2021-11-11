@@ -40,8 +40,8 @@ jobs:
     - name: Create ZIP
       id: filename
       run: |
-        $archiveName = "XLMenuMod-${{ github.event.release.tag_name }}.zip"
-        echo "${archiveName}"
+        archiveName = "XLMenuMod-${{ github.event.release.tag_name }}.zip"
+        "archiveName : $archiveName"
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
         echo "archive_name=$archiveName" >> $GITHUB_ENV
         
@@ -57,7 +57,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./${{ env.archive_name }}
+        file: ${{ env.archive_name }}
         asset_name: ${{ env.archive_name }}
         tag: ${{ github.event.release.tag_name }}
     
