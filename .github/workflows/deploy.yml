@@ -45,7 +45,9 @@ jobs:
       id: filename
       run: |
         $tagName = ${{ steps.get_version.outputs.release_tag }}
-        $archiveName = "XLMenuMod-$tagName.zip"
+        echo "${tagName}"
+        $archiveName = "XLMenuMod-${tagName}.zip"
+        echo "${archiveName}"
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
         echo "::set-output name=archive_name::$archiveName"
     
