@@ -52,7 +52,7 @@ jobs:
       id: filename
       shell: powershell
       run: |
-        $archiveName = "${{ steps.release_tag.outputs.release_tag }}".Replace('.', '-')
+        $archiveName = "${{ steps.get_version.outputs.VERSION }}".Replace('.', '-')
         echo "::set-output name=archive_name::$archiveName"
       
         #$TagName = ${{ steps.release_tag.outputs.release_tag }}
@@ -84,7 +84,7 @@ jobs:
         game: 629 # skaterxl
         mod: 135638 # xlmenumod
         path: modfile.zip
-        version: ${{ github.event.release.tag_name }}
+        version: ${{ steps.get_version.outputs.VERSION }}
         changelog: ${{ github.event.release.description_html }}
     
 
