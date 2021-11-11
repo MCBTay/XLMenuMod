@@ -37,14 +37,6 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
         
-    - name: Create ZIP
-      id: filename
-      run: |
-        archiveName = "XLMenuMod-${{ github.event.release.tag_name }}.zip"
-        "archiveName : $archiveName"
-        Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
-        echo "archive_name=$archiveName" >> $GITHUB_ENV
-        
     - name: Upload XLMenuMod.Utilities.dll to release
       uses: svenstaro/upload-release-action@v2
       with:
@@ -52,6 +44,15 @@ jobs:
         file: ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll
         asset_name: XLMenuMod.Utilities.dll
         tag: ${{ github.event.release.tag_name }}
+        
+    - name: Create ZIP
+      id: filename
+      run: |
+        $tag = ${{ github.event.release.tag_name}} -replace '.', '-'
+        $archiveName = "XLMenuMod-$tag.zip"
+        "archiveName : $archiveName"
+        Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
+        echo "archive_name=$archiveName" >> $GITHUB_ENV
         
     - name: Upload XLMenuMod.zip to release
       uses: svenstaro/upload-release-action@v2
