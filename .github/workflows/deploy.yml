@@ -10,21 +10,17 @@ env:
   BUILD_CONFIGURATION: Release
   
 jobs:
-  setup:
-    runs-on: windows-latest
-    steps:
-      - name: Setup .NET 5.0.x
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-        
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1
-
   build:
-    needs: setup
     runs-on: windows-latest
     steps:
+    - name: Setup .NET 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
+        
     - name: Checkout
       uses: actions/checkout@v2
       
