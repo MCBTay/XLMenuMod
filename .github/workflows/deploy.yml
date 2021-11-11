@@ -50,13 +50,12 @@ jobs:
     - name: Determine Archive Name
       id: filename
       run: |
-        echo ${{ steps.release_tag.outputs.release_tag }}
         $TAG_NAME=${{ steps.release_tag.outputs.release_tag }}
-        echo "Tag Name: " + "$TAG_NAME"
+        echo "Tag Name: " + $TAG_NAME
         $TAG_NAME_REPLACED="${$TAG_NAME//./-}"
         echo "$TAG_NAME_REPLACED"
-        $ARCHIVE_NAME="XLMenuMod-${TAG_NAME_REPLACED}.zip"
-        echo "$ARCHIVE_NAME"
+        $ARCHIVE_NAME="XLMenuMod-" + ${TAG_NAME_REPLACED} + ".zip"
+        echo $ARCHIVE_NAME
         echo "::set-output name=archive_name::$ARCHIVE_NAME"
       
     - name: Zip Release
