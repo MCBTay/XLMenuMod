@@ -58,8 +58,8 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ env:ARCHIVE_NAME }}
-        asset_name: ${{ env:ARCHIVE_NAME }}
+        file: $ARCHIVE_NAME
+        asset_name: $ARCHIVE_NAME
         tag: ${{ github.event.release.tag_name }}
     
     #- name: Create XLMenuMod.Utilities Nuget Package
