@@ -39,22 +39,22 @@ jobs:
     
     - name: Get Release Tag
       id: get_version
-      run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
+      run: echo "release_tag=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
         
     - name: Create ZIP
       id: filename
       run: |
-        $tagName = ${{ steps.get_version.outputs.release_tag }}
+        $tagName = ${{ env.release_tag }}
         echo "${tagName}"
         $archiveName = "XLMenuMod-${tagName}.zip"
         echo "${archiveName}"
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
-        echo "::set-output name=archive_name::$archiveName"
+        echo "archive_name=$archiveName" >> $GITHUB_ENV
     
     - name: Upload to release
       uses: JasonEtco/upload-to-release@master
       with:
-        args: ${{ steps.filename.outputs.archive_name }} application/zip
+        args: ${{ env.archive_name }} application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
