@@ -44,6 +44,14 @@ jobs:
         echo "${archiveName}"
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
         echo "archive_name=$archiveName" >> $GITHUB_ENV
+        
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll
+        asset_name: XLMenuMod.Utilities.dll
+        tag: ${{ github.event.release.tag_name }}
     
     - name: Upload to release
       uses: JasonEtco/upload-to-release@master
