@@ -50,7 +50,8 @@ jobs:
       shell: powershell
       run: |
         $TagName = ${{ steps.release_tag.outputs.release_tag }}
-        $TagNameReplaced = $TagName.Replace(".", "-")
+        Write-Host "$TagName"
+        $TagNameReplaced = $TagName.Replace('.', '-')
         Write-Host "$TagNameReplaced"
         $ArchvieName="XLMenuMod-$($TagNameReplaced).zip"
         echo "::set-output name=archive_name::$ArchvieName"
