@@ -89,26 +89,39 @@ jobs:
         tag: ${{ github.event.release.tag_name }}
         
     - name: Update repository.json Version
-      uses: jossef/action-set-json-field@v1
+      uses: 898anil/github-actions-json-edit@v0.2
       with:
-        file: ./repository.json
-        field: Releases.Version
-        value: ${{ github.event.release.tag_name }}
+        file_path: ./repository.json
+        field_path: Releases[0].Version
+        field_value: ${{ github.event.release.tag_name }}
         
     - name: Update repository.json DownloadUrl
-      uses: jossef/action-set-json-field@v1
+      uses: 898anil/github-actions-json-edit@v0.2
       with:
-        file: ./repository.json
-        field: Releases.DownloadUrl
-        value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
+        file_path: ./repository.json
+        field_path: Releases[0].DownloadUrl
+        field_value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
+        
+    #- name: Update repository.json Version
+      #uses: jossef/action-set-json-field@v1
+      #with:
+        #file: ./repository.json
+        #field: Releases.Version
+        #value: ${{ github.event.release.tag_name }}
+        
+    #- name: Update repository.json DownloadUrl
+      #uses: jossef/action-set-json-field@v1
+      #with:
+        #file: ./repository.json
+        #field: Releases.DownloadUrl
+        #value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
     
     - name: Commit repository.json
       run: |
-        git config user.name "GitHub Actions"
-        git config user.email "<>"
-        git switch -c master
         git commit -m "Bumping version number and download url in repository.json" ./repository.json
-        git push --set-upstream origin master
+        git push origin master
+        
+    
     
     #- name: Create XLMenuMod.Utilities Nuget Package
       #run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
