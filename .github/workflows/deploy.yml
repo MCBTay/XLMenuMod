@@ -39,11 +39,7 @@ jobs:
     
     - name: Get Release Tag
       id: get_version
-      run: echo ::set-output name=release_tag::${{ github.event.release.tag_name }}
-        
-    #- name: Get Latest Tag
-      #if: $ {{ steps.release_tag.outputs.release_tag == null }}
-      #uses: WyriHaximus/github-action-get-previous-tag@v1
+      run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
         
     - name: Create ZIP
       id: filename
