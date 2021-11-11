@@ -10,20 +10,23 @@ env:
   BUILD_CONFIGURATION: Release
   
 jobs:
-  build:
+  setup:
     runs-on: windows-latest
-    
+    steps:
+      - name: Setup .NET 5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+        
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1
+
+  build:
+    needs: setup
+    runs-on: windows-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      
-    - name: Setup .NET 5.0.x
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-        
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1
       
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -32,16 +35,23 @@ jobs:
     - name: MSBuild
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: powershell
-      run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-        
-    - name: Dump context
-      uses: crazy-max/ghaction-dump-context@v1.2.0
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
       
+  test:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - name: Test
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
+      
+  package:
+    needs: test
+    runs-on: windows-latest
+    steps:
     - name: Get Release Tag
       id: release_tag
-      run: |
-        echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
+      run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
         
     #- name: Get Latest Tag
       #if: $ {{ steps.release_tag.outputs.release_tag == null }}
@@ -54,8 +64,7 @@ jobs:
         $TAG_NAME=${{ steps.release_tag.outputs.release_tag }}
         $TAG_NAME_REPLACED=$TAG_NAME.Replace(".", "-")
         echo $TAG_NAME_REPLACED
-        $ARCHIVE_NAME="XLMenuMod-" + ${TAG_NAME_REPLACED} + ".zip"
-        echo $ARCHIVE_NAME
+        $ARCHIVE_NAME="XLMenuMod-$($TAG_NAME_REPLACED).zip"
         echo "::set-output name=archive_name::$ARCHIVE_NAME"
       
     - name: Zip Release
@@ -66,6 +75,11 @@ jobs:
         
     - name: Create XLMenuMod.Utilities Nuget Package
       run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+  
+  deploy:
+    needs: package
+    runs-on: windows-latest
+    steps:
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
@@ -76,16 +90,4 @@ jobs:
         version: ${{ github.event.release.tag_name }}
         changelog: ${{ github.event.release.description_html }}
         
-    #- name: Upload XLMenuMod installable zip
-      #uses: actions/upload-artifact@v2.2.2
-      #with:
-        #name: XLMenuMod
-        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip
-        
-    
-          
-    #- name: Upload XLMenuMod.Utilities.dll
-      #uses: actions/upload-artifact@v2.2.2
-      #with:
-        #name: XLMenuMod.Utilities.dll
-        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
+    # upload files to release
