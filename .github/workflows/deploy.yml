@@ -49,10 +49,8 @@ jobs:
       id: filename
       shell: powershell
       run: |
-        $TAG_NAME=${{ steps.release_tag.outputs.release_tag }}
-        $TAG_NAME_REPLACED=$TAG_NAME.Replace(".", "-")
-        echo $TAG_NAME_REPLACED
-        $ARCHIVE_NAME="XLMenuMod-$($TAG_NAME_REPLACED).zip"
+        $TagName = ${{ steps.release_tag.outputs.release_tag }}.Replace(".", "-")
+        $ARCHIVE_NAME="XLMenuMod-$($TagName).zip"
         echo "::set-output name=archive_name::$ARCHIVE_NAME"
       
     - name: Zip Release
