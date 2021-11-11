@@ -36,26 +36,20 @@ jobs:
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
-
-    - name: Get the version
+    
+    - name: Get Release Tag
       id: get_version
-      run: |
-        $SOURCE_TAG = ${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
-        echo “::set-env name=SOURCE_TAG::$SOURCE_TAG”
-    #- name: Get Release Tag
-      #id: release_tag
-      #run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
+      run: echo ::set-output name=release_tag::${{ github.event.release.tag_name }}
         
     #- name: Get Latest Tag
       #if: $ {{ steps.release_tag.outputs.release_tag == null }}
       #uses: WyriHaximus/github-action-get-previous-tag@v1
         
-    - name: Determine Archive Name
+    - name: Create ZIP
       id: filename
-      shell: powershell
       run: |
-        $archiveName = "${{ steps.get_version.outputs.SOURCE_TAG }}".Replace('.', '-')
-        echo "::set-output name=archive_name::$archiveName"
+        $archiveName = "${{ steps.get_version.outputs.release_tag }}".Replace('.', '-')
+        Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath XLMenuMod-$archiveName.zip -CompressionLevel Optimal
       
         #$TagName = ${{ steps.release_tag.outputs.release_tag }}
         #Write-Host "$TagName"
@@ -63,12 +57,6 @@ jobs:
         #Write-Host $TagNameReplaced
         #$ArchiveName="XLMenuMod-$($TagNameReplaced).zip"
         #echo "::set-output name=archive_name::$ArchiveName"
-      
-    - name: Zip Release
-      uses: TheDoctor0/zip-release@0.6.0
-      with:
-        filename: ${{ steps.filename.outputs.archive_name }}
-        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release
     
     - name: Upload to Release Action
       uses: Shopify/upload-to-release@v1.0.1
@@ -86,7 +74,7 @@ jobs:
         game: 629 # skaterxl
         mod: 135638 # xlmenumod
         path: modfile.zip
-        version: ${{ steps.get_version.outputs.SOURCE_TAG }}
+        version: ${{ steps.get_version.outputs.release_tag }}
         changelog: ${{ github.event.release.description_html }}
     
 
