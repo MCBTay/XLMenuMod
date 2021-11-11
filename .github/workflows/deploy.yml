@@ -47,7 +47,7 @@ jobs:
         
     - name: Create ZIP
       id: filename
-      shell: powershell
+      shell: pwsh
       run: |
         $tag = ${{ github.event.release.tag_name }} -replace '.', '-'
         $archiveName = "XLMenuMod-${tag}.zip"
@@ -58,8 +58,8 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: $ARCHIVE_NAME
-        asset_name: $ARCHIVE_NAME
+        file: ${env.ARCHIVE_NAME}
+        asset_name: ${env.ARCHIVE_NAME}
         tag: ${{ github.event.release.tag_name }}
     
     #- name: Create XLMenuMod.Utilities Nuget Package
@@ -73,7 +73,3 @@ jobs:
         path: modfile.zip
         version: ${{ steps.get_version.outputs.release_tag }}
         changelog: ${{ github.event.release.description_html }}
-    
-
-        
-    # upload files to release
