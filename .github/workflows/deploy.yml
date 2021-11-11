@@ -48,16 +48,17 @@ jobs:
     - name: Create ZIP
       id: filename
       run: |
-        $archiveName = 'XLMenuMod-'${{ steps.get_version.outputs.release_tag }}.Replace('.', '-')'.zip'
+        $tagName = ${{ steps.get_version.outputs.release_tag }}
+        $archiveName = "XLMenuMod-$tagName.zip"
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
         echo "::set-output name=archive_name::$archiveName"
     
-    - name: Upload to Release Action
-      uses: Shopify/upload-to-release@v1.0.1
+    - name: Upload to release
+      uses: JasonEtco/upload-to-release@master
       with:
-        name: ${{ steps.filename.outputs.archive_name }}
-        path: .
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        args: ${{ steps.filename.outputs.archive_name }} application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     #- name: Create XLMenuMod.Utilities Nuget Package
       #run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
