@@ -35,10 +35,10 @@ jobs:
       run: |
         git config user.name "GitHub Actions"
         git config user.email "<>"
-        git remote add github "https://${env.GITHUB_ACTOR}:${env.GITHUB_TOKEN}@github.com/${env.GITHUB_REPOSITORY}.git"
-        git pull github ${env.GITHUB_REF} --ff-only
+        git remote add github "https://${{ env.GITHUB_ACTOR }}:${{ env.GITHUB_TOKEN }}@github.com/${{ env.GITHUB_REPOSITORY }}.git"
+        git pull github ${{ env.GITHUB_REF }} --ff-only
         git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
-        git push github HEAD:${env.GITHUB_REF}
+        git push github HEAD:${{ env.GITHUB_REF }}
         git tag --force ${{ github.event.release.tag_name }}
         git push github ${{ github.event.release.tag_name }} --force
         
