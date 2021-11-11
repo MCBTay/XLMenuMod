@@ -71,10 +71,10 @@ jobs:
         
     - name: Prepare Files for Zip
       run: |
-        mkdir ./XLMenuMod/bin/Release/XLMenuMod
-        copy /Y ./XLMenuMod/bin/Release/XLMenuMod.dll ./XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.dll
-        copy /Y ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll ./XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
-        copy /Y ./XLMenuMod/bin/Release/Info.json ./XLMenuMod/bin/Release/XLMenuMod/Info.json
+        New-Item -Path "XLMenuMod\bin\Release\" -name "XLMenuMod" -ItemType "directory"
+        Copy-Item "XLMenuMod\bin\Release\XLMenuMod.dll" -Destination "XLMenuMod\bin\Release\XLMenuMod/XLMenuMod.dll"
+        Copy-Item "XLMenuMod\bin\Release\XLMenuMod.Utilities.dll" "XLMenuMod\bin\Release\XLMenuMod\XLMenuMod.Utilities.dll"
+        Copy-Item "XLMenuMod\bin\Release\Info.json" "XLMenuMod\bin\Release\XLMenuMod\Info.json"
         
     - name: Create ZIP
       id: filename
