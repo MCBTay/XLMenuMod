@@ -50,8 +50,7 @@ jobs:
       shell: powershell
       run: |
         $tag = ${{ github.event.release.tag_name }} -replace '.', '-'
-        echo ${{ tag }}
-        $archiveName = "XLMenuMod-$tag.zip"
+        $archiveName = "XLMenuMod-${tag}.zip"
         Compress-Archive -Path XLMenuMod/bin/Release/XLMenuMod -DestinationPath ${archiveName} -CompressionLevel Optimal
         echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         
