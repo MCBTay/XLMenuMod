@@ -36,10 +36,13 @@ jobs:
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
-      
-    - name: Get Release Tag
-      id: release_tag
-      run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
+
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+    #- name: Get Release Tag
+      #id: release_tag
+      #run: echo "::set-output name=release_tag::${{ github.event.release.tag_name }}"
         
     #- name: Get Latest Tag
       #if: $ {{ steps.release_tag.outputs.release_tag == null }}
