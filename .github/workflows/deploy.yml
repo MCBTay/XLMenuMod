@@ -44,7 +44,7 @@ jobs:
     - name: Create ZIP
       id: filename
       run: |
-        $tagName = ${{ env.release_tag }}
+        $tagName = "${{ env.release_tag }}"
         echo "${tagName}"
         $archiveName = "XLMenuMod-${tagName}.zip"
         echo "${archiveName}"
