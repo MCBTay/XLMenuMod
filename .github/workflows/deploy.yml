@@ -45,20 +45,21 @@ jobs:
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
         echo "archive_name=$archiveName" >> $GITHUB_ENV
         
-    - name: Upload binaries to release
+    - name: Upload XLMenuMod.Utilities.dll to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll
         asset_name: XLMenuMod.Utilities.dll
         tag: ${{ github.event.release.tag_name }}
-    
-    - name: Upload to release
-      uses: JasonEtco/upload-to-release@master
+        
+    - name: Upload XLMenuMod.zip to release
+      uses: svenstaro/upload-release-action@v2
       with:
-        args: ${{ env.archive_name }} application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./${{ env.archive_name }}
+        asset_name: ${{ env.archive_name }}
+        tag: ${{ github.event.release.tag_name }}
     
     #- name: Create XLMenuMod.Utilities Nuget Package
       #run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
