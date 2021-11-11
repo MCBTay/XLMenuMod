@@ -40,9 +40,7 @@ jobs:
     - name: Create ZIP
       id: filename
       run: |
-        $tagName = "${{ github.event.release.tag_name }}"
-        echo "${tagName}"
-        $archiveName = "XLMenuMod-${tagName}.zip"
+        $archiveName = "XLMenuMod-${{ github.event.release.tag_name }}.zip"
         echo "${archiveName}"
         Compress-Archive -Path XLMenuMod/bin/Release -DestinationPath $archiveName -CompressionLevel Optimal
         echo "archive_name=$archiveName" >> $GITHUB_ENV
