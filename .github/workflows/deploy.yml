@@ -23,6 +23,8 @@ jobs:
         
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+          ref: ${{ github.head_ref }}
       
     - name: Update Info.json
       uses: jossef/action-set-json-field@v1
@@ -42,6 +44,8 @@ jobs:
         
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+          ref: ${{ github.head_ref }}
       
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
