@@ -24,6 +24,25 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       
+    - name: Update Info.json
+      uses: jossef/action-set-json-field@v1
+      with:
+        file: ./XLMenuMod/Info.json
+        field: Version
+        value: ${{ github.event.release.tag_name }}
+    
+    - name: Commit Info.json
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
+        git push
+        git tag --force ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }}
+      
+    - name: Checkout
+      uses: actions/checkout@v2
+      
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
@@ -44,6 +63,13 @@ jobs:
         file: ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll
         asset_name: XLMenuMod.Utilities.dll
         tag: ${{ github.event.release.tag_name }}
+        
+    - name: Prepare Files for Zip
+      run: |
+        mkdir ./XLMenuMod/bin/Release/XLMenuMod
+        copy /Y ./XLMenuMod/bin/Release/XLMenuMod.dll ./XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.dll
+        copy /Y ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll ./XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
+        copy /Y ./XLMenuMod/bin/Release/Info.json ./XLMenuMod/bin/Release/XLMenuMod/Info.json
         
     - name: Create ZIP
       id: filename
