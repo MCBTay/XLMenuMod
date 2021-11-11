@@ -143,14 +143,6 @@ copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "F:\Steam\steamapps\common\Skater 
 copy /Y "$(TargetDir)XLMenuMod.Utilities.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.pdb"
 copy /Y "$(TargetDir)Info.json" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\Info.json"
 )
-
-if "$(ConfigurationName)"=="Release" (
-mkdir $(TargetDir)XLMenuMod
-copy /Y "$(TargetDir)XLMenuMod.dll" "$(TargetDir)XLMenuMod\XLMenuMod.dll"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "$(TargetDir)XLMenuMod\XLMenuMod.Utilities.dll"
-copy /Y "$(TargetDir)Info.json" "$(TargetDir)XLMenuMod\Info.json"
-
-powershell Compress-Archive -Path '$(TargetDir)XLMenuMod' -DestinationPath '$(TargetDir)XLMenuMod-2-4-0.zip' -Force
-)</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
