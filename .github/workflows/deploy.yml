@@ -49,7 +49,7 @@ jobs:
       id: filename
       shell: pwsh
       run: |
-        $tag = ${{ github.event.release.tag_name }} -replace '.', '-'
+        $tag = "${{ github.event.release.tag_name }}" -replace '.', '-'
         $archiveName = "XLMenuMod-${tag}.zip"
         Compress-Archive -Path XLMenuMod/bin/Release/XLMenuMod -DestinationPath ${archiveName} -CompressionLevel Optimal
         echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
@@ -58,8 +58,8 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${env.ARCHIVE_NAME}
-        asset_name: ${env.ARCHIVE_NAME}
+        file: ${{env.ARCHIVE_NAME}}
+        asset_name: ${{env.ARCHIVE_NAME}}
         tag: ${{ github.event.release.tag_name }}
     
     #- name: Create XLMenuMod.Utilities Nuget Package
