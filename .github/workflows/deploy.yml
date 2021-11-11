@@ -49,12 +49,15 @@ jobs:
       id: filename
       shell: powershell
       run: |
-        $TagName = ${{ steps.release_tag.outputs.release_tag }}
-        Write-Host "$TagName"
-        $TagNameReplaced = $TagName.Replace('.', '-')
-        Write-Host "$TagNameReplaced"
-        $ArchvieName="XLMenuMod-$($TagNameReplaced).zip"
-        echo "::set-output name=archive_name::$ArchvieName"
+        $archiveName = "${{ steps.release_tag.outputs.release_tag }}".Replace('.', '-')
+        echo "::set-output name=archive_name::$archiveName"
+      
+        #$TagName = ${{ steps.release_tag.outputs.release_tag }}
+        #Write-Host "$TagName"
+        #$TagNameReplaced = $TagName.Replace('.', '-')
+        #Write-Host $TagNameReplaced
+        #$ArchiveName="XLMenuMod-$($TagNameReplaced).zip"
+        #echo "::set-output name=archive_name::$ArchiveName"
       
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.6.0
