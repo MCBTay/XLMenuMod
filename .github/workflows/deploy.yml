@@ -79,5 +79,12 @@ jobs:
         path: modfile.zip
         version: ${{ github.event.release.tag_name }}
         changelog: ${{ github.event.release.description_html }}
+    
+    - name: Upload to Release Action
+      uses: Shopify/upload-to-release@v1.0.1
+      with:
+        name: ${{ steps.filename.outputs.archive_name }}
+        path: .
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
         
     # upload files to release
