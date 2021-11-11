@@ -38,7 +38,7 @@ jobs:
         git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
         git push
         git tag --force ${{ github.event.release.tag_name }}
-        git push origin ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }} --force
       
     - name: Checkout
       uses: actions/checkout@v2
