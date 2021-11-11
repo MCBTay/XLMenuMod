@@ -36,15 +36,11 @@ jobs:
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
-    
-    - name: Get Release Tag
-      id: get_version
-      run: echo "release_tag=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
         
     - name: Create ZIP
       id: filename
       run: |
-        $tagName = "${{ env.release_tag }}"
+        $tagName = "${{ github.event.release.tag_name }}"
         echo "${tagName}"
         $archiveName = "XLMenuMod-${tagName}.zip"
         echo "${archiveName}"
