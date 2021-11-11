@@ -36,7 +36,7 @@ jobs:
         git config user.name "GitHub Actions"
         git config user.email "<>"
         git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
-        git push
+        git push origin master
         git tag --force ${{ github.event.release.tag_name }}
         git push origin ${{ github.event.release.tag_name }} --force
       
