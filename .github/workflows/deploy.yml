@@ -113,8 +113,8 @@ jobs:
         git commit -m "Bumping version number and download url in repository.json" ./repository.json
         git push origin master
         
-    #- name: Create XLMenuMod.Utilities Nuget Package
-      #run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+    - name: Create XLMenuMod.Utilities Nuget Package
+      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj -- configuration=Release --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
@@ -124,3 +124,4 @@ jobs:
         path: ${{ env.ARCHIVE_NAME }}
         version: ${{ steps.get_version.outputs.release_tag }}
         changelog: ${{ github.event.release.description_html }}
+        active: false
