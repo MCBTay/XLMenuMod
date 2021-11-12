@@ -113,8 +113,11 @@ jobs:
         git commit -m "Bumping version number and download url in repository.json" ./repository.json
         git push origin master
         
-    - name: Create XLMenuMod.Utilities Nuget Package
-      run: nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
+    - name: Create and Upload XLMenuMod.Utilities Nuget Package
+      run: |
+        nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
+        nuget sources add -name "github" -source "https://nuget.pkg.github.com/MCBTay/index.json" -username MCBTay -password ${{ secrets.GITHUB_TOKEN }} -StorePasswordInClearText
+        nuget push "XLMenuMod.Utilities.*.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
@@ -123,5 +126,4 @@ jobs:
         mod: 135638 # xlmenumod
         path: ${{ env.ARCHIVE_NAME }}
         version: ${{ steps.get_version.outputs.release_tag }}
-        changelog: ${{ github.event.release.description_html }}
-        active: false
+        changelog: ${{ github.event.release.body }}
