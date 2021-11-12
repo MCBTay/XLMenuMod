@@ -12,11 +12,7 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      
     - name: Setup .NET 5.0.x
       uses: actions/setup-dotnet@v1
       with:
@@ -24,6 +20,28 @@ jobs:
         
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
+        
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+          ref: ${{ github.head_ref }}
+      
+    - name: Update Info.json
+      uses: jossef/action-set-json-field@v1
+      with:
+        file: ./XLMenuMod/Info.json
+        field: Version
+        value: ${{ github.event.release.tag_name }}
+        
+    - name: Commit Info.json
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "<>"
+        git switch -c master
+        git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
+        git push --set-upstream origin master
+        git tag --force ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }} --force
       
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -32,61 +50,80 @@ jobs:
     - name: MSBuild
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: powershell
-      run: |
-        msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+    
+    - name: Test
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
         
-    - name: Dump context
-      uses: crazy-max/ghaction-dump-context@v1.2.0
-      
-    - name: Get Release Tag
-      id: release_tag
-      run: |
-        $TAG_NAME = ${{ github.event.release.tag_name }}
-        echo "::set-output name=release_tag::$TAG_NAME"
-        
-    - name: Get Latest Tag
-      if: $ {{ steps.release_tag.outputs.release_tag == null }}
-      uses: WyriHaximus/github-action-get-previous-tag@v1
-        
-    - name: Determine Archive Name
-      id: filename
-      run: |
-        $TAG_NAME = ${{ github.event.release.tag_name }}
-        echo "Tag Name: " + "$TAG_NAME"
-        $TAG_NAME_REPLACED="${$TAG_NAME//./-}"
-        echo "$TAG_NAME_REPLACED"
-        $ARCHIVE_NAME="XLMenuMod-${TAG_NAME_REPLACED}.zip"
-        echo "$ARCHIVE_NAME"
-        echo "::set-output name=archive_name::$ARCHIVE_NAME"
-      
-    - name: Zip Release
-      uses: TheDoctor0/zip-release@0.6.0
+    - name: Upload XLMenuMod.Utilities.dll to release
+      uses: svenstaro/upload-release-action@v2
       with:
-        filename: ${{ steps.filename.outputs.archive_name }}
-        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll
+        asset_name: XLMenuMod.Utilities.dll
+        tag: ${{ github.event.release.tag_name }}
         
-    - name: Create XLMenuMod.Utilities Nuget Package
-      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+    - name: Prepare Files for Zip
+      run: |
+        New-Item -Path "XLMenuMod\bin\Release\" -name "XLMenuMod" -ItemType "directory"
+        Copy-Item "XLMenuMod\bin\Release\XLMenuMod.dll" -Destination "XLMenuMod\bin\Release\XLMenuMod/XLMenuMod.dll"
+        Copy-Item "XLMenuMod\bin\Release\XLMenuMod.Utilities.dll" "XLMenuMod\bin\Release\XLMenuMod\XLMenuMod.Utilities.dll"
+        Copy-Item "XLMenuMod\bin\Release\Info.json" "XLMenuMod\bin\Release\XLMenuMod\Info.json"
+        
+    - name: Create ZIP
+      id: filename
+      shell: pwsh
+      run: |
+        $tag = "${{ github.event.release.tag_name }}".Replace('.', '-')
+        $archiveName = "XLMenuMod-${tag}.zip"
+        Compress-Archive -Path XLMenuMod/bin/Release/XLMenuMod -DestinationPath ${archiveName} -CompressionLevel Optimal
+        echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        
+    - name: Upload XLMenuMod.zip to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ env.ARCHIVE_NAME }}
+        asset_name: ${{ env.ARCHIVE_NAME }}
+        tag: ${{ github.event.release.tag_name }}
+        
+    - name: Update repository.json Version
+      id: update-json
+      uses: 898anil/github-actions-json-edit@v0.2
+      with:
+        file_path: ./repository.json
+        field_path: Releases.0.Version
+        field_value: ${{ github.event.release.tag_name }}
+        
+    - name: Update repository.json DownloadUrl
+      id: update-json2
+      uses: 898anil/github-actions-json-edit@v0.2
+      with:
+        file_path: ${{ steps.update-json.outputs.out_file }}
+        field_path: Releases.0.DownloadUrl
+        field_value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
+        
+    - name: Overwrite repository.json
+      run: |
+        Copy-Item "${{ steps.update-json2.outputs.out_file }}" "repository.json"
+    
+    - name: Commit repository.json
+      run: |
+        git commit -m "Bumping version number and download url in repository.json" ./repository.json
+        git push origin master
+        
+    - name: Create and Upload XLMenuMod.Utilities Nuget Package
+      run: |
+        nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
+        nuget sources add -name "github" -source "https://nuget.pkg.github.com/MCBTay/index.json" -username MCBTay -password ${{ secrets.GITHUB_TOKEN }} -StorePasswordInClearText
+        nuget push "XLMenuMod.Utilities.${{ github.event.release.tag_name }}.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
         token: ${{ secrets.MODIO_TOKEN }}
         game: 629 # skaterxl
         mod: 135638 # xlmenumod
-        path: modfile.zip
+        path: ${{ env.ARCHIVE_NAME }}
         version: ${{ github.event.release.tag_name }}
-        changelog: ${{ github.event.release.description_html }}
-        
-    #- name: Upload XLMenuMod installable zip
-      #uses: actions/upload-artifact@v2.2.2
-      #with:
-        #name: XLMenuMod
-        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip
-        
-    
-          
-    #- name: Upload XLMenuMod.Utilities.dll
-      #uses: actions/upload-artifact@v2.2.2
-      #with:
-        #name: XLMenuMod.Utilities.dll
-        #path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
+        changelog: ${{ github.event.release.body }}

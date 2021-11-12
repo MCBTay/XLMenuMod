@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using HarmonyLib;
+using XLMenuMod.Utilities.Levels;
 
 namespace XLMenuMod.Utilities.Gear
 {
@@ -26,6 +28,31 @@ namespace XLMenuMod.Utilities.Gear
 				default:
 					if (!Enum.TryParse(category.ToString(), out GearCategory gearCategory)) return false;
 					return index[1] == (int)gearCategory;
+			}
+		}
+
+		/// <summary>
+		/// Used when changing categories in the gear menu such that the current folder and index path get set appropriately.
+		/// </summary>
+		public static void WalkUpFolders(this MVCListView instance)
+		{
+			if (instance.DataSource == null) return;
+
+			var newIndexPath = instance.currentIndexPath;
+
+			if (instance.DataSource is LevelSelectionController && instance.currentIndexPath.depth > 1)
+			{
+				while (newIndexPath.depth != 1) { newIndexPath = newIndexPath.Up(); }
+
+				Traverse.Create(instance).Property("currentIndexPath").SetValue(newIndexPath);
+				CustomLevelManager.Instance.CurrentFolder = null;
+			}
+			else if (instance.DataSource is GearSelectionController && instance.currentIndexPath.depth > 2)
+			{
+				while (newIndexPath.depth != 2) { newIndexPath = newIndexPath.Up(); }
+
+				Traverse.Create(instance).Property("currentIndexPath").SetValue(newIndexPath);
+				CustomGearManager.Instance.CurrentFolder = null;
 			}
 		}
 	}

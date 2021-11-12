@@ -238,7 +238,7 @@ namespace XLMenuMod.Utilities.Gear
 			return false;
 		}
 
-		public override List<ICustomInfo> SortList(List<ICustomInfo> gear)
+		public override List<ICustomInfo> SortList(List<ICustomInfo> sourceList)
 		{
 			UserInterfaceHelper.Instance.SetSortLabelText(ref _sortLabel, ((GearSortMethod)CurrentSort).ToString());
 
@@ -247,16 +247,16 @@ namespace XLMenuMod.Utilities.Gear
 			switch (CurrentSort)
 			{
 				case (int)GearSortMethod.Newest:
-					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
+					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
 					break;
 				case (int)GearSortMethod.Oldest:
-					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetModifiedDate(true)).ToList();
+					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetModifiedDate(true)).ToList();
 					break;
 				case (int)GearSortMethod.Name_ASC:
-					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
+					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
 					break;
 				default:
-					sorted = gear.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
+					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
 					break;
 			}
 

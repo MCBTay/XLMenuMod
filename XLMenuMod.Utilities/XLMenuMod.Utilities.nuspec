@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>XLMenuMod.Utilities</id>
+    <version>2.5.0</version>
+    <title>XL Menu Mod Utilities</title>
+    <authors>mcbtay</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/MCBTay/XLMenuMod</projectUrl>
+	<description>Utilities for interacting with SkaterXL's menu system.</description>
+    <releaseNotes>Github Release Description?</releaseNotes>
+    <copyright>Copyright ©  2021</copyright>
+    <repository type="git" url="https://github.com/MCBTay/XLMenuMod.git" />
+  </metadata>
+</package>
