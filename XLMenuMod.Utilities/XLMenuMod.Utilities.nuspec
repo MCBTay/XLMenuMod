@@ -11,5 +11,6 @@
 	<description>Utilities for interacting with SkaterXL's menu system.</description>
     <releaseNotes>Github Release Description?</releaseNotes>
     <copyright>Copyright ©  2021</copyright>
+    <repository type="git" url="https://github.com/MCBTay/XLMenuMod.git" />
   </metadata>
 </package>
