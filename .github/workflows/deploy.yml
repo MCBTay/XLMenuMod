@@ -116,7 +116,8 @@ jobs:
     - name: Create and Upload XLMenuMod.Utilities Nuget Package
       run: |
         nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
-        nuget push "XLMenuMod.Utilities.*.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
+        nuget sources add -name "github" -source "https://nuget.pkg.github.com/MCBTay/index.json" -username MCBTay --password ${{ secrets.GITHUB_TOKEN }} -StorePasswordInClearText
+        nuget push "XLMenuMod.Utilities.*.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "github"
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
