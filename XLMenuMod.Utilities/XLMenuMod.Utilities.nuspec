@@ -4,11 +4,11 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>$author$</authors>
+    <authors>mcbtay</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/MCBTay/XLMenuMod</projectUrl>
-	<description>$description$</description>
+	<description>Utilities for interacting with SkaterXL's menu system.</description>
     <releaseNotes>Github Release Description?</releaseNotes>
     <copyright>$copyright$</copyright>
   </metadata>
