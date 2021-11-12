@@ -15,6 +15,6 @@ namespace XLMenuMod.Utilities.UnitTest.Extensions
 		public void IsSubPathOfTests(string path, string baseDirPath, bool expected)
 		{
 			path.IsSubPathOf(baseDirPath).Should().Be(expected);
-		}
+        }
 	}
 }
