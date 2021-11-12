@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\XLMenuMod.Utilities\XLMenuMod.Utilities.csproj" />
+    <ProjectReference Include="..\XLMenuMod.Utilities\XLMenuMod.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
