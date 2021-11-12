@@ -81,7 +81,7 @@ jobs:
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        vstest XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
+        vstest.console.exe XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
         
     - name: Stop SonarScanner Analysis
       env:
