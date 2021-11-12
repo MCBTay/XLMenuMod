@@ -114,7 +114,7 @@ jobs:
         git push origin master
         
     - name: Create XLMenuMod.Utilities Nuget Package
-      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj -- configuration=Release --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+      run: nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
