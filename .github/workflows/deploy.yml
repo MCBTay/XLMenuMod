@@ -125,4 +125,4 @@ jobs:
         mod: 135638 # xlmenumod
         path: ${{ env.ARCHIVE_NAME }}
         version: ${{ steps.get_version.outputs.release_tag }}
-        changelog: ${{ github.event.release.description_html }}
+        changelog: ${{ github.event.release.body }}
