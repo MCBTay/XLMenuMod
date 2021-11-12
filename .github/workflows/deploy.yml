@@ -116,14 +116,7 @@ jobs:
     - name: Create and Upload XLMenuMod.Utilities Nuget Package
       run: |
         nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
-        
-    - name: Push Nupkg to GitHub Packages
-      uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
-      with:
-        nupkg-path: 'XLMenuMod.Utilities.*.nupkg'
-        repo-owner: MCBTay
-        gh-user: MCBTay
-        token: ${{ secrets.GITHUB_TOKEN }}
+        nuget push "XLMenuMod.Utilities.*.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
