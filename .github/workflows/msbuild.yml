@@ -1,4 +1,4 @@
-name: Build and Upload XLMenuMod
+name: Build, Test, and Analyze
 
 on:
   push:
@@ -84,17 +84,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-      
-    - name: Upload XLMenuMod installable zip
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: XLMenuMod
-        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/*.zip 
-          
-    - name: Upload XLMenuMod.Utilities.dll
-      uses: actions/upload-artifact@v2.2.2
-      with:
-        name: XLMenuMod.Utilities.dll
-        path: ${{env.GITHUB_WORKSPACE}}XLMenuMod/bin/Release/XLMenuMod/XLMenuMod.Utilities.dll
-          
-          
