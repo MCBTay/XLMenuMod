@@ -107,36 +107,21 @@ jobs:
     - name: Overwrite repository.json
       run: |
         Copy-Item "${{ steps.update-json2.outputs.out_file }}" "repository.json"
-        
-    #- name: Update repository.json Version
-      #uses: jossef/action-set-json-field@v1
-      #with:
-        #file: ./repository.json
-        #field: Releases.Version
-        #value: ${{ github.event.release.tag_name }}
-        
-    #- name: Update repository.json DownloadUrl
-      #uses: jossef/action-set-json-field@v1
-      #with:
-        #file: ./repository.json
-        #field: Releases.DownloadUrl
-        #value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
     
     - name: Commit repository.json
       run: |
         git commit -m "Bumping version number and download url in repository.json" ./repository.json
         git push origin master
         
-    
-    
-    #- name: Create XLMenuMod.Utilities Nuget Package
-      #run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
+    - name: Create XLMenuMod.Utilities Nuget Package
+      run: dotnet pack XLMenuMod.Utilities/XLMenuMod.Utilities.csproj -- configuration=Release --include-source --include-symbols --no-build -p:PackageVersion=${{ github.event.release.tag_name }}
       
     - uses: nickelc/upload-to-modio@v1.0.1
       with:
         token: ${{ secrets.MODIO_TOKEN }}
         game: 629 # skaterxl
         mod: 135638 # xlmenumod
-        path: modfile.zip
+        path: ${{ env.ARCHIVE_NAME }}
         version: ${{ steps.get_version.outputs.release_tag }}
         changelog: ${{ github.event.release.description_html }}
+        active: false
