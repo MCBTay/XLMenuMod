@@ -24,7 +24,7 @@ namespace XLMenuMod.Utilities.UserInterface
 		private static SpriteHelper _instance;
 		public static SpriteHelper Instance
 		{
-			get { return _instance ?? (_instance = new SpriteHelper()); }
+			get { return _instance ??= new SpriteHelper(); }
 			private set { _instance = value; }
 		}
 
@@ -117,32 +117,23 @@ namespace XLMenuMod.Utilities.UserInterface
 		/// <summary>
 		/// Load a PNG or JPG file from disk to a Texture2D
 		/// </summary>
-		/// <param name="FilePath"></param>
+		/// <param name="filePath"></param>
 		/// <returns>Null if load fails</returns>
-		public Texture2D LoadTexture(string FilePath)
+		public Texture2D LoadTexture(string filePath)
 		{
-			Texture2D texture;
-			byte[] data;
+            if (!File.Exists(filePath)) return null;
 
-			if (File.Exists(FilePath))
-			{
-				data = File.ReadAllBytes(FilePath);
-				texture = new Texture2D(2, 2);
-				if (texture.LoadImage(data))
-				{
-					if (texture.width > 256 || texture.height > 256)
-					{
-						UnityModManager.Logger.Log($"XLMenuMod: {FilePath} is too large.  Max dimensions are 256x256.");
-						Object.Destroy(texture);
-						return null;
-					}
+            var data = File.ReadAllBytes(filePath);
+            var texture = new Texture2D(2, 2);
+            if (!texture.LoadImage(data)) return null;
 
-					return texture;
-				}
-			}
+            if (texture.width <= 256 && texture.height <= 256) return texture;
 
-			return null;
-		}
+            UnityModManager.Logger.Log($"XLMenuMod: {filePath} is too large.  Max dimensions are 256x256.");
+            Object.Destroy(texture);
+            return null;
+
+        }
 
 		/// <summary>
 		/// Create and add new default material to sprite asset.
@@ -158,21 +149,21 @@ namespace XLMenuMod.Utilities.UserInterface
 			material.hideFlags = HideFlags.HideInHierarchy;
 		}
 
-		public int GetSpriteIndex_YButton_Gray()
+		public int GetSpriteIndex_YButton_Gray(RuntimePlatform platform, string joystickName = "unknown")
 		{
 			ControllerIconSpriteGray returnVal;
 
-			switch (Application.platform)
+			switch (platform)
 			{
 				case RuntimePlatform.WindowsPlayer:
 				case RuntimePlatform.WindowsEditor:
-					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
-					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
-					{
-						returnVal = ControllerIconSpriteGray.PS4_Triangle_Button;
-						break;
-					}
-					returnVal = ControllerIconSpriteGray.XB1_Y;
+					string str = joystickName ?? "unknown";
+                    if (str.Contains("Dual Shock") || str.Contains("DualShock"))
+                    {
+                        returnVal = ControllerIconSpriteGray.PS4_Triangle_Button;
+                        break;
+                    }
+                    returnVal = ControllerIconSpriteGray.XB1_Y;
 					break;
 				case RuntimePlatform.PS4:
 					returnVal = ControllerIconSpriteGray.PS4_Triangle_Button;
@@ -188,21 +179,21 @@ namespace XLMenuMod.Utilities.UserInterface
 			return (int)returnVal;
 		}
 
-		public int GetSpriteIndex_YButton()
+		public int GetSpriteIndex_YButton(RuntimePlatform platform, string joystickName = "unknown")
 		{
 			ControllerIconSprite returnVal;
 
-			switch (Application.platform)
+			switch (platform)
 			{
 				case RuntimePlatform.WindowsPlayer:
 				case RuntimePlatform.WindowsEditor:
-					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
+					string str = joystickName ?? "unknown";
 					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
-					{
-						returnVal = ControllerIconSprite.PS4_Triangle_Button;
-						break;
-					}
-					returnVal = ControllerIconSprite.XB1_Y;
+                    {
+                        returnVal = ControllerIconSprite.PS4_Triangle_Button;
+                        break;
+                    }
+                    returnVal = ControllerIconSprite.XB1_Y;
 					break;
 				case RuntimePlatform.PS4:
 					returnVal = ControllerIconSprite.PS4_Triangle_Button;
@@ -218,15 +209,15 @@ namespace XLMenuMod.Utilities.UserInterface
 			return (int)returnVal;
 		}
 
-		public int GetSpriteIndex_XButton()
+		public int GetSpriteIndex_XButton(RuntimePlatform platform, string joystickName = "unknown")
 		{
 			ControllerIconSprite returnVal;
 
-			switch (Application.platform)
+			switch (platform)
 			{
 				case RuntimePlatform.WindowsPlayer:
 				case RuntimePlatform.WindowsEditor:
-					string str = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name ?? "unknown";
+                    string str = joystickName ?? "unknown";
 					if (str.Contains("Dual Shock") || str.Contains("DualShock"))
 					{
 						returnVal = ControllerIconSprite.PS4_Square_Button;
@@ -238,7 +229,7 @@ namespace XLMenuMod.Utilities.UserInterface
 					returnVal = ControllerIconSprite.PS4_Square_Button;
 					break;
 				case RuntimePlatform.Switch:
-					returnVal = ControllerIconSprite.SWITCH_X;
+					returnVal = ControllerIconSprite.SWITCH_Y;
 					break;
 				default:
 					returnVal = ControllerIconSprite.XB1_X;
