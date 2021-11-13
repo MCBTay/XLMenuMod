@@ -56,7 +56,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
         public void SetSortLabelText(ref TMP_Text label, string text)
         {
-			var sortLabelText = $"<size=80%><sprite={SpriteHelper.Instance.GetSpriteIndex_YButton_Gray()}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
+			var sortLabelText = $"<size=80%><sprite={SpriteHelper.Instance.GetSpriteIndex_YButton_Gray(Application.platform)}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
             label?.SetText(sortLabelText);
         }
 

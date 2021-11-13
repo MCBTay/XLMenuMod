@@ -158,11 +158,11 @@ namespace XLMenuMod.Utilities.UserInterface
 			material.hideFlags = HideFlags.HideInHierarchy;
 		}
 
-		public int GetSpriteIndex_YButton_Gray()
+		public int GetSpriteIndex_YButton_Gray(RuntimePlatform platform)
 		{
 			ControllerIconSpriteGray returnVal;
 
-			switch (Application.platform)
+			switch (platform)
 			{
 				case RuntimePlatform.WindowsPlayer:
 				case RuntimePlatform.WindowsEditor:
@@ -188,11 +188,11 @@ namespace XLMenuMod.Utilities.UserInterface
 			return (int)returnVal;
 		}
 
-		public int GetSpriteIndex_YButton()
+		public int GetSpriteIndex_YButton(RuntimePlatform platform)
 		{
 			ControllerIconSprite returnVal;
 
-			switch (Application.platform)
+			switch (platform)
 			{
 				case RuntimePlatform.WindowsPlayer:
 				case RuntimePlatform.WindowsEditor:
@@ -218,11 +218,11 @@ namespace XLMenuMod.Utilities.UserInterface
 			return (int)returnVal;
 		}
 
-		public int GetSpriteIndex_XButton()
+		public int GetSpriteIndex_XButton(RuntimePlatform platform)
 		{
 			ControllerIconSprite returnVal;
 
-			switch (Application.platform)
+			switch (platform)
 			{
 				case RuntimePlatform.WindowsPlayer:
 				case RuntimePlatform.WindowsEditor:
