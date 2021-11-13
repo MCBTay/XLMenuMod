@@ -81,7 +81,7 @@ jobs:
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
-        dotnet publish
+        dotnet publish -c ${{ env.BUILD_CONFIGURATION }}
         dotnet vstest ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities.UnitTest\bin\Release\net5.0\publish\XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
         
     - name: Stop SonarScanner Analysis
