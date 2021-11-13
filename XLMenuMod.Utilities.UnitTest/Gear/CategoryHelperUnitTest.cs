@@ -30,7 +30,7 @@ namespace XLMenuMod.Utilities.UnitTest.Gear
         [InlineAutoMoqData(Skater.TomAsta, GearCategory.Top, OfficialBrand.Almost)]
         [InlineAutoMoqData(Skater.BrandonWestgate, GearCategory.Hair, OfficialBrand.Almost)]
         [InlineAutoMoqData(Skater.TiagoLemos, GearCategory.Hair, OfficialBrand.Almost)]
-        public void IsTypeOfTests_InvalidValues(int first, int second, OfficialBrand category, bool result)
+        public void IsTypeOfTests_InvalidValues(int first, int second, OfficialBrand category)
         {
             var index = new IndexPath(new List<int> { first, second });
             CategoryHelper.IsTypeOf(index, category).Should().BeFalse();
