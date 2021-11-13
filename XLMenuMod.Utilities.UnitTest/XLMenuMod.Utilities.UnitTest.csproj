@@ -26,4 +26,10 @@
     <ProjectReference Include="..\XLMenuMod.Utilities\XLMenuMod.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\XLMenuMod\References\Assembly-CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
