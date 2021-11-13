@@ -117,32 +117,23 @@ namespace XLMenuMod.Utilities.UserInterface
 		/// <summary>
 		/// Load a PNG or JPG file from disk to a Texture2D
 		/// </summary>
-		/// <param name="FilePath"></param>
+		/// <param name="filePath"></param>
 		/// <returns>Null if load fails</returns>
-		public Texture2D LoadTexture(string FilePath)
+		public Texture2D LoadTexture(string filePath)
 		{
-			Texture2D texture;
-			byte[] data;
+            if (!File.Exists(filePath)) return null;
 
-			if (File.Exists(FilePath))
-			{
-				data = File.ReadAllBytes(FilePath);
-				texture = new Texture2D(2, 2);
-				if (texture.LoadImage(data))
-				{
-					if (texture.width > 256 || texture.height > 256)
-					{
-						UnityModManager.Logger.Log($"XLMenuMod: {FilePath} is too large.  Max dimensions are 256x256.");
-						Object.Destroy(texture);
-						return null;
-					}
+            var data = File.ReadAllBytes(filePath);
+            var texture = new Texture2D(2, 2);
+            if (!texture.LoadImage(data)) return null;
 
-					return texture;
-				}
-			}
+            if (texture.width <= 256 && texture.height <= 256) return texture;
 
-			return null;
-		}
+            UnityModManager.Logger.Log($"XLMenuMod: {filePath} is too large.  Max dimensions are 256x256.");
+            Object.Destroy(texture);
+            return null;
+
+        }
 
 		/// <summary>
 		/// Create and add new default material to sprite asset.
