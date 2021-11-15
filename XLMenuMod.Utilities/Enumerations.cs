@@ -136,7 +136,9 @@
         Name_ASC,
         Name_DESC,
         Newest,
-        Oldest
+        Oldest,
+        Type_ASC,
+        Type_DESC
     }
 
     public enum OfficialBrand
