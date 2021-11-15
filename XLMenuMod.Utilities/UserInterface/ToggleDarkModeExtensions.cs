@@ -191,10 +191,7 @@ namespace XLMenuMod.Utilities.UserInterface
 		{
 			if (listView == null) return;
 
-			//TODO: Should this even be here? It's pretty irrelvant to dark mode, although it does ensure the font size gets set more often?
-			UserInterfaceHelper.Instance.UpdateFontSize(listView.ItemPrefab.Label);
-
-			listView.ItemPrefab.ToggleDarkMode(enabled);
+            listView.ItemPrefab.ToggleDarkMode(enabled);
 			listView.HeaderView.ToggleDarkMode(enabled);
 
 			foreach (var item in listView.ItemViews)
@@ -207,8 +204,6 @@ namespace XLMenuMod.Utilities.UserInterface
 		{
 			if (listItemView == null) return;
 
-			//TODO: Should this even be here? It's pretty irrelvant to dark mode, although it does ensure the font size gets set more often?
-			UserInterfaceHelper.Instance.UpdateFontSize(listItemView.Label);
 
 			listItemView.Label.ToggleDarkMode(enabled);
 		}

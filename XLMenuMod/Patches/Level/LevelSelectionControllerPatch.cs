@@ -21,6 +21,8 @@ namespace XLMenuMod.Patches.Level
 				CustomLevelManager.Instance.SortLabel.gameObject.SetActive(__instance.showCustom);
 				UserInterfaceHelper.Instance.UpdateLabelColor(CustomLevelManager.Instance.SortLabel, Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText);
 
+                header.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
+
 				if (CustomLevelManager.Instance.CurrentFolder != null && SpriteHelper.MenuIcons != null)
 				{
 					var isEasyDay = CustomLevelManager.Instance.CurrentFolder.GetName().Equals("\\Easy Day");
@@ -37,6 +39,8 @@ namespace XLMenuMod.Patches.Level
 		{
 			static void Postfix(ref MVCListItemView itemView)
 			{
+                itemView.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
+
 				if (itemView.Label.text.StartsWith("\\"))
 				{
 					if (SpriteHelper.MenuIcons == null) return;

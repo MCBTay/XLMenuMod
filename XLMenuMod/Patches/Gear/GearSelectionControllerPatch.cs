@@ -13,7 +13,7 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Gear
 {
-	public static class GearSelectionControllerPatch
+    public static class GearSelectionControllerPatch
 	{
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
@@ -29,33 +29,34 @@ namespace XLMenuMod.Patches.Gear
 				// return out if it's not one of the tabs XLMenuMod is aware of.
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
 
-				if (CustomGearManager.Instance.CurrentFolder != null)
-				{
-					if (index[0] < 0) return;
-					bool isCustom = index[1] >= officialGear[index[0]].Length;
+                if (CustomGearManager.Instance.CurrentFolder == null) return;
+                if (index[0] < 0) return;
 
-					if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
-					{
-						if (SpriteHelper.MenuIcons != null)
-						{
-							itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
+                bool isCustom = index[1] >= officialGear[index[0]].Length;
 
-							string newText = "<sprite name=\"folder_outline\">";
+                itemView.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
 
-							if (CustomGearManager.Instance.CurrentFolder.GetName().Equals("\\mod.io"))
-							{
-								itemView.Label.spriteAsset = SpriteHelper.BrandIcons;
-								newText = "<sprite name=\"mod.io\">";
-							}
-							itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", newText));
-						}
-					}
-					else
-					{
-						itemView.SetBrandSprite(CustomGearManager.Instance.CurrentFolder.GetParentObject() as CustomGearFolderInfo);
-					}
-				}
-			}
+                if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
+                {
+                    if (SpriteHelper.MenuIcons != null)
+                    {
+                        itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
+
+                        string newText = "<sprite name=\"folder_outline\">";
+
+                        if (CustomGearManager.Instance.CurrentFolder.GetName().Equals("\\mod.io"))
+                        {
+                            itemView.Label.spriteAsset = SpriteHelper.BrandIcons;
+                            newText = "<sprite name=\"mod.io\">";
+                        }
+                        itemView.SetText(CustomGearManager.Instance.CurrentFolder.GetName().Replace("\\", newText));
+                    }
+                }
+                else
+                {
+                    itemView.SetBrandSprite(CustomGearManager.Instance.CurrentFolder.GetParentObject() as CustomGearFolderInfo);
+                }
+            }
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureListItemView))]
@@ -78,59 +79,60 @@ namespace XLMenuMod.Patches.Gear
 				if (SpriteHelper.MenuIcons != null) 
 					itemView.Label.spriteAsset = SpriteHelper.MenuIcons;
 
-				if (index.depth >= 3)
-				{
-					GearInfo gearAtIndex = GearDatabase.Instance.GetGearAtIndex(index, out bool _);
+                if (index.depth < 3) return;
 
-					if (gearAtIndex == null)
-					{
-						itemView.SetText("NOT FOUND", false);
-						Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, false).GetValue();
-					}
-					else
-					{
-						// To ensure the items have the proper font and weight.
-						itemView.Label.font = FontDatabase.bookOblique;
-						itemView.Label.fontStyle = FontStyles.Normal;
+                GearInfo gearAtIndex = GearDatabase.Instance.GetGearAtIndex(index, out bool _);
 
-						if (gearAtIndex.name.StartsWith("\\"))
-						{
-							if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
-							{
-								var newText = "<space=18px><sprite name=\"folder_outline\" tint=1>";
+                if (gearAtIndex == null)
+                {
+                    itemView.SetText("NOT FOUND", false);
+                    Traverse.Create(GearSelectionController.Instance).Method("SetIsEquippedIndicators", itemView, false).GetValue();
+                }
+                else
+                {
+                    // To ensure the items have the proper font and weight.
+                    itemView.Label.font = FontDatabase.bookOblique;
+                    itemView.Label.fontStyle = FontStyles.Normal;
 
-								if (gearAtIndex is CustomGearFolderInfo folder && folder.CustomSprite != null)
-								{
-									itemView.Label.spriteAsset = folder.CustomSprite;
-									newText = "<space=18px><sprite=0 tint=1>";
-								}
+                    itemView.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
 
-								if (gearAtIndex.name.Equals("\\mod.io"))
-								{
-									itemView.Label.spriteAsset = SpriteHelper.BrandIcons;
-									newText = "<space=18px><sprite name=\"mod.io\" tint=1>";
-								}
+					if (gearAtIndex.name.StartsWith("\\"))
+                    {
+                        if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
+                        {
+                            var newText = "<space=18px><sprite name=\"folder_outline\" tint=1>";
+
+                            if (gearAtIndex is CustomGearFolderInfo folder && folder.CustomSprite != null)
+                            {
+                                itemView.Label.spriteAsset = folder.CustomSprite;
+                                newText = "<space=18px><sprite=0 tint=1>";
+                            }
+
+                            if (gearAtIndex.name.Equals("\\mod.io"))
+                            {
+                                itemView.Label.spriteAsset = SpriteHelper.BrandIcons;
+                                newText = "<space=18px><sprite name=\"mod.io\" tint=1>";
+                            }
 								
-								itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
-							}
-							else
-							{
-								itemView.SetBrandSprite(gearAtIndex);
-							}
-						}
-						else if (gearAtIndex.name.Equals("..\\"))
-						{
-							itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=18px><sprite name=\"folder\" tint=1>Go Back"), true);
-						}
-						else
-						{
-							itemView.SetText(gearAtIndex.name, true);
-						}
+                            itemView.SetText(gearAtIndex.name.Replace("\\", newText), true);
+                        }
+                        else
+                        {
+                            itemView.SetBrandSprite(gearAtIndex);
+                        }
+                    }
+                    else if (gearAtIndex.name.Equals("..\\"))
+                    {
+                        itemView.SetText(gearAtIndex.name.Replace("..\\", "<space=18px><sprite name=\"folder\" tint=1>Go Back"), true);
+                    }
+                    else
+                    {
+                        itemView.SetText(gearAtIndex.name, true);
+                    }
 
-						Traverse.Create(__instance).Method("SetIsEquippedIndicators", itemView, __instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
-					}
-				}
-			}
+                    Traverse.Create(__instance).Method("SetIsEquippedIndicators", itemView, __instance.previewCustomizer.HasEquipped(gearAtIndex)).GetValue();
+                }
+            }
 		}
 
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.GetNumberOfItems))]
