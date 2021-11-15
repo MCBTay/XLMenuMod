@@ -13,7 +13,7 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Gear
 {
-	public static class GearSelectionControllerPatch
+    public static class GearSelectionControllerPatch
 	{
 		[HarmonyPatch(typeof(GearSelectionController), nameof(GearSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
@@ -34,9 +34,9 @@ namespace XLMenuMod.Patches.Gear
 
                 bool isCustom = index[1] >= officialGear[index[0]].Length;
 
-                UserInterfaceHelper.Instance.UpdateFontSize(itemView.Label, Main.Settings.FontSize);
+                itemView.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
 
-				if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
+                if (isCustom || CategoryHelper.IsTypeOf(index, GearCategory.Hair))
                 {
                     if (SpriteHelper.MenuIcons != null)
                     {
@@ -94,7 +94,7 @@ namespace XLMenuMod.Patches.Gear
                     itemView.Label.font = FontDatabase.bookOblique;
                     itemView.Label.fontStyle = FontStyles.Normal;
 
-                    UserInterfaceHelper.Instance.UpdateFontSize(itemView.Label, Main.Settings.FontSize);
+                    itemView.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
 
 					if (gearAtIndex.name.StartsWith("\\"))
                     {
