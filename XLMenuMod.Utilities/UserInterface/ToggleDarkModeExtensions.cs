@@ -9,32 +9,6 @@ namespace XLMenuMod.Utilities.UserInterface
 {
 	public static class ToggleDarkModeExtensions
 	{
-		public static void ToggleDarkMode(this GameObject gameObject, bool enabled, bool hasStaticText = false, bool hasSubmeshes = false)
-		{
-			if (gameObject == null) return;
-
-			if (hasStaticText)
-			{
-				gameObject.GetComponentsInChildren<TMP_Text>(true).ToggleDarkMode(enabled);
-			}
-
-			if (hasSubmeshes)
-			{
-				gameObject.GetComponentsInChildren<TMP_SubMeshUI>(true).ToggleDarkMode(enabled);
-			}
-
-			gameObject.GetComponentsInChildren<MenuButton>(true).ToggleDarkMode(enabled);
-			gameObject.GetComponentsInChildren<MenuSlider>(true).ToggleDarkMode(enabled);
-			gameObject.GetComponentsInChildren<MenuToggle>(true).ToggleDarkMode(enabled);
-
-			gameObject.GetComponentInChildren<ChallengeSummaryController>(true).ToggleDarkMode(enabled);
-			gameObject.GetComponentInChildren<ChallengeTrickListController>(true).ToggleDarkMode(enabled);
-			gameObject.GetComponentInChildren<MVCListView>(true).ToggleDarkMode(enabled);
-
-			// This is for the replay editor UIs and menu background
-			gameObject.GetComponentsInChildren<Image>(true).ToggleDarkMode(enabled);
-		}
-
 		public static void ToggleDarkMode(this MenuButton[] buttons, bool enabled)
 		{
 			if (buttons == null || !buttons.Any()) return;
@@ -142,17 +116,7 @@ namespace XLMenuMod.Utilities.UserInterface
 			button.colors = color;
 		}
 
-		public static void ToggleDarkMode(this TMP_Text[] labels, bool enabled)
-		{
-			if (labels == null || !labels.Any()) return;
-
-			foreach (var label in labels)
-			{
-				label.ToggleDarkMode(enabled);
-			}
-		}
-
-		public static void ToggleDarkMode(this TMP_Text label, bool enabled)
+        public static void ToggleDarkMode(this TMP_Text label, bool enabled)
 		{
 			if (label == null) return;
 
@@ -173,20 +137,7 @@ namespace XLMenuMod.Utilities.UserInterface
 			}
 		}
 
-		public static void ToggleDarkMode(this TMP_SubMeshUI[] submeshes, bool enabled)
-		{
-			if (submeshes == null || !submeshes.Any()) return;
-
-			foreach (var submesh in submeshes)
-			{
-				if (submesh?.spriteAsset != null && submesh?.material != null)
-				{
-					submesh.material.color = enabled ? UserInterfaceHelper.DarkModeText.normalColor : UserInterfaceHelper.DefaultText.normalColor;
-				}
-			}
-		}
-
-		#region MVCListViews
+        #region MVCListViews
 		public static void ToggleDarkMode(this MVCListView listView, bool enabled)
 		{
 			if (listView == null) return;
