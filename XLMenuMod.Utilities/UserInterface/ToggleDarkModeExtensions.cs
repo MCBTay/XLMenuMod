@@ -87,6 +87,8 @@ namespace XLMenuMod.Utilities.UserInterface
 		/// </summary>
 		private static void UpdateReplayEditorHeaderBackgroundSprite(this Image image, bool enabled)
         {
+            if (image.mainTexture.name != "UnityWhite") return;
+
             image.color = enabled ? UserInterfaceHelper.DarkModeReplayHeaderColor : UserInterfaceHelper.OriginalReplayHeaderColor;
 		}
 
