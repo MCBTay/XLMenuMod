@@ -115,6 +115,7 @@
     <Compile Include="Patches\Level\LevelManagerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionControllerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionStatePatch.cs" />
+    <Compile Include="Patches\MenuInputFieldDialogPatch.cs" />
     <Compile Include="Patches\Multiplayer\MultiplayerRoomInfoPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
