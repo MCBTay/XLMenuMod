@@ -242,25 +242,33 @@ namespace XLMenuMod.Utilities.Gear
 		{
 			UserInterfaceHelper.Instance.SetSortLabelText(ref _sortLabel, ((GearSortMethod)CurrentSort).ToString());
 
-			List<ICustomInfo> sorted;
+			IEnumerable<ICustomInfo> sorted;
+
+            var firstSort = sourceList.OrderBy(x => x.GetName() != "..\\");
 
 			switch (CurrentSort)
 			{
+				case (int)GearSortMethod.Type_ASC:
+                    sorted = firstSort.ThenBy(x => x.ParentObject is CustomCharacterGearInfo ccgi && !x.IsFolder ? ccgi.type : string.Empty);
+                    break;
+				case (int)GearSortMethod.Type_DESC:
+                    sorted = firstSort.ThenByDescending(x => x.ParentObject is CustomCharacterGearInfo ccgi && !x.IsFolder ? ccgi.type : string.Empty);
+					break;
 				case (int)GearSortMethod.Newest:
-					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetModifiedDate(false)).ToList();
+					sorted = firstSort.ThenByDescending(x => x.GetModifiedDate(false));
 					break;
 				case (int)GearSortMethod.Oldest:
-					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetModifiedDate(true)).ToList();
+					sorted = firstSort.ThenBy(x => x.GetModifiedDate(true));
 					break;
 				case (int)GearSortMethod.Name_ASC:
-					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenBy(x => x.GetName()).ToList();
+					sorted = firstSort.ThenBy(x => x.GetName());
 					break;
 				default:
-					sorted = sourceList.OrderBy(x => x.GetName() != "..\\").ThenByDescending(x => x.GetName()).ToList();
+					sorted = firstSort.ThenByDescending(x => x.GetName());
 					break;
 			}
 
-			return sorted;
+			return sorted.ToList();
 		}
 
 		public override void OnPreviousSort<T>()
