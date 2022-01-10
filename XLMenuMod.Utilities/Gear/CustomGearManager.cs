@@ -249,10 +249,10 @@ namespace XLMenuMod.Utilities.Gear
 			switch (CurrentSort)
 			{
 				case (int)GearSortMethod.Type_ASC:
-                    sorted = firstSort.ThenBy(x => x.GetMeshType());
+                    sorted = firstSort.ThenBy(x => x.ParentObject is CustomCharacterGearInfo ccgi && !x.IsFolder ? ccgi.type : string.Empty);
                     break;
 				case (int)GearSortMethod.Type_DESC:
-                    sorted = firstSort.ThenByDescending(x => x.GetMeshType());
+                    sorted = firstSort.ThenByDescending(x => x.ParentObject is CustomCharacterGearInfo ccgi && !x.IsFolder ? ccgi.type : string.Empty);
 					break;
 				case (int)GearSortMethod.Newest:
 					sorted = firstSort.ThenByDescending(x => x.GetModifiedDate(false));
