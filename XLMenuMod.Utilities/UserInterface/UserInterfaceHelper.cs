@@ -123,22 +123,16 @@ namespace XLMenuMod.Utilities.UserInterface
 			label.color = color.normalColor;
 		}
 
-		//TODO: Come back to this!!
-        public void UpdateFontSize(TMP_Text label)
+        public int GetFontSize(FontSizePreset fontSize)
         {
-	        //switch (Main.Settings.FontSize)
-	        //{
-		       // case FontSizePreset.Small:
-			      //  label.fontSize = 30;
-			      //  break;
-		       // case FontSizePreset.Smaller:
-			      //  label.fontSize = 24;
-			      //  break;
-		       // case FontSizePreset.Normal:
-		       // default:
-			      //  label.fontSize = 36;
-			      //  break;
-	        //}
+            switch (fontSize)
+            {
+                case FontSizePreset.Small: return 30;
+                case FontSizePreset.Smaller: return 24;
+                case FontSizePreset.Normal:
+                default:
+                    return 36;
+            }
         }
 
         public void ToggleDarkMode(bool enabled)

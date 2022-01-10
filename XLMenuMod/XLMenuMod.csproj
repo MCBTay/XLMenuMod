@@ -10,7 +10,7 @@
     <RootNamespace>XLMenuMod</RootNamespace>
     <AssemblyName>XLMenuMod</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-	<LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
     <TargetFrameworkProfile />
@@ -115,6 +115,7 @@
     <Compile Include="Patches\Level\LevelManagerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionControllerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionStatePatch.cs" />
+    <Compile Include="Patches\MenuInputFieldDialogPatch.cs" />
     <Compile Include="Patches\Multiplayer\MultiplayerRoomInfoPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -136,12 +137,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" ( 
-del /Q /F "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\"
-copy /Y "$(TargetDir)XLMenuMod.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.dll"
-copy /Y "$(TargetDir)XLMenuMod.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.pdb"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.dll"
-copy /Y "$(TargetDir)XLMenuMod.Utilities.pdb" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.pdb"
-copy /Y "$(TargetDir)Info.json" "F:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\Info.json"
+del /Q /F "G:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\"
+copy /Y "$(TargetDir)XLMenuMod.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.dll"
+copy /Y "$(TargetDir)XLMenuMod.pdb" "G:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.pdb"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.dll" "G:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.dll"
+copy /Y "$(TargetDir)XLMenuMod.Utilities.pdb" "G:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\XLMenuMod.Utilities.pdb"
+copy /Y "$(TargetDir)Info.json" "G:\Steam\steamapps\common\Skater XL\Mods\XLMenuMod\Info.json"
 )
 </PostBuildEvent>
   </PropertyGroup>
