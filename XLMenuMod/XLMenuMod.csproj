@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
-    <Compile Include="Patches\Challenges\ChallengeTrickListControllerPatch.cs" />
+    <Compile Include="Patches\Challenges\ChallengeListViewControllerPatch.cs" />
     <Compile Include="Patches\Gear\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\Gear\GearDatabasePatch.cs" />
     <Compile Include="Patches\Gear\GearSelectionControllerPatch.cs" />
