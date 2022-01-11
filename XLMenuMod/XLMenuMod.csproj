@@ -118,6 +118,7 @@
     <Compile Include="Patches\MenuInputFieldDialogPatch.cs" />
     <Compile Include="Patches\Multiplayer\MultiplayerRoomInfoPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
+    <Compile Include="Patches\Tutorial\TutorialListControllerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
