@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using GameManagement;
+﻿using GameManagement;
 using HarmonyLib;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,7 +11,7 @@ using XLMenuMod.Utilities.UserInterface;
 
 namespace XLMenuMod.Patches.Level
 {
-	public static class LevelSelectionControllerPatch
+    public static class LevelSelectionControllerPatch
 	{
 		[HarmonyPatch(typeof(LevelSelectionController), nameof(LevelSelectionController.ConfigureHeaderView))]
 		public static class ConfigureHeaderViewPatch
@@ -40,6 +40,7 @@ namespace XLMenuMod.Patches.Level
 			static void Postfix(ref MVCListItemView itemView)
 			{
                 itemView.Label.fontSize = UserInterfaceHelper.Instance.GetFontSize(Main.Settings.FontSize);
+                itemView.colors = Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText;
 
 				if (itemView.Label.text.StartsWith("\\"))
 				{
