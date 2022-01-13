@@ -116,6 +116,7 @@
     <Compile Include="Patches\Level\LevelSelectionControllerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionStatePatch.cs" />
     <Compile Include="Patches\MenuInputFieldDialogPatch.cs" />
+    <Compile Include="Patches\Multiplayer\MultiplayerPlayerListMenuPatch.cs" />
     <Compile Include="Patches\Multiplayer\MultiplayerRoomInfoPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
     <Compile Include="Patches\Tutorial\TutorialListControllerPatch.cs" />
