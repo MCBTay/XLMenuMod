@@ -37,25 +37,25 @@
       <HintPath>..\XLMenuMod\References\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\XLMenuMod\References\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BFSUtilities">
-      <HintPath>..\XLMenuMod\References\BFSUtilities.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\BFSUtilities.dll</HintPath>
     </Reference>
     <Reference Include="modio.UnityPlugin">
-      <HintPath>..\XLMenuMod\References\modio.UnityPlugin.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\modio.UnityPlugin.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PhotonUnityNetworking">
-      <HintPath>..\XLMenuMod\References\PhotonUnityNetworking.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\PhotonUnityNetworking.dll</HintPath>
     </Reference>
     <Reference Include="Rewired_Core">
-      <HintPath>..\XLMenuMod\References\Rewired_Core.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\Rewired_Core.dll</HintPath>
     </Reference>
     <Reference Include="SkaterXL.Data">
-      <HintPath>..\XLMenuMod\References\SkaterXL.Data.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\SkaterXL.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,22 +66,22 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\XLMenuMod\References\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\XLMenuMod\References\UnityEngine.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\XLMenuMod\References\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\XLMenuMod\References\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>..\XLMenuMod\References\UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\UnityEngine.ImageConversionModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\XLMenuMod\References\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityModManager">
       <HintPath>..\XLMenuMod\References\UnityModManager.dll</HintPath>
