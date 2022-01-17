@@ -28,10 +28,10 @@
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\XLMenuMod\References\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\Assembly-CSharp.dll</HintPath>
     </Reference>
 	<Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\XLMenuMod\References\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\packages\SkaterXL.Assemblies.1.2.3.11\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 
