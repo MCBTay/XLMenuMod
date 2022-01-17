@@ -108,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
-    <Compile Include="Patches\Challenges\ChallengeTrickListControllerPatch.cs" />
+    <Compile Include="Patches\Challenges\ChallengeListViewControllerPatch.cs" />
     <Compile Include="Patches\Gear\CharacterCustomizerPatch.cs" />
     <Compile Include="Patches\Gear\GearDatabasePatch.cs" />
     <Compile Include="Patches\Gear\GearSelectionControllerPatch.cs" />
@@ -116,8 +116,11 @@
     <Compile Include="Patches\Level\LevelSelectionControllerPatch.cs" />
     <Compile Include="Patches\Level\LevelSelectionStatePatch.cs" />
     <Compile Include="Patches\MenuInputFieldDialogPatch.cs" />
+    <Compile Include="Patches\Multiplayer\MultiplayerPlayerListMenuPatch.cs" />
     <Compile Include="Patches\Multiplayer\MultiplayerRoomInfoPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
+    <Compile Include="Patches\Settings\ProceduralMenuPagePatch.cs" />
+    <Compile Include="Patches\Tutorial\TutorialListControllerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
