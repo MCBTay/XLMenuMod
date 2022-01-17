@@ -119,6 +119,7 @@
     <Compile Include="Patches\Multiplayer\MultiplayerPlayerListMenuPatch.cs" />
     <Compile Include="Patches\Multiplayer\MultiplayerRoomInfoPatch.cs" />
     <Compile Include="Patches\MVCListViewPatch.cs" />
+    <Compile Include="Patches\Settings\ProceduralMenuPagePatch.cs" />
     <Compile Include="Patches\Tutorial\TutorialListControllerPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
