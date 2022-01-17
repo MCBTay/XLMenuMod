@@ -22,10 +22,10 @@ namespace XLMenuMod.Patches.Settings
                             floatSlider.selectable.colors = GetColors();
                             break;
                         case IntSliderItem intSlider:
-                            intSlider.selectable.colors = GetColors();
+                            intSlider.selectable.colors = GetColors(true);
                             break;
                         case ColorSliderItem colorSlider:
-                            colorSlider.selectable.colors = GetColors();
+                            colorSlider.selectable.colors = GetColors(true);
                             break;
                         case EnumSliderItem enumSlider:
                             enumSlider.selectable.colors = GetColors();
@@ -50,9 +50,12 @@ namespace XLMenuMod.Patches.Settings
                 }
             }
 
-            private static ColorBlock GetColors()
+            private static ColorBlock GetColors(bool isSlider = false)
             {
-                return Main.Settings.EnableDarkMode ? UserInterfaceHelper.DarkModeText : UserInterfaceHelper.DefaultText;
+                var darkMode = isSlider ? UserInterfaceHelper.DarkModeSliderText : UserInterfaceHelper.DarkModeText;
+                var lightMode = isSlider ? UserInterfaceHelper.DefaultSliderText : UserInterfaceHelper.DefaultText;
+
+                return Main.Settings.EnableDarkMode ? darkMode : lightMode;
             }
         }
     }
