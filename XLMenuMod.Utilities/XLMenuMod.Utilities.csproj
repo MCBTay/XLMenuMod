@@ -16,6 +16,10 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+	<PackageId>XLMenuMod.Utilities</PackageId>
+	<Version>2.5.1</Version>
+	<Authors>mcbtay</Authors>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
