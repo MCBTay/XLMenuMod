@@ -33,12 +33,19 @@ jobs:
         field: Version
         value: ${{ github.event.release.tag_name }}
         
-    - name: Commit Info.json
+    - name: Set XLMenuMod.Utilities.csproj Version
+      uses: KageKirin/set-csproj-version@v0.0.1
+      with:
+        file: ../../../XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
+        version: ${{ github.event.release.tag_name }}
+        
+    - name: Commit Info.json and XLMenuMod.Utilities.csproj
       run: |
         git config user.name "GitHub Actions"
         git config user.email "<>"
         git switch -c master
         git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
+        git commit -m "Bumping version number in XLMenuMod.Utilities.csproj" ./XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
         git push --set-upstream origin master
         git tag --force ${{ github.event.release.tag_name }}
         git push origin ${{ github.event.release.tag_name }} --force
@@ -115,15 +122,14 @@ jobs:
         
     - name: Create and Upload XLMenuMod.Utilities Nuget Package
       run: |
-        nuget pack ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities\XLMenuMod.Utilities.nuspec -Properties Configuration=${{env.BUILD_CONFIGURATION}} -Symbols -Version ${{ github.event.release.tag_name }}
         nuget sources add -name "github" -source "https://nuget.pkg.github.com/MCBTay/index.json" -username MCBTay -password ${{ secrets.GITHUB_TOKEN }} -StorePasswordInClearText
-        nuget push "XLMenuMod.Utilities.${{ github.event.release.tag_name }}.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
+        nuget push "./XLMenuMod.Utilities/bin/Release/XLMenuMod.Utilities.${{ github.event.release.tag_name }}.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
       
-    - uses: nickelc/upload-to-modio@v1.0.1
-      with:
-        token: ${{ secrets.MODIO_TOKEN }}
-        game: 629 # skaterxl
-        mod: 135638 # xlmenumod
-        path: ${{ env.ARCHIVE_NAME }}
-        version: ${{ github.event.release.tag_name }}
-        changelog: ${{ github.event.release.body }}
+    #- uses: nickelc/upload-to-modio@v1.0.1
+    #  with:
+    #    token: ${{ secrets.MODIO_TOKEN }}
+    #    game: 629 # skaterxl
+    #    mod: 135638 # xlmenumod
+    #    path: ${{ env.ARCHIVE_NAME }}
+    #    version: ${{ github.event.release.tag_name }}
+    #    changelog: ${{ github.event.release.body }}
