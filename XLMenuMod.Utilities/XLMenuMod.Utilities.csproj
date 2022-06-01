@@ -16,10 +16,10 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-	<PackageId>XLMenuMod.Utilities</PackageId>
-	<Version>2.5.1</Version>
-	<Authors>mcbtay</Authors>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>XLMenuMod.Utilities</PackageId>
+    <Version>2.5.1</Version>
+    <Authors>mcbtay</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -118,7 +118,6 @@
     <Compile Include="UserInterface\UserInterfaceHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="XLMenuMod.Utilities.nuspec" />
   </ItemGroup>
   <ItemGroup />
