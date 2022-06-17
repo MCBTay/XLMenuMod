@@ -38,7 +38,7 @@ jobs:
     - name: Set XLMenuMod.Utilities.csproj Version
       uses: KageKirin/set-csproj-version@v0.0.1
       with:
-        file: ../../../XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
+        file: ./XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
         version: ${{ github.event.release.tag_name }}
         
     - name: Commit Info.json and XLMenuMod.Utilities.csproj
