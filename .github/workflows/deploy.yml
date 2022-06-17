@@ -56,25 +56,6 @@ jobs:
         file_path: ./repository.json
         field_path: Releases.0.Version
         field_value: ${{ github.event.release.tag_name }}
-        
-    - name: Update repository.json DownloadUrl
-      id: update-json2
-      uses: 898anil/github-actions-json-edit@v0.2
-      with:
-        file_path: ${{ steps.update-json.outputs.out_file }}
-        field_path: Releases.0.DownloadUrl
-        field_value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
-        
-    - name: Overwrite repository.json
-      run: |
-        Copy-Item "${{ steps.update-json2.outputs.out_file }}" "repository.json"
-    
-    - name: Commit repository.json
-      run: |
-        git commit -m "Bumping version number and download url in repository.json" ./repository.json
-        git push origin master
-        git tag --force ${{ github.event.release.tag_name }}
-        git push origin ${{ github.event.release.tag_name }} --force
       
     - name: Restore NuGet packages
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -109,6 +90,25 @@ jobs:
         $archiveName = "XLMenuMod-${tag}.zip"
         Compress-Archive -Path XLMenuMod/bin/${{ env.BUILD_CONFIGURATION }}/XLMenuMod -DestinationPath ${archiveName} -CompressionLevel Optimal
         echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        
+    - name: Update repository.json DownloadUrl
+      id: update-json2
+      uses: 898anil/github-actions-json-edit@v0.2
+      with:
+        file_path: ${{ steps.update-json.outputs.out_file }}
+        field_path: Releases.0.DownloadUrl
+        field_value: "https://github.com/MCBTay/XLMenuMod/releases/download/${{ github.event.release.tag_name }}/${{ env.ARCHIVE_NAME }}"
+        
+    - name: Overwrite repository.json
+      run: |
+        Copy-Item "${{ steps.update-json2.outputs.out_file }}" "repository.json"
+    
+    - name: Commit repository.json
+      run: |
+        git commit -m "Bumping version number and download url in repository.json" ./repository.json
+        git push origin master
+        git tag --force ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }} --force
         
     - name: Upload XLMenuMod.zip to release
       uses: svenstaro/upload-release-action@v2
