@@ -35,11 +35,11 @@ jobs:
         field: Version
         value: ${{ github.event.release.tag_name }}
         
-    - name: Set XLMenuMod.Utilities.csproj Version
-      uses: KageKirin/set-csproj-version@v0.0.1
-      with:
-        file: ./XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
-        version: ${{ github.event.release.tag_name }}
+    #- name: Set XLMenuMod.Utilities.csproj Version
+    #  uses: KageKirin/set-csproj-version@v0.0.1
+    #  with:
+    #    file: ./XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
+    #    version: ${{ github.event.release.tag_name }}
         
     - name: Commit Info.json and XLMenuMod.Utilities.csproj
       run: |
@@ -47,7 +47,6 @@ jobs:
         git config user.email "<>"
         git switch -c master
         git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
-        git commit -m "Bumping version number in XLMenuMod.Utilities.csproj" ./XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
         git push --set-upstream origin master
 
     - name: Update repository.json Version
