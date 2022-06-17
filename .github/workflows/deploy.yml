@@ -13,13 +13,15 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Setup .NET 5.0.x
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-        
-    - name: Add MSBuild to PATH
+
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+      
+    - name: Setup VSTest
+      uses: darenm/Setup-VSTest@v1
         
     - name: Checkout
       uses: actions/checkout@v2
@@ -47,54 +49,7 @@ jobs:
         git commit -m "Bumping version number in Info.json" ./XLMenuMod/Info.json
         git commit -m "Bumping version number in XLMenuMod.Utilities.csproj" ./XLMenuMod.Utilities/XLMenuMod.Utilities.csproj
         git push --set-upstream origin master
-        git tag --force ${{ github.event.release.tag_name }}
-        git push origin ${{ github.event.release.tag_name }} --force
-      
-    - name: Restore NuGet packages
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-      
-    - name: MSBuild
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      shell: powershell
-      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-    
-    - name: Test
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: dotnet test --verbosity normal --settings coverlet.runsettings --logger:trx
-        
-    - name: Upload XLMenuMod.Utilities.dll to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./XLMenuMod/bin/Release/XLMenuMod.Utilities.dll
-        asset_name: XLMenuMod.Utilities.dll
-        tag: ${{ github.event.release.tag_name }}
-        
-    - name: Prepare Files for Zip
-      run: |
-        New-Item -Path "XLMenuMod\bin\Release\" -name "XLMenuMod" -ItemType "directory"
-        Copy-Item "XLMenuMod\bin\Release\XLMenuMod.dll" -Destination "XLMenuMod\bin\Release\XLMenuMod/XLMenuMod.dll"
-        Copy-Item "XLMenuMod\bin\Release\XLMenuMod.Utilities.dll" "XLMenuMod\bin\Release\XLMenuMod\XLMenuMod.Utilities.dll"
-        Copy-Item "XLMenuMod\bin\Release\Info.json" "XLMenuMod\bin\Release\XLMenuMod\Info.json"
-        
-    - name: Create ZIP
-      id: filename
-      shell: pwsh
-      run: |
-        $tag = "${{ github.event.release.tag_name }}".Replace('.', '-')
-        $archiveName = "XLMenuMod-${tag}.zip"
-        Compress-Archive -Path XLMenuMod/bin/Release/XLMenuMod -DestinationPath ${archiveName} -CompressionLevel Optimal
-        echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
-        
-    - name: Upload XLMenuMod.zip to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ env.ARCHIVE_NAME }}
-        asset_name: ${{ env.ARCHIVE_NAME }}
-        tag: ${{ github.event.release.tag_name }}
-        
+
     - name: Update repository.json Version
       id: update-json
       uses: 898anil/github-actions-json-edit@v0.2
@@ -119,11 +74,50 @@ jobs:
       run: |
         git commit -m "Bumping version number and download url in repository.json" ./repository.json
         git push origin master
+        git tag --force ${{ github.event.release.tag_name }}
+        git push origin ${{ github.event.release.tag_name }} --force
+      
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+      
+    - name: MSBuild
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      shell: powershell
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+    
+    - name: Test
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: vstest.console.exe .\XLMenuMod.Utilities.UnitTest\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
         
-    - name: Create and Upload XLMenuMod.Utilities Nuget Package
+    - name: Upload XLMenuMod.Utilities.dll to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ./XLMenuMod/bin/${{ env.BUILD_CONFIGURATION }}/XLMenuMod.Utilities.dll
+        asset_name: XLMenuMod.Utilities.dll
+        tag: ${{ github.event.release.tag_name }}
+               
+    - name: Create ZIP
+      id: filename
+      shell: pwsh
       run: |
-        nuget sources add -name "github" -source "https://nuget.pkg.github.com/MCBTay/index.json" -username MCBTay -password ${{ secrets.GITHUB_TOKEN }} -StorePasswordInClearText
-        nuget push "./XLMenuMod.Utilities/bin/Release/XLMenuMod.Utilities.${{ github.event.release.tag_name }}.nupkg" -ApiKey ${{ secrets.GITHUB_TOKEN }} -Source "https://nuget.pkg.github.com/MCBTay/index.json"
+        New-Item -Path "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\" -name "XLMenuMod" -ItemType "directory"
+        Copy-Item "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod.dll" -Destination "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod/XLMenuMod.dll"
+        Copy-Item "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod.Utilities.dll" "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod\XLMenuMod.Utilities.dll"
+        Copy-Item "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\Info.json" "XLMenuMod\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod\Info.json"
+        $tag = "${{ github.event.release.tag_name }}".Replace('.', '-')
+        $archiveName = "XLMenuMod-${tag}.zip"
+        Compress-Archive -Path XLMenuMod/bin/${{ env.BUILD_CONFIGURATION }}/XLMenuMod -DestinationPath ${archiveName} -CompressionLevel Optimal
+        echo "ARCHIVE_NAME=${archiveName}" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+        
+    - name: Upload XLMenuMod.zip to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ env.ARCHIVE_NAME }}
+        asset_name: ${{ env.ARCHIVE_NAME }}
+        tag: ${{ github.event.release.tag_name }}
       
     #- uses: nickelc/upload-to-modio@v1.0.1
     #  with:

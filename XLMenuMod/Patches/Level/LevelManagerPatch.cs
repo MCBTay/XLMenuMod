@@ -11,7 +11,7 @@ namespace XLMenuMod.Patches.Level
         /// <summary>
         /// Some levels have custom script assemblies that go with them.  Find if an assembly exists that matches the maps file name, and load it if soo.
         /// </summary>
-        [HarmonyPatch(typeof(LevelManager), nameof(LevelManager.LoadLevelScene))]
+        [HarmonyPatch(typeof(LevelManager), "LoadLevelScene")]
         public static class LoadLevelScenePatch
         {
             static void Prefix(LevelInfo level)

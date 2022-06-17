@@ -24,15 +24,13 @@ jobs:
       with:
         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
         
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1.8.2
-      with:
-        dotnet-version: 5.0.x
-        
-    - name: Add MSBuild to PATH
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
       
-    - name: Setup VSTest.console.exe
+    - name: Setup VSTest
       uses: darenm/Setup-VSTest@v1
       
     - name: Set up JDK 11
@@ -72,17 +70,15 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: .\.sonar\scanner\dotnet-sonarscanner begin /k:"MCBTay_XLMenuMod" /o:"mcbtay" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
         
-    - name: MSBuild
+    - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       shell: powershell
       run: |
         msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-        
+
     - name: Test
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        dotnet publish -c ${{ env.BUILD_CONFIGURATION }}
-        dotnet vstest ${{env.SOLUTION_FILE_PATH}}\XLMenuMod.Utilities.UnitTest\bin\Release\net5.0\publish\XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
+      run: vstest.console.exe .\XLMenuMod.Utilities.UnitTest\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
         
     - name: Stop SonarScanner Analysis
       env:
