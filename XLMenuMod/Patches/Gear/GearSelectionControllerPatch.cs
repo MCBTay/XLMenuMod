@@ -27,6 +27,7 @@ namespace XLMenuMod.Patches.Gear
 
 				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return;
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
 
                 if (CustomGearManager.Instance.CurrentFolder == null) return;
@@ -72,6 +73,7 @@ namespace XLMenuMod.Patches.Gear
 
 				var officialGear = Traverse.Create(GearDatabase.Instance).Field("gearListSource").GetValue<GearInfo[][][]>();
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return;
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
 
 				bool isCustom = index[1] >= Enum.GetValues(typeof(GearCategory)).Length;
@@ -145,6 +147,7 @@ namespace XLMenuMod.Patches.Gear
 				if (index[0] < 0) return;
 
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return;
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
 
 				bool isCustom = index[0] < officialGear.Length && index[1] >= officialGear[index[0]].Length;
@@ -172,6 +175,7 @@ namespace XLMenuMod.Patches.Gear
 				if (index[0] < 0) return true;
 
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return true;
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return true;
 
 				var gear = GearDatabase.Instance.GetGearAtIndex(index);
@@ -260,6 +264,7 @@ namespace XLMenuMod.Patches.Gear
 				if (index[0] < 0) return;
 
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return;
 				if (index[1] < 0 || index[1] > (officialGear[index[0]].Length * 2) - 1) return;
 
 				if (index.depth >= 3)

@@ -17,6 +17,7 @@ namespace XLMenuMod.Patches.Gear
 			static void Postfix(IndexPath index, GearInfo[][][] ___gearListSource, GearInfo[][][] ___customGearListSource, ref GearInfo[] __result)
 			{
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return;
 				if (index[1] < 0 || index[1] > (___gearListSource[index[0]].Length * 2) - 1) return;
 
 				List<ICustomInfo> sourceList = null;
@@ -66,6 +67,7 @@ namespace XLMenuMod.Patches.Gear
 				if (index.depth < 3) return;
 
 				// return out if it's not one of the tabs XLMenuMod is aware of.
+                if (index[0] >= Enum.GetNames(typeof(Skater)).Length) return;
 				if (index[1] < 0 || index[1] > (___gearListSource[index[0]].Length * 2) - 1) return;
 
 				List<ICustomInfo> sourceList = null;
