@@ -335,7 +335,7 @@ namespace XLMenuMod.Patches.Gear
 				if (__instance.listView.currentIndexPath.depth >= 3)
 				{
 					if (CustomGearManager.Instance.CurrentFolder == null) return true;
-					if (!PlayerController.Instance.inputController.player.GetButtonDown("B")) return true;
+					if (!PlayerController.Main.input.GetButtonDown("B")) return true;
 
 					if (!Main.Settings.DisableBToMoveUpDirectory)
 					{

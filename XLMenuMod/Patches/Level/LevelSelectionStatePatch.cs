@@ -12,7 +12,7 @@ namespace XLMenuMod.Patches.Level
         {
             static bool Prefix()
             {
-	            Player player = PlayerController.Instance.inputController.player;
+	            Player player = PlayerController.Main.input;
 	            var levelSelection = UnityEngine.Object.FindObjectOfType<LevelSelectionController>();
 
                 if (player.GetButtonDown("Y"))
