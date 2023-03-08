@@ -57,6 +57,9 @@
     <Reference Include="Rewired_Core">
       <HintPath>References\Rewired_Core.dll</HintPath>
     </Reference>
+    <Reference Include="SkaterXL.Core">
+      <HintPath>References\SkaterXL.Core.dll</HintPath>
+    </Reference>
     <Reference Include="SkaterXL.Data">
       <HintPath>References\SkaterXL.Data.dll</HintPath>
     </Reference>
