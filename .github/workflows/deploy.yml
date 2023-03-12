@@ -71,7 +71,7 @@ jobs:
       run: vstest.console.exe .\XLMenuMod.Utilities.UnitTest\bin\${{ env.BUILD_CONFIGURATION }}\XLMenuMod.Utilities.UnitTest.dll /Settings:coverlet.runsettings /Parallel /Logger:trx
         
     - name: Upload XLMenuMod.Utilities.dll to release
-      uses: svenstaro/upload-release-action@v2.5.0
+      uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./XLMenuMod/bin/${{ env.BUILD_CONFIGURATION }}/XLMenuMod.Utilities.dll
@@ -111,7 +111,7 @@ jobs:
         git push origin ${{ github.event.release.tag_name }} --force
         
     - name: Upload XLMenuMod.zip to release
-      uses: svenstaro/upload-release-action@v2.5.0
+      uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ env.ARCHIVE_NAME }}
