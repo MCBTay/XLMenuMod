@@ -41,6 +41,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\XLMenuMod\References\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="SkaterXL.Core">
+      <HintPath>..\XLMenuMod\References\SkaterXL.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine.CoreModule">

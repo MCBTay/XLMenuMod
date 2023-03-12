@@ -56,7 +56,7 @@ namespace XLMenuMod.Utilities.UserInterface
 
         public void SetSortLabelText(ref TMP_Text label, string text)
         {
-			var joystickName = PlayerController.Instance.inputController.player.controllers.Joysticks.FirstOrDefault()?.name;
+			var joystickName = PlayerController.Main.input.controllers.Joysticks.FirstOrDefault()?.name;
 			var spriteIndex = SpriteHelper.Instance.GetSpriteIndex_YButton_Gray(Application.platform, joystickName);
 			var sortLabelText = $"<size=80%><sprite={spriteIndex}> <size=60%><b>Sort By:</b> " + text.Replace('_', ' ');
             label?.SetText(sortLabelText);
